@@ -1,16 +1,23 @@
 {
   "canisters": {
+    "internet_identity": {
+      "candid": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity.did",
+      "frontend": {},
+      "remote": {
+        "id": {
+          "ic": "br5f7-7uaaa-aaaaa-qaaca-cai"
+        }
+      },
+      "type": "custom",
+      "wasm": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity_dev.wasm.gz"
+    },
     "ticketix_backend": {
       "main": "src/ticketix_backend/main.mo",
       "type": "motoko"
     },
     "ticketix_frontend": {
-      "dependencies": [
-        "ticketix_backend"
-      ],
-      "source": [
-        "src/ticketix_frontend/dist"
-      ],
+      "dependencies": ["ticketix_backend"],
+      "source": ["src/ticketix_frontend/dist"],
       "type": "assets",
       "workspace": "ticketix_frontend"
     }

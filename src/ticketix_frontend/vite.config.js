@@ -1,10 +1,12 @@
-import { fileURLToPath, URL } from 'url';
-import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vite';
-import environment from 'vite-plugin-environment';
-import dotenv from 'dotenv';
+import path from "path";
+import { fileURLToPath, URL } from "url";
 
-dotenv.config({ path: '../../.env' });
+import react from "@vitejs/plugin-react";
+import { defineConfig } from "vite";
+import environment from "vite-plugin-environment";
+import dotenv from "dotenv";
+
+dotenv.config({ path: "../../.env" });
 
 export default defineConfig({
   build: {
@@ -31,14 +33,11 @@ export default defineConfig({
     environment("all", { prefix: "DFX_" }),
   ],
   resolve: {
-    alias: [
-      {
-        find: "declarations",
-        replacement: fileURLToPath(
-          new URL("../declarations", import.meta.url)
-        ),
-      },
-    ],
-    dedupe: ['@dfinity/agent'],
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+
+      find: "declarations",
+      replacement: fileURLToPath(new URL("../declarations", import.meta.url)),
+    },
   },
 });

@@ -14,5 +14,8 @@
   "type": "module",
   "workspaces": [
     "src/ticketix_frontend"
-  ]
+  ],
+  "dependencies": {
+    "@headlessui/react": "^2.2.0"
+  }
 }
