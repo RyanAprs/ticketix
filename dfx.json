@@ -1,0 +1,26 @@
+{
+  "canisters": {
+    "ticketix_backend": {
+      "main": "src/ticketix_backend/main.mo",
+      "type": "motoko"
+    },
+    "ticketix_frontend": {
+      "dependencies": [
+        "ticketix_backend"
+      ],
+      "source": [
+        "src/ticketix_frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "ticketix_frontend"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
