@@ -30,6 +30,7 @@ actor TickeTix {
     return UserService.updateUserProfile(users, userId, updateData);
   };
 
+  // GET ALL USERS
   public query func getAllUsers(): async [Principal] {
     var userList: [Principal] = [];
     let entries = users.entries();
@@ -42,6 +43,17 @@ actor TickeTix {
     return userList;
   };
 
+  // GET USER BY ID
+  public query func getUserById(userId : Principal) : async ?Types.User {
+    return users.get(userId);
+  };
+
+  // GET USER BY USERNAME
+  public query func getUserByUsername(username : Text) : async ?Types.User {
+    return UserService.getUserByUsername(users, username);
+  };
+
+  // GET USER BY PRINCIPAL
   public query func getUserByPrincipal(userPrincipal: Principal): async ?Types.User {
     switch(users.get(userPrincipal)) {
         case (?user) {

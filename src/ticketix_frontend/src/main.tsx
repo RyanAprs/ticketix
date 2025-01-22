@@ -7,7 +7,7 @@ import { InternetIdentityProvider } from "ic-use-internet-identity";
 import { BrowserRouter } from "react-router-dom";
 import "./styles/global.css";
 import { persistor, store } from "./store";
-// import { AuthProvider } from "./store/AuthProvider";
+import { AuthProvider } from "./store/AuthProvider";
 
 const rootElement = document.getElementById("root");
 if (rootElement) {
@@ -17,9 +17,9 @@ if (rootElement) {
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
             <BrowserRouter>
-              {/* <AuthProvider> */}
-              <App />
-              {/* </AuthProvider> */}
+              <AuthProvider>
+                <App />
+              </AuthProvider>
             </BrowserRouter>
           </PersistGate>
         </Provider>

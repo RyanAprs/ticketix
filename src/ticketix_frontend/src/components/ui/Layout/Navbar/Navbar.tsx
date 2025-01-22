@@ -1,11 +1,11 @@
-//import { useAuthManager } from "@/store/AuthProvider";
+import { useAuthManager } from "@/store/AuthProvider";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import UserDropdown from "./UseDropDown";
 import CustomButton from "../../Button/CustomButton";
 
 const Navbar = () => {
-  // const { isAuthenticated, login } = useAuthManager();
+  const { isAuthenticated, login } = useAuthManager();
   return (
     <nav className="flex w-full justify-center border-b">
       <div
@@ -21,11 +21,11 @@ const Navbar = () => {
             TickeTix
           </Link>
           <ul className="flex items-center gap-x-10 font-semibold text-subtext">
-            {/* {isAuthenticated && (
+            {isAuthenticated && (
               <li className="hover:text-black">
                 <Link to="/dashboard">Dashboard</Link>
               </li>
-            )} */}
+            )}
             <li className="hover:text-black">
               <Link to="/">Explore Tickets</Link>
             </li>
@@ -33,12 +33,11 @@ const Navbar = () => {
           </ul>
         </div>
 
-        <CustomButton>Login</CustomButton>
-        {/* {!isAuthenticated ? (
-          <CustomButton onClick={() => login("voter")}>Login</CustomButton>
+        {!isAuthenticated ? (
+          <CustomButton onClick={() => login()}>Login</CustomButton>
         ) : (
           <UserDropdown />
-        )} */}
+        )}
       </div>
     </nav>
   );

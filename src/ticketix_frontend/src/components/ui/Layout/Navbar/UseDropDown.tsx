@@ -11,22 +11,20 @@ import {
 import {
   ChevronDown,
   CircleUserRoundIcon,
-  CompassIcon,
-  EarthIcon,
-  PaletteIcon,
-  ShoppingBagIcon,
-  Vote,
+  Ticket,
+  Tickets,
 } from "lucide-react";
 
-// import { useAuthManager } from "@/store/AuthProvider";
+import { useAuthManager } from "@/store/AuthProvider";
 import { cn } from "@/lib/utils";
+import useUser from "@/hooks/useUser";
 
 export const menuSections = [
   {
     items: [
       { label: "Profile", to: "/dashboard", icon: <CircleUserRoundIcon /> },
-      { label: "My Votes", to: "/dashboard/myvote", icon: <Vote /> },
-      { label: "Explore Votes", to: "/votes", icon: <EarthIcon /> },
+      { label: "My Tickets", to: "/dashboard/tickets", icon: <Ticket /> },
+      { label: "Find Tickets", to: "/tickets", icon: <Tickets /> },
     ],
     activeClassName: "hover:bg-mainAccent",
   },
@@ -38,7 +36,8 @@ export const menuSections = [
 ];
 
 const UserDropdown = () => {
-  // const { logout } = useAuthManager();
+  const { logout } = useAuthManager();
+  const { user } = useUser();
 
   return (
     <Menu as="div" className="mt2 relative inline-block text-left">
@@ -64,7 +63,7 @@ const UserDropdown = () => {
           user image
         </div> */}
         <div className="flex items-center gap-1 text-subtext">
-          <div className="font-semibold">@voters</div>
+          <div className="font-semibold">@{user?.username}</div>
           <ChevronDown />
         </div>
       </MenuButton>
@@ -102,7 +101,7 @@ const UserDropdown = () => {
                     </Link>
                   ) : (
                     <div
-                      // onClick={logout}
+                      onClick={logout}
                       className={cn(
                         "block cursor-pointer px-4 py-2 text-center text-sm text-subtext hover:text-white",
                         section.activeClassName

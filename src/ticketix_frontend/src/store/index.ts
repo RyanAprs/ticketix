@@ -8,7 +8,7 @@ const rootReducer = combineReducers({
 });
 
 const persistedReducer = persistReducer(
-  { key: "voteup", storage, blacklist: [] },
+  { key: "ticketix", storage, blacklist: [] },
   rootReducer
 );
 

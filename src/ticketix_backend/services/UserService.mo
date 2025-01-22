@@ -4,6 +4,7 @@ import Text "mo:base/Text";
 import Types "../types/Types";
 
 module {
+  // LOGIN/REGISTER
   public func authenticateUser(
     userId: Principal,
     users: Types.Users,
@@ -29,7 +30,8 @@ module {
     }
   };
 
-public func updateUserProfile(
+  // UPDATE USER PROFILE
+  public func updateUserProfile(
     users: Types.Users,
     userId: Principal,
     updateData: Types.UserUpdateData,
@@ -85,5 +87,14 @@ public func updateUserProfile(
     };
   };
 
+ // GET USER BY USERNAME
+ public func getUserByUsername(users: Types.Users, username: Text): ?Types.User {
+  for((principal, user) in users.entries()) {
+    if(user.username == username) {
+      return ?user;
+    };
+  };
+  return null;
+ };
 
 }
