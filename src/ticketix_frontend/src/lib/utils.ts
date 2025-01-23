@@ -22,7 +22,6 @@ export const serializeUser = (user: User): UserType => {
   return {
     id: user.id.toText(),
     username: user.username,
-    name: user.name,
     balance: Number(user.balance),
     tickets: user.tickets.map((ticket) => ({
       id: ticket.id,

@@ -8,14 +8,12 @@ module {
 
     public type User = {
         id: Principal;          
-        name: Text;             
         username: Text;         
         balance: Nat;           
         tickets: [Ticket];    
     };
 
     public type UserUpdateData = {
-        name: ?Text;
         username: ?Text;
     };
 

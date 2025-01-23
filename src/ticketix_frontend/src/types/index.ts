@@ -1,6 +1,5 @@
 export interface UserType {
   id: string;
-  name: string | null;
   username: string;
   balance: number;
   tickets: TicketType[];

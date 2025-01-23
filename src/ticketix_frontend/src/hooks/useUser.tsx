@@ -53,36 +53,6 @@ const useUser = () => {
     }
   };
 
-  //   const getICPBalance = useCallback(async () => {
-  //     if (!isAuthenticated || !actor) {
-  //       throw new Error(
-  //         !isAuthenticated ? "User not authenticated" : "Actor is unavailable"
-  //       );
-  //     }
-
-  //     try {
-  //       return (await actor.getAccountBalance()) ?? 0;
-  //     } catch (error) {
-  //       console.error("Failed to fetch ICP balance:", error);
-  //       throw error;
-  //     }
-  //   }, [isAuthenticated, actor]);
-
-  //   const getCreditBalance = useCallback(async () => {
-  //     if (!isAuthenticated || !actor) {
-  //       throw new Error(
-  //         !isAuthenticated ? "User not authenticated" : "Actor is unavailable"
-  //       );
-  //     }
-
-  //     try {
-  //       return (await actor.getCreditBalance()).balance ?? 0;
-  //     } catch (error) {
-  //       console.error("Failed to fetch ICP balance:", error);
-  //       throw error;
-  //     }
-  //   }, [isAuthenticated, actor]);
-
   return {
     user,
     getUserById,

@@ -9,7 +9,6 @@ module {
     userId: Principal,
     users: Types.Users,
     username: Text,
-    name: Text,
     balance: Nat,
   ): Result.Result<Types.User, Text> {
     switch (users.get(userId)) {
@@ -19,7 +18,6 @@ module {
       case null {
         let newUser: Types.User = {
           id = userId;
-          name = name;
           username = username;
           balance = balance;
           tickets = [];
@@ -63,20 +61,9 @@ module {
           };
         };
 
-        let name = switch (updateData.name) {
-          case (null) { user.name };
-          case (?newName) {
-            if (Text.size(newName) < 1) {
-              return #err("NAME_INVALID: Name must not be empty");
-            };
-            newName;
-          };
-        };
-
         let updatedUser: Types.User = {
           id = user.id;
           username = username;
-          name = name;
           balance = user.balance;
           tickets = user.tickets;
         };

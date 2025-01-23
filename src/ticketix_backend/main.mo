@@ -14,10 +14,9 @@ actor TickeTix {
   public func authenticateUser(
     userPrincipal: Principal,
     username: Text,
-    name: Text,
     balance: Nat,
   ): async Result.Result<Types.User, Text> {
-    return UserService.authenticateUser(userPrincipal, users, username, name, balance);
+    return UserService.authenticateUser(userPrincipal, users, username, balance);
   };
 
   // GET CALLER PRINCIPAL

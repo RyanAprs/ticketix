@@ -23,7 +23,7 @@ import { useNavigate } from "react-router-dom";
 import { UserType, TicketType } from "@/types";
 import { _SERVICE } from "../../../declarations/ticketix_backend/ticketix_backend.did";
 import { idlFactory } from "../../../declarations/ticketix_backend";
-import { generateRandomString } from "@/lib/utils";
+import { generateRandomString, serializeUser } from "@/lib/utils";
 
 interface AuthState {
   identity: Identity | null;
@@ -99,7 +99,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
           if (matchedUsers.length > 0) {
             matchedUsers.forEach((user) => {
-              console.log({ user });
+              // dispatch(setUser(serializeUser(user)));
+              const serializedUser = serializeUser(user);
+              console.log("serialized user:", serializeUser);
             });
           } else {
             console.log("No users found with the same principal");
@@ -190,42 +192,37 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           const principal = identity.getPrincipal();
           const actor = await createActor(identity);
 
-          // const plugData = await connectPlugWallet();
-          // if (!plugData) {
-          //   throw new Error("Plug Wallet connection failed");
-          // }
+          const users = await actor.getUserByPrincipal(principal);
 
-          // const { plugPrincipal, icpBalance } = plugData;
+          let user;
+          if (users && users.length > 0) {
+            const existingUser = users.find(
+              (u) => u.id.toText() === principal.toText()
+            );
+            if (existingUser) {
+              user = serializeUser(existingUser);
+            }
+          } else {
+            const randomString = generateRandomString();
+            const username = `user${randomString}`;
+            user = {
+              id: principal.toString(),
+              username: username,
+              balance: 0,
+              tickets: [],
+            };
 
-          // if (principal !== plugPrincipal) {
-          //   throw new Error(
-          //     "Mismatch between Internet Identity and Plug Wallet principals"
-          //   );
-          // }
+            await actor.authenticateUser(principal, username, BigInt(0));
+          }
 
-          const randomString = generateRandomString();
-          const username = `user${randomString}`;
-
-          const user: UserType = {
-            id: principal.toString(),
-            name: "Nama user",
-            username: username,
-            balance: 0,
-            tickets: [],
-          };
-
-          const res = actor.authenticateUser(
-            principal,
-            "Ryan",
-            username,
-            BigInt(0)
-          );
-
-          console.log(res);
-
-          dispatch(setUser(user));
-          dispatch(setIsAuthenticated(true));
-          navigate("/dashboard", { replace: true });
+          // Simpan data pengguna ke Redux
+          if (user) {
+            dispatch(setUser(user));
+            dispatch(setIsAuthenticated(true));
+            navigate("/dashboard", { replace: true });
+          } else {
+            console.error("Failed to retrieve or create user");
+          }
         },
         onError: (error) => {
           console.error("Login failed:", error);
@@ -236,7 +233,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       console.error("Login failed:", error);
       logout();
     }
-  }, [createActor, dispatch, navigate, connectPlugWallet]);
+  }, [createActor, dispatch, navigate]);
 
   useEffect(() => {
     initializeAuth();
