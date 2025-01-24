@@ -35,14 +35,14 @@ const CustomButton = ({
       onClick={!disabled ? onClick : undefined}
       disabled={disabled}
       className={cn(
-        "relative z-10 flex h-[48px] items-center justify-center gap-1 rounded-lg border px-[30px] font-semibold text-subtext hover:shadow-hover",
+        "relative z-10 flex h-[48px] items-center justify-center gap-1  border px-[30px] font-semibold  text-subtext hover:shadow-hover",
         shadow && "shadow-custom",
         variant === "main" && "bg-mainAccent",
         variant === "secondary" && "bg-secondaryAccent",
         variant === "third" && "bg-thirdAccent",
         (size === "small" || isMobile) && "h-10 px-5 text-[14px]",
         disabled &&
-          "cursor-not-allowed text-caption shadow-none hover:shadow-none",
+          "cursor-not-allowed text-black shadow-none hover:shadow-none",
         className
       )}
     >

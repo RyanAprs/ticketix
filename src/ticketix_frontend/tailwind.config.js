@@ -13,7 +13,9 @@ export default {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
-      fontFamily: {},
+      fontFamily: {
+        jetbrainsMono: ["JetBrains Mono", "monospace"],
+      },
       boxShadow: {
         custom: "4px 4px 0px #5A534F",
         hover: "2px 2px 0px #5A534F",
@@ -26,10 +28,9 @@ export default {
         title: "#3E3D39",
         subtext: "#4E4C47",
         caption: "#7A6858",
-        border: "#3E3D3950",
+        border: "hsl(var(--border))",
         shadow: "#5A534F",
         offWhite: "#FFFBFA",
-
         FFE4E1: "#FFE4E1",
         FEC2C3: "#FEC2C3",
         D9C3F2: "#D9C3F2",
@@ -39,7 +40,6 @@ export default {
         "7A6858": "#7A6858",
         "3E3D39": "#3E3D39",
         "5A534F": "#5A534F",
-
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {
@@ -70,7 +70,6 @@ export default {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
         },
-        border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         chart: {
@@ -80,6 +79,28 @@ export default {
           4: "hsl(var(--chart-4))",
           5: "hsl(var(--chart-5))",
         },
+      },
+      keyframes: {
+        "accordion-down": {
+          from: {
+            height: "0",
+          },
+          to: {
+            height: "var(--radix-accordion-content-height)",
+          },
+        },
+        "accordion-up": {
+          from: {
+            height: "var(--radix-accordion-content-height)",
+          },
+          to: {
+            height: "0",
+          },
+        },
+      },
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
       },
     },
   },

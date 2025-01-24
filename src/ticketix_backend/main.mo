@@ -64,6 +64,9 @@ actor TickeTix {
     };
   };
 
+  public query func deleteUser(userId : Principal) : async ?Types.User {
+    return users.remove(userId);
+  };
 
   public query func greet(name: Text): async Text {
     return "Hello, " # name # "!";

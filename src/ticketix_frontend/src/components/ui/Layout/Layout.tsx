@@ -5,6 +5,7 @@ import Navbar from "./Navbar/Navbar";
 import { cn } from "@/lib/utils";
 import { LayoutProps } from "./types";
 import useWindowSize from "@/hooks/useWindowSize";
+import MobileNavbar from "./Navbar/MobileNavbar";
 
 const Layout = ({ children, className, title, fullWidth }: LayoutProps) => {
   const { isTablet } = useWindowSize();
@@ -25,7 +26,7 @@ const Layout = ({ children, className, title, fullWidth }: LayoutProps) => {
             "grid-rows-[max-content_auto_max-content]"
           )}
         >
-          {isTablet ? <div>mobile lavbar</div> : <Navbar />}
+          {isTablet ? <MobileNavbar /> : <Navbar />}
           <div className="mb-10 mt-6 flex w-full justify-center lg:mb-14 lg:mt-10">
             <main
               className={cn(
