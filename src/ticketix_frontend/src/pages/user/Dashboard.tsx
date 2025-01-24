@@ -1,11 +1,7 @@
-import Layout from "../../components/ui/Layout/Layout";
+import LayoutDashboard from "@/components/ui/Layout/LayoutDashboard";
 
 const Dashboard = () => {
-  return (
-    <Layout>
-      <div>Dashboard</div>
-    </Layout>
-  );
+  return <LayoutDashboard>Dashboard</LayoutDashboard>;
 };
 
 export default Dashboard;

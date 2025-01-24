@@ -28,7 +28,6 @@ export const menuSections = [
     ],
     activeClassName: "hover:bg-mainAccent",
   },
-
   {
     items: [{ label: "Logout", to: undefined, icon: undefined }],
     activeClassName: "hover:bg-shadow",

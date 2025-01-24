@@ -30,9 +30,9 @@ export const serializeUser = (user: User): UserType => {
       price: Number(ticket.price),
       total: Number(ticket.total),
       owner: ticket.owner.toText(),
-      imageUrl: ticket.image_url || "",
-      salesDeadline: Number(ticket.sales_deadline) * 1000,
-      isSold: ticket.is_sold || false,
+      imageUrl: ticket.imageUrl || "",
+      salesDeadline: Number(ticket.salesDeadline) * 1000,
+      isSold: ticket.isSold || false,
     })),
   };
 };

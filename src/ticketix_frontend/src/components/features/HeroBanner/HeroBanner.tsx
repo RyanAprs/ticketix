@@ -4,7 +4,7 @@ import { useAuthManager } from "@/store/AuthProvider";
 import CustomButton from "@/components/ui/Button/CustomButton";
 
 const HeroBanner = () => {
-  const { login } = useAuthManager();
+  const { login, isAuthenticated } = useAuthManager();
   const { isMobile } = useWindowSize();
 
   return (
@@ -27,15 +27,28 @@ const HeroBanner = () => {
         </div>
 
         <div className="mt-5 flex items-center justify-center gap-6 md:mt-9 md:gap-10">
-          <CustomButton
-            size={isMobile ? "small" : "default"}
-            className="md:w-[250px]"
-            onClick={login}
-          >
-            Join Now
-          </CustomButton>
+          {!isAuthenticated && (
+            <CustomButton
+              size={isMobile ? "small" : "default"}
+              className="md:w-[250px]"
+              onClick={login}
+            >
+              Join Now
+            </CustomButton>
+          )}
 
-          <Link to="/creator">
+          {isAuthenticated && (
+            <Link to="/dashboard/tickets">
+              <CustomButton
+                size={isMobile ? "small" : "default"}
+                className="md:w-[250px]"
+              >
+                My Tickets
+              </CustomButton>
+            </Link>
+          )}
+
+          <Link to="/tickets">
             <CustomButton
               size={isMobile ? "small" : "default"}
               variant={"secondary"}

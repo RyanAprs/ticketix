@@ -3,7 +3,7 @@ import HashMap "mo:base/HashMap";
 
 module {
     public type Users = HashMap.HashMap<Principal, User>;
-    public type Tickets = HashMap.HashMap<Principal, Ticket>;
+    public type Tickets = HashMap.HashMap<Text, Ticket>;
     public type Transactions = HashMap.HashMap<Principal, Transaction>;
 
     public type User = {
@@ -19,14 +19,15 @@ module {
 
     public type Ticket = {
         id: Text;               
+        owner: Principal;       
         title: Text;            
         description: Text;      
-        image_url: Text;        
+        imageUrl: Text;        
         price: Nat;             
-        owner: Principal;       
-        sales_deadline: Int;    
+        salesDeadline: Int;    
         total: Nat;             
-        is_sold: Bool;          
+        isSold: Bool;
+        createdAt: Int;          
     };
 
     public type Transaction = {
@@ -34,7 +35,7 @@ module {
         buyer: Principal;       
         seller: Principal;      
         ticket: Ticket;         
-        total_ticket: Nat;      
+        totalTicket: Nat;      
         amount: Nat;            
         timestamp: Int;         
     };

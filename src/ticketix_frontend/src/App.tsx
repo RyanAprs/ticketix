@@ -4,6 +4,8 @@ import { useAuthManager } from "./store/AuthProvider";
 import { useEffect } from "react";
 import ProtectedRoute from "./components/features/ProtectedRoute/ProtectedRoute";
 import Dashboard from "./pages/user/Dashboard";
+import MyTickets from "./pages/user/MyTickets";
+import Tickets from "./pages/Tickets";
 
 const App = () => {
   const { isAuthenticated, initializeAuth } = useAuthManager();
@@ -16,10 +18,12 @@ const App = () => {
     <Routes>
       {/* Public Routes */}
       <Route path="/" element={<LandingPage />} />
+      <Route path="/tickets" element={<Tickets />} />
 
       {/* Protected Routes = Authenticated */}
       <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard/tickets" element={<MyTickets />} />
       </Route>
     </Routes>
   );

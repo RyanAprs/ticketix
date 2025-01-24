@@ -3,11 +3,30 @@ import HashMap "mo:base/HashMap";
 import Array "mo:base/Array";
 import Result "mo:base/Result";
 import Text "mo:base/Text";
+import Iter "mo:base/Iter";
 import UserService "services/UserService";
 import Types "types/Types";
+import TicketService "services/TicketService";
 
 actor TickeTix {
-  var users: Types.Users = HashMap.HashMap(0, Principal.equal, Principal.hash);
+  private var users: Types.Users = HashMap.HashMap(0, Principal.equal, Principal.hash);
+  private var tickets: Types.Tickets = HashMap.HashMap(0, Text.equal, Text.hash);
+
+  private stable var usersEntries : [(Principal, Types.User)] = [];
+  private stable var ticketsEntries : [(Text, Types.Ticket)] = [];
+
+  // PREUPGRADE & POSTUPGRADE
+  system func preupgrade() {
+    usersEntries := Iter.toArray(users.entries());
+    ticketsEntries := Iter.toArray(tickets.entries());
+  };
+
+  system func postupgrade() {
+    users := HashMap.fromIter<Principal, Types.User>(usersEntries.vals(), 0, Principal.equal, Principal.hash);
+    tickets := HashMap.fromIter<Text, Types.Ticket>(ticketsEntries.vals(), 0, Text.equal, Text.hash);
+    usersEntries := [];
+    ticketsEntries := [];
+  };
 
   //  USERS ENFDPOINT ===========================================================
   // AUTHENTICATE USER
@@ -68,7 +87,23 @@ actor TickeTix {
     return users.remove(userId);
   };
 
-  public query func greet(name: Text): async Text {
-    return "Hello, " # name # "!";
+  // TICKETS ENDPOINT ==========================================================
+  // POST TICKET
+  public func postTicket(
+    owner: Principal,
+    imageUrl: Text,
+    title: Text,
+    description: Text,
+    price: Nat,
+    salesDeadline: Int,
+    total: Nat,
+    isSold: Bool
+  ) : async Result.Result<Types.Ticket, Text> {
+    return TicketService.postTicket(tickets, owner, imageUrl, title, description, price, salesDeadline, total, isSold);
   };
+
+  public func getAllTicketPreviews() : async [Types.Ticket] {
+    return Iter.toArray(tickets.vals());
+  };
+
 };
