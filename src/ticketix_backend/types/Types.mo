@@ -30,6 +30,15 @@ module {
         createdAt: Int;          
     };
 
+    public type TicketUpdateData = {
+        title: ?Text;            
+        description: ?Text;      
+        imageUrl: ?Text;        
+        price: ?Nat;             
+        salesDeadline: ?Int;    
+        total: ?Nat;             
+    };
+
     public type Transaction = {
         id: Text;               
         buyer: Principal;       

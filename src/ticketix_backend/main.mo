@@ -61,27 +61,16 @@ actor TickeTix {
     return userList;
   };
 
-  // GET USER BY ID
-  public query func getUserById(userId : Principal) : async ?Types.User {
-    return users.get(userId);
-  };
-
   // GET USER BY USERNAME
   public query func getUserByUsername(username : Text) : async ?Types.User {
     return UserService.getUserByUsername(users, username);
   };
 
   // GET USER BY PRINCIPAL
-  public query func getUserByPrincipal(userPrincipal: Principal): async ?Types.User {
-    switch(users.get(userPrincipal)) {
-        case (?user) {
-            return ?user;  
-        };
-        case null {
-            return null;  
-        };
-    };
+  public func getUserByPrincipal(userId: Principal): async Result.Result<Types.User, Text> {
+      return UserService.getDetailUser(users, userId);
   };
+
 
   public query func deleteUser(userId : Principal) : async ?Types.User {
     return users.remove(userId);
@@ -102,8 +91,33 @@ actor TickeTix {
     return TicketService.postTicket(tickets, owner, imageUrl, title, description, price, salesDeadline, total, isSold);
   };
 
+  // UPDATE TICKET
+  public func updateTicket(
+    userId: Principal,
+    ticketId: Text,
+    updateData: Types.TicketUpdateData
+  ): async Result.Result<Types.Ticket, Text> {
+      return TicketService.updateTicket(userId, tickets, ticketId, updateData);
+  };
+
+  // GET TICKETS
   public func getAllTicketPreviews() : async [Types.Ticket] {
     return Iter.toArray(tickets.vals());
+  };
+
+  // GET DETAIL TICKET
+  public func getTicketDetail(
+    ticketId: Text,
+  ): async Result.Result<Types.Ticket, Text> {
+    return TicketService.getDetailTicket(tickets, ticketId);
+  };
+
+  // DELETE TICKET
+  public func deleteTicket (
+    ticketId: Text,
+    userId: Principal,
+  ) : async Result.Result<(), Text> {
+    return TicketService.deleteTicket(tickets, userId, ticketId);
   };
 
 };
