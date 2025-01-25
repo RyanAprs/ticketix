@@ -17,6 +17,11 @@ module {
         username: ?Text;
     };
 
+    public type ticketStatus = {
+        #active;
+        #used;
+    };
+
     public type Ticket = {
         id: Text;               
         owner: Principal;       
@@ -27,7 +32,8 @@ module {
         salesDeadline: Int;    
         total: Nat;             
         isSold: Bool;
-        createdAt: Int;          
+        createdAt: Int;
+        status: ticketStatus;          
     };
 
     public type TicketUpdateData = {

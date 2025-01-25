@@ -112,6 +112,14 @@ actor TickeTix {
       return TicketService.updateTicket(userId, tickets, ticketId, updateData);
   };
 
+  // UPDATE TICKET STATUS
+   public shared func updateTicketStatus(
+        ticketId: Text,
+        userId: Principal
+    ) : async Result.Result<Types.Ticket, Text> {
+        return TicketService.updateTicketStatus(tickets, ticketId, userId);
+    };
+
   // GET TICKETS
   public func getAllTicketPreviews() : async [Types.Ticket] {
     return Iter.toArray(tickets.vals());

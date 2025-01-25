@@ -65,6 +65,7 @@ module {
             total = total;
             isSold = isSold;
             createdAt = Time.now();
+            status = #active;
         };
 
         tickets.put(ticketId, newTicket);
@@ -95,6 +96,10 @@ module {
                 // VALIDATE TICKET STATUS
                 if (ticket.isSold == true) {
                     return #err("This ticket is already sold");
+                };
+
+                if(ticket.status == #used) {
+                    return #err("This ticket is already used");
                 };
 
                 // VALIDATE TITLE
@@ -159,6 +164,7 @@ module {
                     total = total;
                     isSold = ticket.isSold;
                     createdAt = ticket.createdAt;
+                    status = ticket.status;
                 };
 
                 // UPDATE TICKET
@@ -202,6 +208,33 @@ module {
             case (null) { #err("Ticket not found!") }
         }
     };
+
+    public func updateTicketStatus(
+        tickets: Types.Tickets,
+        ticketId: Text,
+        userId: Principal
+    ) : Result.Result<Types.Ticket, Text> {
+        if (Principal.isAnonymous(userId)) {
+            return #err("Anonymous principals are not allowed to update ticket status");
+        };
+
+        switch (tickets.get(ticketId)) {
+            case (null) {
+                return #err("Ticket not found!");
+            };
+            case (?ticket) {
+                if (ticket.status == #used) {
+                    return #err("This ticket has already been marked as used");
+                };
+
+                let updatedTicket = { ticket with status = #used };
+                tickets.put(ticketId, updatedTicket);
+
+                return #ok(updatedTicket);
+            };
+        };
+    };
+
 
     // Helper function to validate URLs (basic implementation)
     private func _isValidUrl(url : Text) : Bool {
