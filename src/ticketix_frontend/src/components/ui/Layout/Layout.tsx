@@ -10,9 +10,9 @@ import MobileNavbar from "./Navbar/MobileNavbar";
 const Layout = ({ children, className, title, fullWidth }: LayoutProps) => {
   const { isTablet } = useWindowSize();
 
-  let pageTitle: string = "VoteUp";
+  let pageTitle: string = "TickeTix";
   if (title) {
-    pageTitle = title + " - VoteUp";
+    pageTitle = title + " - TickeTix";
   }
   return (
     <>

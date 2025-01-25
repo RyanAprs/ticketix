@@ -6,12 +6,16 @@ import ProtectedRoute from "./components/features/ProtectedRoute/ProtectedRoute"
 import Dashboard from "./pages/user/Dashboard";
 import MyTickets from "./pages/user/MyTickets";
 import Tickets from "./pages/Tickets";
+import CreateTicketPage from "./pages/user/CreateTicketPage";
 
 const App = () => {
   const { isAuthenticated, initializeAuth } = useAuthManager();
 
   useEffect(() => {
     initializeAuth();
+    if (document.title !== "TickeTix") {
+      document.title = "TickeTix";
+    }
   }, [initializeAuth]);
 
   return (
@@ -23,7 +27,8 @@ const App = () => {
       {/* Protected Routes = Authenticated */}
       <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/dashboard/tickets" element={<MyTickets />} />
+        <Route path="/dashboard/ticket" element={<MyTickets />} />
+        <Route path="/dashboard/ticket/post" element={<CreateTicketPage />} />
       </Route>
     </Routes>
   );

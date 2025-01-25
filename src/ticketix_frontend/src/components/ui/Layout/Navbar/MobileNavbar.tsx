@@ -24,12 +24,13 @@ const MobileNavbar = () => {
   return (
     <nav className="flex h-[65px] items-center justify-between border-b px-4">
       <Link to={"/"}>
-        <img
+        {/* <img
           alt="ticketix logo"
           src="/images/logo/ticketix-logo.svg"
           loading="eager"
           className="w-32"
-        ></img>
+        ></img> */}
+        TickeTix
       </Link>
 
       <div className="flex items-center gap-2">

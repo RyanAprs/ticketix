@@ -38,7 +38,7 @@ const HeroBanner = () => {
           )}
 
           {isAuthenticated && (
-            <Link to="/dashboard/tickets">
+            <Link to="/dashboard/ticket">
               <CustomButton
                 size={isMobile ? "small" : "default"}
                 className="md:w-[250px]"
