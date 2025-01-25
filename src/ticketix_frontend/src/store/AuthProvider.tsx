@@ -99,7 +99,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
           if (matchedUsers.length > 0) {
             matchedUsers.forEach((user) => {
-              // dispatch(setUser(serializeUser(user)));
+              dispatch(setUser(serializeUser(user)));
               const serializedUser = serializeUser(user);
               console.log("serialized user:", serializeUser);
             });

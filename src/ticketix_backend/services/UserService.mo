@@ -83,19 +83,4 @@ module {
     };
     return null;
   };
-
-  // GET DETAIL USER
-  public func getDetailUser(
-      users: Types.Users,
-      userId: Principal,
-  ): Result.Result<Types.User, Text> {
-      switch (users.get(userId)) {
-          case (null) {
-              return #err("User not found!");
-          };
-          case(?user) {
-              return #ok(user);
-          };
-      };
-  };
 }

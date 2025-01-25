@@ -66,12 +66,24 @@ actor TickeTix {
     return UserService.getUserByUsername(users, username);
   };
 
-  // GET USER BY PRINCIPAL
-  public func getUserByPrincipal(userId: Principal): async Result.Result<Types.User, Text> {
-      return UserService.getDetailUser(users, userId);
+  // GET USER BY ID
+  public query func getUserById(userId : Principal) : async ?Types.User {
+    return users.get(userId);
   };
 
+  // GET USER BY PRINCIPAL
+  public query func getUserByPrincipal(userPrincipal: Principal): async ?Types.User {
+    switch(users.get(userPrincipal)) {
+        case (?user) {
+            return ?user;  
+        };
+        case null {
+            return null;  
+        };
+    };
+  };
 
+  // DELETE USER
   public query func deleteUser(userId : Principal) : async ?Types.User {
     return users.remove(userId);
   };
