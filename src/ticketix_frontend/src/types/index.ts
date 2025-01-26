@@ -14,7 +14,6 @@ export interface TicketType {
   owner: string;
   salesDeadline: number;
   total: number;
-  isSold: boolean;
   status: TicketStatus;
 }
 

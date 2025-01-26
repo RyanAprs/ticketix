@@ -1,7 +1,6 @@
 import { MessageSquareIcon, ThumbsUpIcon } from "lucide-react";
 
-import { cn } from "@/lib/utils";
-import { TicketStatus } from "@/types";
+import { cn } from "@/lib/utils/cn";
 
 interface TicketPreviewProps {
   title: string;
@@ -12,13 +11,17 @@ interface TicketPreviewProps {
   salesDeadline: number;
   total: number;
   isSold: boolean;
-  status: TicketStatus;
   className?: string;
 }
 
 const TicketPreview = ({
-  description,
   title,
+  description,
+  imageUrl,
+  price,
+  owner,
+  salesDeadline,
+  total,
   className,
 }: TicketPreviewProps) => {
   return (
@@ -28,32 +31,19 @@ const TicketPreview = ({
         className
       )}
     >
-      {/* <img
-        src={thumbnail}
+      <img
+        src={imageUrl}
         alt={title}
         className="h-40 w-full rounded-t-lg bg-mainAccent object-cover"
       />
       <div className="p-4">
         <h2 className="text-lg font-semibold text-title">{title}</h2>
         <p className="text-sm text-caption">{description}</p>
-        <p className="text-sm text-caption">{createdAt}</p>
-
-        <div className="mt-2 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1">
-              <ThumbsUpIcon className="size-5" />
-              {likesCount}
-            </div>
-            <div className="flex items-center gap-1">
-              <MessageSquareIcon className="size-5" />
-              {commentsCount}
-            </div>
-          </div>
-          <p className="bg- flex items-center rounded-lg border px-3 py-1 text-sm font-medium">
-            {tier === "Free" ? "Free" : isUnlocked ? "Unlocked" : tier}
-          </p>
-        </div>
-      </div> */}
+        <p className="text-sm text-caption">{owner}</p>
+        <p className="text-sm text-caption">{price}</p>
+        <p className="text-sm text-caption">Available until {salesDeadline}</p>
+        <p className="text-sm text-caption">{total}</p>
+      </div>
     </div>
   );
 };

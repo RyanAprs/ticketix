@@ -7,7 +7,7 @@ import { AppDispatch, RootState } from "@/store";
 import { useAuthManager } from "@/store/AuthProvider";
 import { setUser } from "@/store/reducers/userSlice";
 import { User } from "../../../declarations/ticketix_backend/ticketix_backend.did";
-import { serializeUser } from "@/lib/utils";
+import { serializeUser } from "@/lib/utils/index";
 
 const useUser = () => {
   const { user } = useSelector((state: RootState) => state.user);

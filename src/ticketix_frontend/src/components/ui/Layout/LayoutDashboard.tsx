@@ -3,7 +3,7 @@ import { LayoutProps } from "./types";
 import { Helmet } from "react-helmet";
 import MobileNavbar from "./Navbar/MobileNavbar";
 import Navbar from "./Navbar/Navbar";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/cn";
 import DashboardMenu from "./DashboardMenu/DashboardMenu";
 
 const LayoutDashboard = ({ children, className, title }: LayoutProps) => {

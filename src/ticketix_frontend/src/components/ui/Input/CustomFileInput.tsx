@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 
 import { Upload, X } from "lucide-react";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/cn";
 
 interface CustomFileInputProps {
   // eslint-disable-next-line no-unused-vars

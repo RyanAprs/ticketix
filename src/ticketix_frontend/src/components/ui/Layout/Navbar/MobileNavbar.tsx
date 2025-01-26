@@ -10,7 +10,7 @@ import Drawer from "../../Drawer/Drawer";
 
 import { menuSections } from "./UseDropDown";
 import CustomButton from "../../Button/CustomButton";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/cn";
 
 const MobileNavbar = () => {
   const { isAuthenticated, login, logout } = useAuthManager();

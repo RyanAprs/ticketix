@@ -18,12 +18,10 @@ import {
 } from "@/constant/common";
 import { AppDispatch, RootState } from "@/store";
 import { setUser, setIsAuthenticated } from "@/store/reducers/userSlice";
-import { AccountIdentifier } from "@dfinity/ledger-icp";
 import { useNavigate } from "react-router-dom";
-import { UserType, TicketType } from "@/types";
 import { _SERVICE } from "../../../declarations/ticketix_backend/ticketix_backend.did";
 import { idlFactory } from "../../../declarations/ticketix_backend";
-import { generateRandomString, serializeUser } from "@/lib/utils";
+import { generateRandomString, serializeUser } from "@/lib/utils/index";
 
 interface AuthState {
   identity: Identity | null;
@@ -100,8 +98,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           if (matchedUsers.length > 0) {
             matchedUsers.forEach((user) => {
               dispatch(setUser(serializeUser(user)));
-              const serializedUser = serializeUser(user);
-              console.log("serialized user:", serializeUser);
             });
           } else {
             console.log("No users found with the same principal");

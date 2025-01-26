@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { ChevronDown, XIcon } from "lucide-react";
@@ -10,10 +10,23 @@ import { CustomTextarea } from "@/components/ui/Input/CustomTextAre";
 import CustomFileInput from "@/components/ui/Input/CustomFileInput";
 import CustomButton from "@/components/ui/Button/CustomButton";
 import { CustomDateInput } from "@/components/ui/Input/CustomDateInput";
+import useICP from "@/hooks/useICP";
+import { convertUsdToIcp } from "@/lib/utils";
 
 const CreateTicketForm = () => {
   const navigate = useNavigate();
-  const { actor } = useAuthManager();
+  const { actor, principal } = useAuthManager();
+  const { fetchIcpUsdPrice } = useICP();
+  const [icpPrice, setIcpPrice] = useState<number>(0);
+
+  useEffect(() => {
+    const fetchPrice = async () => {
+      const price = await fetchIcpUsdPrice();
+      setIcpPrice(price);
+    };
+
+    fetchPrice();
+  }, []);
 
   const {
     preview: ImagePreview,
@@ -26,7 +39,7 @@ const CreateTicketForm = () => {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [price, setPrice] = useState(0);
+  const [priceInput, setPriceInput] = useState("");
   const [total, setTotal] = useState(0);
   const [salesDeadline, setSalesDeadline] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
@@ -34,6 +47,7 @@ const CreateTicketForm = () => {
 
   const validateForm = () => {
     const errors: string[] = [];
+    const price = parseFloat(priceInput);
 
     if (!title.trim()) {
       errors.push("Title is required");
@@ -43,8 +57,8 @@ const CreateTicketForm = () => {
       errors.push("Description is required");
     }
 
-    if (!price || price <= 0) {
-      errors.push("Price must be greater than 0");
+    if (isNaN(price) || price <= 0) {
+      errors.push("Invalid input price");
     }
 
     if (!total || total <= 0) {
@@ -55,39 +69,59 @@ const CreateTicketForm = () => {
       errors.push("Sales deadline is required");
     }
 
-    // if (!imageFile) {
-    //   errors.push("Image is required");
-    // }
+    if (!imageFile) {
+      errors.push("Image is required");
+    }
 
     setFormErrors(errors);
     return errors.length === 0;
   };
 
   const handleCreateNewTicket = async () => {
-    if (!validateForm()) return;
-    setLoading(true);
+    if (!validateForm()) return null;
 
     try {
-      console.log({
-        title,
-        description,
-        price,
-        total,
-        salesDeadline,
-      });
+      setLoading(true);
 
-      // const uploadedImageUrl = await uploadImage();
-      // const result = await actor.createPost({
-      //   title,
-      //   description,
-      //   price,
-      //   total,
-      //   salesDeadline,
-      //   imageUrl: uploadedImageUrl,
-      // });
-      // console.log("Post created successfully:", result);
-      // resetForm();
-      // navigate("/posts");
+      if (actor && principal) {
+        let imageUrl: string | null = "";
+        if (imageFile) {
+          imageUrl = await uploadImage();
+          if (!imageUrl) {
+            setLoading(false);
+            return;
+          }
+        }
+
+        const price = parseFloat(priceInput);
+        const usdToICP = convertUsdToIcp(price, icpPrice);
+        const priceInICP = BigInt(Math.round(usdToICP * 10000));
+
+        const totalInBigInt = BigInt(total);
+
+        console.log("Price in ICP:", priceInICP);
+        const owner = principal;
+
+        const result = await actor.postTicket(
+          owner,
+          imageUrl,
+          title,
+          description,
+          priceInICP,
+          BigInt(salesDeadline || 0),
+          totalInBigInt
+        );
+
+        console.log("Post created successfully:", result);
+
+        if ("ok" in result) {
+          resetForm();
+          navigate(`/ticket/${result.ok.id}`);
+        } else {
+          console.error("Error creating post", result.err);
+          setFormErrors([result.err.toString()]);
+        }
+      }
     } catch (error) {
       console.error("Error creating post:", error);
     } finally {
@@ -98,7 +132,7 @@ const CreateTicketForm = () => {
   const resetForm = () => {
     setTitle("");
     setDescription("");
-    setPrice(0);
+    setPriceInput("");
     setTotal(0);
     setSalesDeadline(null);
     resetImage();
@@ -106,7 +140,12 @@ const CreateTicketForm = () => {
   };
 
   const handleDateChange = (date: Date | null) => {
-    setSalesDeadline(date ? date.getTime() : null);
+    if (date) {
+      const timestamp = date.getTime();
+      setSalesDeadline(timestamp);
+    } else {
+      setSalesDeadline(null);
+    }
   };
 
   return (
@@ -127,11 +166,11 @@ const CreateTicketForm = () => {
         onChange={(e) => setDescription(e.target.value)}
       />
       <CustomInput
-        label="Price"
-        placeholder="Ticket Price"
-        type="number"
-        value={price}
-        onChange={(e) => setPrice(Number(e.target.value))}
+        label="Price ($)"
+        placeholder="Ticket Price in USD"
+        type="text" // Use text to allow decimal input
+        value={priceInput}
+        onChange={(e) => setPriceInput(e.target.value)}
       />
       <CustomInput
         label="Total Ticket"
@@ -147,7 +186,6 @@ const CreateTicketForm = () => {
         containerClassName="mb-4"
       />
 
-      {/* Image Upload */}
       <div className="mt-4">
         <label className="mb-2 block font-semibold text-subtext">Image</label>
         <div className="space-y-5">
@@ -175,7 +213,6 @@ const CreateTicketForm = () => {
         </div>
       </div>
 
-      {/* Error messages */}
       {formErrors.length > 0 && (
         <div className="mt-4 text-red-500">
           {formErrors.map((error, index) => (

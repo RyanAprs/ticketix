@@ -32,7 +32,6 @@ module {
         price: Nat;             
         salesDeadline: Int;    
         total: Nat;             
-        isSold: Bool;
         createdAt: Int;
         status: ticketStatus;          
     };

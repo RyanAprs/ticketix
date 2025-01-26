@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 
 import { useAuthManager } from "@/store/AuthProvider";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/cn";
 import useUser from "@/hooks/useUser";
 
 export const menuSections = [

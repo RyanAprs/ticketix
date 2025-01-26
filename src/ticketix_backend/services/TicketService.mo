@@ -16,7 +16,6 @@ module {
         price: Nat,
         salesDeadline: Int,
         total: Nat,
-        isSold: Bool,
     ) : Result.Result<Types.Ticket, Text>{
         if (Principal.isAnonymous(owner)) {
             return #err("Anonymous principals cannot post content");
@@ -63,7 +62,6 @@ module {
             price = price;
             salesDeadline = salesDeadline;
             total = total;
-            isSold = isSold;
             createdAt = Time.now();
             status = #forSale;
         };
@@ -94,9 +92,6 @@ module {
                 };
 
                 // VALIDATE TICKET STATUS
-                if (ticket.isSold == true) {
-                    return #err("This ticket is already sold");
-                };
 
                 if(ticket.status == #used) {
                     return #err("This ticket is already used");
@@ -162,7 +157,6 @@ module {
                     price = price;
                     salesDeadline = salesDeadline;
                     total = total;
-                    isSold = ticket.isSold;
                     createdAt = ticket.createdAt;
                     status = ticket.status;
                 };

@@ -1,7 +1,7 @@
 import React from "react";
 
 import useWindowSize from "@/hooks/useWindowSize";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/cn";
 
 interface ButtonProps {
   children: React.ReactNode;

@@ -4,25 +4,26 @@ import { Link } from "react-router-dom";
 import { PlusIcon } from "lucide-react";
 
 import useWindowSize from "@/hooks/useWindowSize";
-// import { fetchCreatorContentPreview } from "@/lib/services/contentService";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/cn";
 import { useAuthManager } from "@/store/AuthProvider";
 
 import { Ticket as TicketType } from "../../../../../declarations/ticketix_backend/ticketix_backend.did";
 
-import TicketPreview from "./TicketPreview";
 import CustomButton from "@/components/ui/Button/CustomButton";
+import { fetchAllTicketOnSale } from "@/lib/services/TicketService";
+import TicketPreview from "./TicketPreview";
 
 const TicketManagement = () => {
-  const { principal } = useAuthManager();
+  const { actor } = useAuthManager();
   const { isMobile } = useWindowSize();
 
-  const [contents, setContents] = useState([] as TicketType[]);
+  const [tickets, setTickets] = useState([] as TicketType[]);
 
-  // useEffect(() => {
-  //   if (actor && principal)
-  //     fetchCreatorContentPreview(actor, principal, setContents);
-  // }, [actor, principal]);
+  useEffect(() => {
+    if (actor) {
+      fetchAllTicketOnSale(actor, setTickets);
+    }
+  });
 
   return (
     <>
@@ -44,33 +45,33 @@ const TicketManagement = () => {
       <div
         className={cn(
           "mt-3 w-full rounded-lg border border-border p-3 shadow-custom md:px-5 md:py-4",
-          contents.length === 0 &&
+          tickets.length === 0 &&
             "flex min-h-[200px] max-w-[600px] items-center justify-center md:min-h-[300px]"
         )}
       >
-        {/* {contents.length === 0 ? (
+        {tickets.length === 0 ? (
           <div className="mb-4 flex flex-col items-center space-y-3 text-subtext">
             <p className="text-center font-semibold md:text-lg">
-              No content yet. Start creating your first exclusive post!
+              No ticket yet, Sale or buy a ticket first!
             </p>
           </div>
         ) : (
           <div className="flex flex-wrap gap-5">
-            {contents.map((content) => (
-              <Link key={content.id} to={`/creator/content/${content.id}`}>
+            {/* {tickets.map((ticket) => (
+              <Link key={ticket.id} to={`/ticket/${ticket.id}`}>
                 <TicketPreview
-                  title={content.title}
-                  description={content.description}
-                  tier={content.tier}
-                  thumbnail={content.thumbnail}
-                  likesCount={content.likesCount.toString()}
-                  commentsCount={content.commentsCount.toString()}
-                  createdAt={formatNSToDate(content.createdAt)}
+                  title={ticket.title}
+                  description={ticket.description}
+                  imageUrl={ticket.imageUrl}
+                  owner={ticket.owner}
+                  price={ticket.price}
+                  total={ticket.total}
+                  salesDeadline={ticket.salesDeadline}
                 />
               </Link>
-            ))}
+            ))} */}
           </div>
-        )} */}
+        )}
       </div>
     </>
   );

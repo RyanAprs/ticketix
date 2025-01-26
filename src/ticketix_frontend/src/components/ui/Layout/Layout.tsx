@@ -2,7 +2,7 @@ import { Helmet } from "react-helmet";
 
 import Footer from "./Footer/Footer";
 import Navbar from "./Navbar/Navbar";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/cn";
 import { LayoutProps } from "./types";
 import useWindowSize from "@/hooks/useWindowSize";
 import MobileNavbar from "./Navbar/MobileNavbar";

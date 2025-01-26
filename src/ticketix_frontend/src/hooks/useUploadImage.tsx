@@ -1,7 +1,7 @@
 import { ChangeEvent, useEffect, useState } from "react";
 
 import { PinResponse } from "pinata-web3";
-import { pinata } from "@/lib/config";
+import { pinata } from "@/lib/utils/config";
 
 interface UseUploadImageReturn {
   preview: string;

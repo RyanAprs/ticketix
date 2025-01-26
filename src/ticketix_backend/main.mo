@@ -98,9 +98,8 @@ actor TickeTix {
     price: Nat,
     salesDeadline: Int,
     total: Nat,
-    isSold: Bool
   ) : async Result.Result<Types.Ticket, Text> {
-    return TicketService.postTicket(tickets, owner, imageUrl, title, description, price, salesDeadline, total, isSold);
+    return TicketService.postTicket(tickets, owner, imageUrl, title, description, price, salesDeadline, total);
   };
 
   // UPDATE TICKET
@@ -145,6 +144,25 @@ actor TickeTix {
     let ticketArray = Iter.toArray(forSaleTickets);
     if (ticketArray.size() == 0) {
       return #err("No tickets for sale available.");
+    } else {
+      return #ok(ticketArray);
+    };
+  };
+
+  // GET ALL OWNED TICKETS
+  public func getAllOwnedTickets(
+    userId: Principal
+  ): async Result.Result<[Types.Ticket], Text> {
+    let ownedTickets = Iter.filter<Types.Ticket>(
+      tickets.vals(),
+      func (ticket: Types.Ticket) : Bool {
+        return ticket.owner == userId;
+      }
+    );
+    
+    let ticketArray = Iter.toArray(ownedTickets);
+    if (ticketArray.size() == 0) {
+      return #err("You do not own any tickets.");
     } else {
       return #ok(ticketArray);
     };

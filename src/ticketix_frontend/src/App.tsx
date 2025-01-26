@@ -7,6 +7,7 @@ import Dashboard from "./pages/user/Dashboard";
 import MyTickets from "./pages/user/MyTickets";
 import Tickets from "./pages/Tickets";
 import CreateTicketPage from "./pages/user/CreateTicketPage";
+import DetailTicket from "./pages/DetailTicket";
 
 const App = () => {
   const { isAuthenticated, initializeAuth } = useAuthManager();
@@ -22,7 +23,8 @@ const App = () => {
     <Routes>
       {/* Public Routes */}
       <Route path="/" element={<LandingPage />} />
-      <Route path="/tickets" element={<Tickets />} />
+      <Route path="/ticket" element={<Tickets />} />
+      <Route path="/ticket/:id" element={<DetailTicket />} />
 
       {/* Protected Routes = Authenticated */}
       <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>

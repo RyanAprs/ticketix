@@ -1,6 +1,6 @@
 import { useAuthManager } from "@/store/AuthProvider";
 import { Link } from "react-router-dom";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/cn";
 import UserDropdown from "./UseDropDown";
 import CustomButton from "../../Button/CustomButton";
 
@@ -27,7 +27,7 @@ const Navbar = () => {
               </li>
             )}
             <li className="hover:text-black">
-              <Link to="/tickets">Browse Tickets</Link>
+              <Link to="/ticket">Find Ticket</Link>
             </li>
             <li className="cursor-pointer hover:text-black">Support</li>
           </ul>

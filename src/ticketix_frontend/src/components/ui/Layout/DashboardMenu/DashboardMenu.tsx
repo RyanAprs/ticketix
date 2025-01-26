@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { menuSections } from "../Navbar/UseDropDown";
 import { useAuthManager } from "@/store/AuthProvider";
 import { useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/cn";
 import CustomButton from "../../Button/CustomButton";
 
 const DashboardMenu = () => {

@@ -6,7 +6,7 @@ import {
   Transition,
   TransitionChild,
 } from "@headlessui/react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/cn";
 
 type PositionType = "right" | "left" | "top" | "bottom";
 
