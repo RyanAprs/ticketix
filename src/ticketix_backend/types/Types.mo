@@ -18,7 +18,8 @@ module {
     };
 
     public type ticketStatus = {
-        #active;
+        #owned;
+        #forSale;
         #used;
     };
 

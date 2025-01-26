@@ -1,7 +1,10 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { User } from "../../../declarations/ticketix_backend/ticketix_backend.did";
-import { UserType } from "@/types";
+import {
+  ticketStatus,
+  User,
+} from "../../../declarations/ticketix_backend/ticketix_backend.did";
+import { TicketStatus, UserType } from "@/types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -33,6 +36,16 @@ export const serializeUser = (user: User): UserType => {
       imageUrl: ticket.imageUrl || "",
       salesDeadline: Number(ticket.salesDeadline) * 1000,
       isSold: ticket.isSold || false,
+      status: mapMotokoTicketStatusToFrontend(ticket.status), 
     })),
   };
+};
+
+const mapMotokoTicketStatusToFrontend = (
+  status: ticketStatus
+): TicketStatus => {
+  if ("owned" in status) return "owned";
+  if ("forSale" in status) return "forSale";
+  if ("used" in status) return "used";
+  throw new Error("Invalid ticket status from backend");
 };

@@ -8,16 +8,16 @@ import useWindowSize from "@/hooks/useWindowSize";
 import { cn } from "@/lib/utils";
 import { useAuthManager } from "@/store/AuthProvider";
 
-// import { ContentPreview as ContentPreviewType } from "../../../../../declarations/nekotip_backend/nekotip_backend.did";
+import { Ticket as TicketType } from "../../../../../declarations/ticketix_backend/ticketix_backend.did";
 
 import TicketPreview from "./TicketPreview";
 import CustomButton from "@/components/ui/Button/CustomButton";
 
 const TicketManagement = () => {
-  const { actor, principal } = useAuthManager();
+  const { principal } = useAuthManager();
   const { isMobile } = useWindowSize();
 
-  // const [contents, setContents] = useState([] as ContentPreviewType[]);
+  const [contents, setContents] = useState([] as TicketType[]);
 
   // useEffect(() => {
   //   if (actor && principal)
@@ -41,15 +41,14 @@ const TicketManagement = () => {
           </CustomButton>
         </Link>
       </div>
-      <div>Ticket List</div>
-      {/* <div
+      <div
         className={cn(
           "mt-3 w-full rounded-lg border border-border p-3 shadow-custom md:px-5 md:py-4",
           contents.length === 0 &&
             "flex min-h-[200px] max-w-[600px] items-center justify-center md:min-h-[300px]"
         )}
       >
-        {contents.length === 0 ? (
+        {/* {contents.length === 0 ? (
           <div className="mb-4 flex flex-col items-center space-y-3 text-subtext">
             <p className="text-center font-semibold md:text-lg">
               No content yet. Start creating your first exclusive post!
@@ -59,10 +58,10 @@ const TicketManagement = () => {
           <div className="flex flex-wrap gap-5">
             {contents.map((content) => (
               <Link key={content.id} to={`/creator/content/${content.id}`}>
-                <TicketManagement
+                <TicketPreview
                   title={content.title}
                   description={content.description}
-                  tier={getContentTierLabel(content.tier)}
+                  tier={content.tier}
                   thumbnail={content.thumbnail}
                   likesCount={content.likesCount.toString()}
                   commentsCount={content.commentsCount.toString()}
@@ -71,8 +70,8 @@ const TicketManagement = () => {
               </Link>
             ))}
           </div>
-        )}
-      </div> */}
+        )} */}
+      </div>
     </>
   );
 };

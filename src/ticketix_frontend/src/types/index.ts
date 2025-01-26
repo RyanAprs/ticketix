@@ -15,4 +15,7 @@ export interface TicketType {
   salesDeadline: number;
   total: number;
   isSold: boolean;
+  status: TicketStatus;
 }
+
+export type TicketStatus = "owned" | "forSale" | "used";
