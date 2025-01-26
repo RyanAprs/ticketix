@@ -178,7 +178,7 @@ module {
     public func getDetailTicket(
         tickets: Types.Tickets,
         ticketId: Text,
-    ): Result.Result<Types.Ticket, Text> {
+    ) : Result.Result<Types.Ticket, Text> {
         switch (tickets.get(ticketId)) {
             case (null) {
                 return #err("Ticket not found!");
@@ -209,6 +209,7 @@ module {
         }
     };
 
+    // UPDATE TICKET
     public func updateTicketStatus(
         tickets: Types.Tickets,
         ticketId: Text,

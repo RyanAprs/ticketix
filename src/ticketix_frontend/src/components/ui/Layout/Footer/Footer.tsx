@@ -33,8 +33,8 @@ const Footer = () => {
       <section className="flex flex-col gap-6 px-4 md:gap-14 xl:flex-row xl:justify-center xl:gap-20">
         <div className="w-[350px]">
           {/* <img
-            src="/images/logo/nekotip-logo.svg"
-            alt="nekotip logo"
+            src="/images/logo/ticketix-logo.svg"
+            alt="ticketix logo"
             className="mb-2 w-28 md:w-40"
           /> */}
           TickeTix

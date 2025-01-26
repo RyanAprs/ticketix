@@ -9,6 +9,7 @@ import { CustomInput } from "@/components/ui/Input/CustomInput";
 import { CustomTextarea } from "@/components/ui/Input/CustomTextAre";
 import CustomFileInput from "@/components/ui/Input/CustomFileInput";
 import CustomButton from "@/components/ui/Button/CustomButton";
+import { CustomDateInput } from "@/components/ui/Input/CustomDateInput";
 
 const CreateTicketForm = () => {
   const navigate = useNavigate();
@@ -27,11 +28,10 @@ const CreateTicketForm = () => {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(0);
   const [total, setTotal] = useState(0);
-  const [salesDeadline, setSalesDeadline] = useState("");
+  const [salesDeadline, setSalesDeadline] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const [formErrors, setFormErrors] = useState<string[]>([]);
 
-  // Validate form before submission
   const validateForm = () => {
     const errors: string[] = [];
 
@@ -51,13 +51,13 @@ const CreateTicketForm = () => {
       errors.push("Total ticket must be greater than 0");
     }
 
-    if (!salesDeadline.trim()) {
+    if (!salesDeadline) {
       errors.push("Sales deadline is required");
     }
 
-    if (!imageFile) {
-      errors.push("Image is required");
-    }
+    // if (!imageFile) {
+    //   errors.push("Image is required");
+    // }
 
     setFormErrors(errors);
     return errors.length === 0;
@@ -100,9 +100,13 @@ const CreateTicketForm = () => {
     setDescription("");
     setPrice(0);
     setTotal(0);
-    setSalesDeadline("");
+    setSalesDeadline(null);
     resetImage();
     setFormErrors([]);
+  };
+
+  const handleDateChange = (date: Date | null) => {
+    setSalesDeadline(date ? date.getTime() : null);
   };
 
   return (
@@ -136,12 +140,11 @@ const CreateTicketForm = () => {
         value={total}
         onChange={(e) => setTotal(Number(e.target.value))}
       />
-      <CustomInput
+      <CustomDateInput
         label="Sales Deadline"
-        placeholder="Sales Deadline"
-        type="date"
-        value={salesDeadline}
-        onChange={(e) => setSalesDeadline(e.target.value)}
+        value={salesDeadline ? new Date(salesDeadline) : null}
+        onChange={handleDateChange}
+        containerClassName="mb-4"
       />
 
       {/* Image Upload */}
