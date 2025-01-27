@@ -37,3 +37,18 @@ export const fetchAllTicketOwned = async (
     console.error("Error fetching ticket:", error);
   }
 };
+
+export const fetchDetailTicket = async (actor: _SERVICE, ticketId: string) => {
+  try {
+    const tickets = await actor.getTicketDetail(ticketId);
+
+    if ("ok" in tickets) {
+      const ticketArray = tickets.ok;
+      return ticketArray;
+    } else {
+      console.error("Error fetching tickets:", tickets.err);
+    }
+  } catch (error) {
+    console.error("Error fetching ticket:", error);
+  }
+};

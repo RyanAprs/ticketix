@@ -7,7 +7,7 @@ import Dashboard from "./pages/user/Dashboard";
 import MyTickets from "./pages/user/MyTickets";
 import Tickets from "./pages/Tickets";
 import CreateTicketPage from "./pages/user/CreateTicketPage";
-import DetailTicket from "./pages/DetailTicket";
+import DetailTicket from "./pages/TicketDetail";
 
 const App = () => {
   const { isAuthenticated, initializeAuth } = useAuthManager();

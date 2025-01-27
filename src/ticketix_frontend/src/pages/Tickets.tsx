@@ -34,56 +34,60 @@ const Tickets = () => {
     }
   }, [actor]);
 
-  if (loading) {
-    return <IsLoadingPage />;
-  }
-
   return (
-    <Layout>
-      <div className="flex flex-col gap-3 md:flex-row md:justify-between">
-        <h1 className="text-2xl font-semibold text-title lg:text-3xl">
-          Find Your Tickets
-        </h1>
-      </div>
-      <div
-        className={cn(
-          "mt-3 w-full  p-3  md:px-5 md:py-4",
-          tickets.length === 0 &&
-            "flex min-h-[200px] max-w-[600px] items-center justify-center md:min-h-[300px]"
-        )}
-      >
-        {tickets.length === 0 ? (
-          <div className="mb-4 flex flex-col items-center space-y-3 text-subtext">
-            <p className="text-center font-semibold md:text-lg">
-              No tickets for sale, check again later!
-            </p>
+    <>
+      {loading ? (
+        <Layout>
+          <IsLoadingPage />
+        </Layout>
+      ) : (
+        <Layout>
+          <div className="flex flex-col gap-3 md:flex-row md:justify-between">
+            <h1 className="text-2xl font-semibold text-title lg:text-3xl">
+              Find Your Tickets
+            </h1>
           </div>
-        ) : (
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {tickets.map((ticket) => {
-              if (!ticket.salesDeadline) return null;
+          <div
+            className={cn(
+              "mt-3 w-full  p-3  md:px-5 md:py-4",
+              tickets.length === 0 &&
+                "flex min-h-[200px] max-w-[600px] items-center justify-center md:min-h-[300px]"
+            )}
+          >
+            {tickets.length === 0 ? (
+              <div className="mb-4 flex flex-col items-center space-y-3 text-subtext">
+                <p className="text-center font-semibold md:text-lg">
+                  No tickets for sale, check again later!
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+                {tickets.map((ticket) => {
+                  if (!ticket.salesDeadline) return null;
 
-              const salesDeadline = Number(ticket.salesDeadline);
-              const formattedDate = formatNSToDate(
-                BigInt(salesDeadline * 1_000_000)
-              );
+                  const salesDeadline = Number(ticket.salesDeadline);
+                  const formattedDate = formatNSToDate(
+                    BigInt(salesDeadline * 1_000_000)
+                  );
 
-              return (
-                <TicketPreview
-                  key={ticket.id}
-                  id={ticket.id}
-                  title={ticket.title}
-                  total={Number(ticket.total)}
-                  imageUrl={ticket.imageUrl}
-                  price={ticket.price}
-                  salesDeadline={formattedDate}
-                />
-              );
-            })}
+                  return (
+                    <TicketPreview
+                      key={ticket.id}
+                      id={ticket.id}
+                      title={ticket.title}
+                      total={Number(ticket.total)}
+                      imageUrl={ticket.imageUrl}
+                      price={ticket.price}
+                      salesDeadline={formattedDate}
+                    />
+                  );
+                })}
+              </div>
+            )}
           </div>
-        )}
-      </div>
-    </Layout>
+        </Layout>
+      )}
+    </>
   );
 };
 

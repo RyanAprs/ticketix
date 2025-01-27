@@ -1,12 +1,8 @@
-import Layout from "@/components/ui/Layout/Layout";
-
 const IsLoadingPage = () => {
   return (
-    <Layout>
-      <div className="h-full w-full flex items-center justify-center text-mainAccent">
-        <h1>Loading...</h1>
-      </div>
-    </Layout>
+    <div className="h-full w-full flex items-center justify-center text-title">
+      <h1 className="text-2xl">Loading...</h1>
+    </div>
   );
 };
 
