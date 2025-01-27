@@ -91,16 +91,18 @@ actor TickeTix {
   // TICKETS ENDPOINT ==========================================================
   // POST TICKET
   public func postTicket(
-    owner: Principal,
-    imageUrl: Text,
-    title: Text,
-    description: Text,
-    price: Nat,
-    salesDeadline: Int,
-    total: Nat,
-  ) : async Result.Result<Types.Ticket, Text> {
-    return TicketService.postTicket(tickets, owner, imageUrl, title, description, price, salesDeadline, total);
-  };
+      owner: Principal,
+      imageUrl: Text,
+      title: Text,
+      description: Text,
+      price: Float, 
+      salesDeadline: Int,
+      total: Nat,
+    ) : async Result.Result<Types.Ticket, Text> {
+      let priceInUSD = price / 10000; 
+      return TicketService.postTicket(tickets, owner, imageUrl, title, description, priceInUSD, salesDeadline, total);
+    };
+
 
   // UPDATE TICKET
   public func updateTicket(

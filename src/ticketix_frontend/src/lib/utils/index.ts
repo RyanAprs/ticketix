@@ -46,13 +46,8 @@ const mapMotokoTicketStatusToFrontend = (
 };
 
 export const formatNSToDate = (nanoseconds: bigint): string => {
-  // Convert nanoseconds to milliseconds
   const milliseconds = Number(nanoseconds / BigInt(1_000_000));
-
-  // Create a Date object
   const date = new Date(milliseconds);
-
-  // Format the date (e.g., "10 November 2024")
   const options: Intl.DateTimeFormatOptions = {
     day: "numeric",
     month: "long",

@@ -1,8 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-
-import { PlusIcon } from "lucide-react";
-
 import useWindowSize from "@/hooks/useWindowSize";
 import { cn } from "@/lib/utils/cn";
 import { useAuthManager } from "@/store/AuthProvider";
@@ -13,10 +9,10 @@ import { fetchAllTicketOnSale } from "@/lib/services/TicketService";
 import TicketPreview from "@/components/features/TicketManagement/TicketPreview";
 import Layout from "@/components/ui/Layout/Layout";
 import IsLoadingPage from "@/components/features/isLoadingPage/IsLoadingPage";
+import { formatNSToDate } from "@/lib/utils";
 
 const Tickets = () => {
   const { actor } = useAuthManager();
-  const { isMobile } = useWindowSize();
 
   const [tickets, setTickets] = useState([] as TicketType[]);
   const [loading, setLoading] = useState(false);
@@ -51,7 +47,7 @@ const Tickets = () => {
       </div>
       <div
         className={cn(
-          "mt-3 w-full rounded-lg border border-border p-3 shadow-custom md:px-5 md:py-4",
+          "mt-3 w-full  p-3  md:px-5 md:py-4",
           tickets.length === 0 &&
             "flex min-h-[200px] max-w-[600px] items-center justify-center md:min-h-[300px]"
         )}
@@ -63,24 +59,27 @@ const Tickets = () => {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {tickets.map((ticket) => (
-              <Link key={ticket.id} to={`/ticket/${ticket.id}`}>
-                <div>
-                  <img src={ticket.imageUrl} alt={ticket.title} />
-                  <h1>{ticket.title}</h1>
-                </div>
-                {/* <TicketPreview
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {tickets.map((ticket) => {
+              if (!ticket.salesDeadline) return null;
+
+              const salesDeadline = Number(ticket.salesDeadline);
+              const formattedDate = formatNSToDate(
+                BigInt(salesDeadline * 1_000_000)
+              );
+
+              return (
+                <TicketPreview
+                  key={ticket.id}
+                  id={ticket.id}
                   title={ticket.title}
-                  description={ticket.description}
+                  total={Number(ticket.total)}
                   imageUrl={ticket.imageUrl}
-                  owner={ticket.owner}
                   price={ticket.price}
-                  total={ticket.total}
-                  salesDeadline={ticket.salesDeadline}
-                /> */}
-              </Link>
-            ))}
+                  salesDeadline={formattedDate}
+                />
+              );
+            })}
           </div>
         )}
       </div>

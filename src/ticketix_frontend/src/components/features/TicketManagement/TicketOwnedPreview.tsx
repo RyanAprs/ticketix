@@ -2,25 +2,25 @@ import { cn } from "@/lib/utils/cn";
 import CustomButton from "@/components/ui/Button/CustomButton";
 import { Link } from "react-router-dom";
 
-interface TicketPreviewProps {
+interface TicketOwnedPreviewProps {
   id: string;
   title: string;
   imageUrl: string;
   price: number;
-  salesDeadline: string;
   total: number;
+  salesDeadline: string;
   className?: string;
 }
 
-const TicketPreview = ({
+const TicketOwnedPreview = ({
   id,
   title,
   imageUrl,
   price,
-  total,
   salesDeadline,
+  total,
   className,
-}: TicketPreviewProps) => {
+}: TicketOwnedPreviewProps) => {
   const handleBuyTicket = () => {
     console.log("buy ticket");
   };
@@ -56,4 +56,4 @@ const TicketPreview = ({
   );
 };
 
-export default TicketPreview;
+export default TicketOwnedPreview;

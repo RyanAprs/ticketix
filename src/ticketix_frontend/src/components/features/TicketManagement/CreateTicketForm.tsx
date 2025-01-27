@@ -92,31 +92,24 @@ const CreateTicketForm = () => {
             return;
           }
         }
-
         const price = parseFloat(priceInput);
         const usdToICP = convertUsdToIcp(price, icpPrice);
         const priceInICP = BigInt(Math.round(usdToICP * 10000));
-
         const totalInBigInt = BigInt(total);
-
-        console.log("Price in ICP:", priceInICP);
+        const priceInICPAsNumber = Number(priceInICP);
         const owner = principal;
-
         const result = await actor.postTicket(
           owner,
           imageUrl,
           title,
           description,
-          priceInICP,
+          priceInICPAsNumber,
           BigInt(salesDeadline || 0),
           totalInBigInt
         );
-
-        console.log("Post created successfully:", result);
-
         if ("ok" in result) {
           resetForm();
-          navigate(`/ticket/${result.ok.id}`);
+          navigate("/dashboard/ticket");
         } else {
           console.error("Error creating post", result.err);
           setFormErrors([result.err.toString()]);
@@ -168,7 +161,7 @@ const CreateTicketForm = () => {
       <CustomInput
         label="Price ($)"
         placeholder="Ticket Price in USD"
-        type="text" // Use text to allow decimal input
+        type="text"
         value={priceInput}
         onChange={(e) => setPriceInput(e.target.value)}
       />

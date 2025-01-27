@@ -10,18 +10,30 @@ import { useAuthManager } from "@/store/AuthProvider";
 import { Ticket as TicketType } from "../../../../../declarations/ticketix_backend/ticketix_backend.did";
 
 import CustomButton from "@/components/ui/Button/CustomButton";
-import { fetchAllTicketOnSale } from "@/lib/services/TicketService";
-import TicketPreview from "./TicketPreview";
+import { fetchAllTicketOwned } from "@/lib/services/TicketService";
+import { formatNSToDate } from "@/lib/utils";
+import { Principal } from "@dfinity/principal";
+import TicketOwnedPreview from "./TicketOwnedPreview";
 
 const TicketManagement = () => {
-  const { actor } = useAuthManager();
+  const { actor, principal } = useAuthManager();
   const { isMobile } = useWindowSize();
 
   const [tickets, setTickets] = useState([] as TicketType[]);
 
   useEffect(() => {
-    if (actor) {
-      fetchAllTicketOnSale(actor, setTickets);
+    const fetchOwner = async (ownerId: Principal) => {
+      if (actor) {
+        const user = await actor.getUserById(ownerId);
+        // return user.length > 0 ? user[0].username : "";
+      }
+      return "";
+    };
+    if (principal) {
+      fetchOwner(principal);
+    }
+    if (actor && principal) {
+      fetchAllTicketOwned(actor, setTickets, principal);
     }
   });
 
@@ -44,7 +56,7 @@ const TicketManagement = () => {
       </div>
       <div
         className={cn(
-          "mt-3 w-full rounded-lg border border-border p-3 shadow-custom md:px-5 md:py-4",
+          "mt-3 w-full p-3  md:px-5 md:py-4",
           tickets.length === 0 &&
             "flex min-h-[200px] max-w-[600px] items-center justify-center md:min-h-[300px]"
         )}
@@ -57,19 +69,28 @@ const TicketManagement = () => {
           </div>
         ) : (
           <div className="flex flex-wrap gap-5">
-            {/* {tickets.map((ticket) => (
-              <Link key={ticket.id} to={`/ticket/${ticket.id}`}>
-                <TicketPreview
-                  title={ticket.title}
-                  description={ticket.description}
-                  imageUrl={ticket.imageUrl}
-                  owner={ticket.owner}
-                  price={ticket.price}
-                  total={ticket.total}
-                  salesDeadline={ticket.salesDeadline}
-                />
-              </Link>
-            ))} */}
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+              {tickets.map((ticket) => {
+                if (!ticket.salesDeadline) return null;
+
+                const salesDeadline = Number(ticket.salesDeadline);
+                const formattedDate = formatNSToDate(
+                  BigInt(salesDeadline * 1_000_000)
+                );
+
+                return (
+                  <TicketOwnedPreview
+                    key={ticket.id}
+                    id={ticket.id}
+                    title={ticket.title}
+                    total={Number(ticket.total)}
+                    imageUrl={ticket.imageUrl}
+                    price={ticket.price}
+                    salesDeadline={formattedDate}
+                  />
+                );
+              })}
+            </div>
           </div>
         )}
       </div>

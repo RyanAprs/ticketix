@@ -48,7 +48,7 @@ const HeroBanner = () => {
             </Link>
           )}
 
-          <Link to="/tickets">
+          <Link to="/ticket">
             <CustomButton
               size={isMobile ? "small" : "default"}
               variant={"secondary"}

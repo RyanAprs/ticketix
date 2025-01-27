@@ -1,5 +1,6 @@
 import Principal "mo:base/Principal";
 import HashMap "mo:base/HashMap";
+import Float "mo:base/Float";
 
 module {
     public type Users = HashMap.HashMap<Principal, User>;
@@ -29,7 +30,7 @@ module {
         title: Text;            
         description: Text;      
         imageUrl: Text;        
-        price: Nat;             
+        price: Float;             
         salesDeadline: Int;    
         total: Nat;             
         createdAt: Int;
@@ -40,7 +41,7 @@ module {
         title: ?Text;            
         description: ?Text;      
         imageUrl: ?Text;        
-        price: ?Nat;             
+        price: ?Float;             
         salesDeadline: ?Int;    
         total: ?Nat;             
     };

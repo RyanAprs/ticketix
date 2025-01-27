@@ -3,6 +3,7 @@ import Principal "mo:base/Principal";
 import Text "mo:base/Text";
 import Result "mo:base/Result";
 import Time "mo:base/Time";
+import Float "mo:base/Float";
 import Utils "../utils/Utils";
 
 module {
@@ -13,7 +14,7 @@ module {
         imageUrl: Text,
         title: Text,
         description: Text,
-        price: Nat,
+        price: Float,
         salesDeadline: Int,
         total: Nat,
     ) : Result.Result<Types.Ticket, Text>{
@@ -92,7 +93,6 @@ module {
                 };
 
                 // VALIDATE TICKET STATUS
-
                 if(ticket.status == #used) {
                     return #err("This ticket is already used");
                 };
@@ -125,13 +125,15 @@ module {
                     case (?newImageUrl) { newImageUrl };
                 };
 
+                // VALIDATE PRICE
                 let price = switch (updateData.price) {
                     case (null) { ticket.price };
                     case (?newPrice) {
                         if (newPrice <= 0) {
                             return #err("Price must be greater than 0");
                         };
-                        newPrice;
+                        let priceInUSD = newPrice / 10000; 
+                        priceInUSD;
                     };
                 };
 

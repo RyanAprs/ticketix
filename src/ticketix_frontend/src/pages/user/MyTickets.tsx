@@ -4,7 +4,7 @@ import LayoutDashboard from "@/components/ui/Layout/LayoutDashboard";
 const MyTickets = () => {
   return (
     <LayoutDashboard title="My Tickets" className="w-full">
-      <TicketManagement />
+      <TicketManagement  />
     </LayoutDashboard>
   );
 };
