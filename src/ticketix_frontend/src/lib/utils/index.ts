@@ -1,20 +1,15 @@
 import BigNumber from "bignumber.js";
 
 import {
+  SingleTicket,
   ticketStatus,
   User,
 } from "../../../../declarations/ticketix_backend/ticketix_backend.did";
 import { TicketStatus, UserType } from "@/types";
 
-export const generateRandomString = () => {
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  let result = "";
-  for (let i = 0; i < 5; i++) {
-    const randomIndex = Math.floor(Math.random() * characters.length);
-    result += characters[randomIndex];
-  }
-  return result;
+const getTicketStatus = (singleTickets: SingleTicket[]): TicketStatus => {
+  if (singleTickets.length === 0) return "forSale";
+  return mapMotokoTicketStatusToFrontend(singleTickets[0].status);
 };
 
 export const serializeUser = (user: User): UserType => {
@@ -31,7 +26,7 @@ export const serializeUser = (user: User): UserType => {
       owner: ticket.owner.toText(),
       imageUrl: ticket.imageUrl || "",
       salesDeadline: Number(ticket.salesDeadline) * 1000,
-      status: mapMotokoTicketStatusToFrontend(ticket.status),
+      status: getTicketStatus(ticket.singleTicket),
     })),
   };
 };
@@ -54,6 +49,17 @@ export const formatNSToDate = (nanoseconds: bigint): string => {
     year: "numeric",
   };
   return date.toLocaleDateString("en-GB", options);
+};
+
+export const generateRandomString = () => {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "";
+  for (let i = 0; i < 5; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    result += characters[randomIndex];
+  }
+  return result;
 };
 
 // Convert ICP to e8s (smallest unit)

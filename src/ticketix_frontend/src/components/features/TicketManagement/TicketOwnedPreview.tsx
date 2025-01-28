@@ -2,6 +2,8 @@ import { cn } from "@/lib/utils/cn";
 import CustomButton from "@/components/ui/Button/CustomButton";
 import { Link } from "react-router-dom";
 import { Calendar, Ticket } from "lucide-react";
+import { useState } from "react";
+import DeleteDialog from "@/components/ui/Dialog/DeleteDialog";
 
 interface TicketOwnedPreviewProps {
   id: string;
@@ -17,14 +19,21 @@ const TicketOwnedPreview = ({
   id,
   title,
   imageUrl,
-  price,
+price,
   total,
   salesDeadline,
   className,
 }: TicketOwnedPreviewProps) => {
-  const handleBuyTicket = () => {
-    console.log("buy ticket");
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const handleDeleteClick = () => {
+    setIsDialogOpen(true);
   };
+
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false);
+  };
+
   return (
     <div
       className={cn(
@@ -55,13 +64,18 @@ const TicketOwnedPreview = ({
         </div>
 
         <div className="mt-5 flex items-center justify-center gap-6 md:mt-9 md:gap-10">
-          <CustomButton onClick={handleBuyTicket} variant={"secondary"}>
+          <CustomButton
+            onClick={() => console.log("Edit")}
+            variant={"secondary"}
+          >
             Edit
           </CustomButton>
 
-          <CustomButton onClick={handleBuyTicket}>Delete</CustomButton>
+          <CustomButton onClick={handleDeleteClick}>Delete</CustomButton>
         </div>
       </div>
+
+      <DeleteDialog isOpen={isDialogOpen} onClose={handleCloseDialog} />
     </div>
   );
 };
