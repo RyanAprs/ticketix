@@ -45,6 +45,8 @@ const TicketDetail = () => {
                 salesDeadline: formattedDate,
                 total: Number(res.total),
               };
+              console.log(ticketWithOwnerAsString);
+
               setTicket(ticketWithOwnerAsString);
             }
           }

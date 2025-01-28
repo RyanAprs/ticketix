@@ -134,21 +134,53 @@ actor TickeTix {
     return TicketService.getDetailTicket(tickets, ticketId);
   };
 
-  // GET ALL FORSALE TICKETS
-   public func getAllForSaleTicketPreviews() : async Result.Result<[Types.Ticket], Text> {
-    let forSaleTickets = Iter.filter<Types.Ticket>(
-      tickets.vals(),
-        func (ticket: Types.Ticket) : Bool {
-            return ticket.status == #forSale;
-        }
-    );
+  // GET ALL FOR SALE TICKETS
+  public func getAllForSaleTicketPreviews() : async Result.Result<[Types.Ticket], Text> {
+      let forSaleTickets = Iter.filter<Types.Ticket>(
+          tickets.vals(),
+          func (ticket: Types.Ticket) : Bool {
+              let ticketIter = Array.vals(ticket.singleTicket);
+              for (single in ticketIter) {
+                  if (single.status == #forSale) {
+                      return true;
+                  };
+              };
+              return false;
+          }
+      );
 
-    let ticketArray = Iter.toArray(forSaleTickets);
-    if (ticketArray.size() == 0) {
-      return #err("No tickets for sale available.");
-    } else {
-      return #ok(ticketArray);
-    };
+      let ticketArray = Iter.toArray(forSaleTickets);
+      if (ticketArray.size() == 0) {
+          return #err("No tickets for sale available.");
+      } else {
+          return #ok(ticketArray);
+      };
+  };
+
+  // GET OWNED TICKETS
+  public func getOwnedTickets(
+      userId: Principal
+  ) : async Result.Result<[Types.Ticket], Text> {
+      let ownedTickets = Iter.filter<Types.Ticket>(
+          tickets.vals(),
+          func (ticket: Types.Ticket) : Bool {
+              // Convert array to iterator using Array.vals()
+              let ticketIter = Array.vals(ticket.singleTicket);
+              for (single in ticketIter) {
+                  if (single.status == #owned and ticket.owner == userId) {
+                      return true;
+                  };
+              };
+              return false;
+          }
+      );
+
+      let ticketArray = Iter.toArray(ownedTickets);
+      if (ticketArray.size() == 0) {
+          return #err("You do not own any tickets.");
+      } else {
+          return #ok(ticketArray);
+      };
   };
 
   // GET ALL OWNED TICKETS
@@ -170,24 +202,30 @@ actor TickeTix {
     };
   };
 
-  // GET OWNED TICKETS
-  public func getOwnedTickets(
+  public func getAllSingleOwnerTickets(
     userId: Principal
-  ): async Result.Result<[Types.Ticket], Text> {
-    let ownedTickets = Iter.filter<Types.Ticket>(
-      tickets.vals(),
-      func (ticket: Types.Ticket) : Bool {
-        return ticket.status == #owned and ticket.owner == userId;
-      }
+) : async Result.Result<[Types.Ticket], Text> {
+    let singleOwnerTickets = Iter.filter<Types.Ticket>(
+        tickets.vals(),
+        func (ticket: Types.Ticket) : Bool {
+            let ticketIter = Array.vals(ticket.singleTicket);
+            for (single in ticketIter) {
+                if (single.singleOwner == userId) {
+                    return true;
+                };
+            };
+            return false;
+        }
     );
-    
-    let ticketArray = Iter.toArray(ownedTickets);
+
+    let ticketArray = Iter.toArray(singleOwnerTickets);
     if (ticketArray.size() == 0) {
-      return #err("You do not own any tickets.");
+        return #err("You do not own any single tickets.");
     } else {
-      return #ok(ticketArray);
+        return #ok(ticketArray);
     };
-  };
+};
+
 
   // DELETE TICKET
   public func deleteTicket (

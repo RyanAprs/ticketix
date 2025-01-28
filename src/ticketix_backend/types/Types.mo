@@ -34,6 +34,12 @@ module {
         salesDeadline: Int;    
         total: Nat;             
         createdAt: Int;
+        singleTicket: [SingleTicket]
+    };
+
+    public type SingleTicket = {
+        id: Text;
+        singleOwner: Principal;
         status: ticketStatus;          
     };
 
@@ -50,7 +56,7 @@ module {
         id: Text;               
         buyer: Principal;       
         seller: Principal;      
-        ticket: Ticket;         
+        ticket: SingleTicket;         
         totalTicket: Nat;      
         amount: Nat;            
         timestamp: Int;         

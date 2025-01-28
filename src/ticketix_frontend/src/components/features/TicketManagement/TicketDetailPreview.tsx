@@ -1,3 +1,4 @@
+import CustomButton from "@/components/ui/Button/CustomButton";
 import { Calendar, Tag, User, Ticket } from "lucide-react";
 
 interface TicketDetailPreviewProps {
@@ -20,6 +21,8 @@ const TicketDetailPreview = ({
   salesDeadline,
   total,
 }: TicketDetailPreviewProps) => {
+  const handleBuy = () => {};
+
   return (
     <div className="mx-auto max-w-6xl px-4">
       <div className="overflow-hidden rounded-xl bg-white shadow-lg">
@@ -111,9 +114,12 @@ const TicketDetailPreview = ({
                 </div>
               </div>
 
-              <button className="mt-6 w-full rounded-lg bg-blue-600 px-4 py-3 text-center font-semibold text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+              <CustomButton
+                onClick={handleBuy}
+                className="mt-6 w-full rounded-lg bg-blue-600 px-4 py-3 text-center font-semibold text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              >
                 Buy Ticket
-              </button>
+              </CustomButton>
 
               <p className="mt-4 text-center text-sm text-gray-500">
                 Secure checkout powered by Internet Computer
