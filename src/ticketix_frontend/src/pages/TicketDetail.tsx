@@ -5,9 +5,15 @@ import { fetchDetailTicket } from "@/lib/services/TicketService";
 import { getUserById } from "@/lib/services/UserService";
 import { formatNSToDate } from "@/lib/utils";
 import { useAuthManager } from "@/store/AuthProvider";
-import { Calendar, Tag, User, Ticket } from "lucide-react";
+import { TicketStatus } from "@/types";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+
+interface SingleTicketType {
+  id: string;
+  owner: string;
+  status: TicketStatus;
+}
 
 interface TicketType {
   id: string;
@@ -18,6 +24,7 @@ interface TicketType {
   owner: string;
   salesDeadline: string;
   total: number;
+  singleTicket: SingleTicketType[];
 }
 
 const TicketDetail = () => {
@@ -38,15 +45,24 @@ const TicketDetail = () => {
             const formattedDate = formatNSToDate(
               BigInt(salesDeadline * 1_000_000)
             );
+
             if (user) {
+              const singleTicketsWithOwner = res.singleTicket.map(
+                (ticket: any) => ({
+                  ...ticket,
+                  owner: res.owner,
+                })
+              );
+
               const ticketWithOwnerAsString = {
                 ...res,
                 owner: user.username,
                 salesDeadline: formattedDate,
                 total: Number(res.total),
+                singleTicket: singleTicketsWithOwner,
               };
-              console.log(ticketWithOwnerAsString);
 
+              console.log(ticketWithOwnerAsString);
               setTicket(ticketWithOwnerAsString);
             }
           }
@@ -74,6 +90,7 @@ const TicketDetail = () => {
           salesDeadline={ticket.salesDeadline}
           total={ticket.total}
           owner={ticket.owner}
+          singleTicket={ticket.singleTicket}
         />
       )}
     </Layout>

@@ -1,5 +1,12 @@
 import CustomButton from "@/components/ui/Button/CustomButton";
+import { TicketStatus } from "@/types";
 import { Calendar, Tag, User, Ticket } from "lucide-react";
+
+interface SingleTicketType {
+  id: string;
+  owner: string;
+  status: TicketStatus;
+}
 
 interface TicketDetailPreviewProps {
   title: string;
@@ -9,6 +16,7 @@ interface TicketDetailPreviewProps {
   salesDeadline: string;
   total: number;
   owner: string;
+  singleTicket: SingleTicketType[];
   className?: string;
 }
 
@@ -20,8 +28,13 @@ const TicketDetailPreview = ({
   owner,
   salesDeadline,
   total,
+  singleTicket,
 }: TicketDetailPreviewProps) => {
-  const handleBuy = () => {};
+  const handleBuy = () => {
+    if (singleTicket) {
+      console.log(singleTicket[0].id);
+    }
+  };
 
   return (
     <div className="mx-auto max-w-6xl px-4">

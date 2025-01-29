@@ -2,6 +2,7 @@ import Principal "mo:base/Principal";
 import Result "mo:base/Result";
 import Text "mo:base/Text";
 import Types "../types/Types";
+import ledger "canister:icp_ledger_canister";
 
 module {
   // LOGIN/REGISTER
@@ -82,5 +83,26 @@ module {
       };
     };
     return null;
+  };
+
+  // GET ICP BALANCE
+  public func getAccountBalance(principalId: Principal): async Nat {
+    let balance = await ledger.icrc1_balance_of({
+      owner = principalId;
+      subaccount = null;
+    });
+    return balance;
+  };
+
+  // GET CREDIT BALANCE
+  public func getCreditBalance(userBalances: Types.UserBalances, userId: Principal): Types.UserBalance {
+    switch (userBalances.get(userId)) {
+      case (null) {
+        {balance = 0; id = userId};
+      };
+      case (?balance) {
+        balance
+      };
+    };
   };
 }
