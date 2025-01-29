@@ -42,7 +42,7 @@ const useICP = () => {
       // Create a Ledger Canister instance
       const ledger = LedgerCanister.create({
         agent: agent,
-        canisterId: Principal.fromText("ryjl3-tyaaa-aaaaa-aaaba-cai"), // Ledger Canister ID
+        canisterId: Principal.fromText("a3shf-5eaaa-aaaaa-qaafa-cai"), // Ledger Canister ID
       });
 
       const accountIdentifier = AccountIdentifier.fromPrincipal({

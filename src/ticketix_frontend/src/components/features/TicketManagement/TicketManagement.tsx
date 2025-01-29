@@ -12,9 +12,9 @@ import { Ticket as TicketType } from "../../../../../declarations/ticketix_backe
 import CustomButton from "@/components/ui/Button/CustomButton";
 import { fetchAllTicketOwned } from "@/lib/services/TicketService";
 import { formatNSToDate } from "@/lib/utils";
-import { Principal } from "@dfinity/principal";
 import TicketOwnedPreview from "./TicketOwnedPreview";
 import IsLoadingPage from "../isLoadingPage/IsLoadingPage";
+import Accordion from "@/components/ui/Accordion/accordion";
 
 const TicketManagement = () => {
   const { actor, principal } = useAuthManager();
@@ -22,6 +22,25 @@ const TicketManagement = () => {
 
   const [tickets, setTickets] = useState([] as TicketType[]);
   const [loading, setLoading] = useState(false);
+
+  const accordionItems = [
+    {
+      title: "Sell Ticket",
+      content: (
+        <div className="w-full flex flex-col justify-center items-center gap-2">
+          <Link
+            to="/dashboard/ticket/post"
+            className="w-full hover:bg-mainAccent p-2 rounded-lg"
+          >
+            Sell New Ticket
+          </Link>
+          <Link to="" className="w-full hover:bg-mainAccent p-2 rounded-lg">
+            Sell Existing Ticket
+          </Link>
+        </div>
+      ),
+    },
+  ];
 
   useEffect(() => {
     if (actor && principal) {
@@ -50,7 +69,12 @@ const TicketManagement = () => {
             <h1 className="text-2xl font-semibold text-title lg:text-3xl">
               Ticket Management
             </h1>
-            <Link to={"/dashboard/ticket/post"}>
+            <Accordion
+              items={accordionItems}
+              className="w-[50%] sm:w-[30%] md:w-[15%]"
+            />
+
+            {/* <Link to={"/dashboard/ticket/post"}>
               <CustomButton
                 variant="secondary"
                 className="w-fit"
@@ -59,7 +83,7 @@ const TicketManagement = () => {
               >
                 Sale New Ticket
               </CustomButton>
-            </Link>
+            </Link> */}
           </div>
           <div
             className={cn(

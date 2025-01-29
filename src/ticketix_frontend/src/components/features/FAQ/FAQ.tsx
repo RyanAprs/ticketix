@@ -1,5 +1,4 @@
 import Accordion from "@/components/ui/Accordion/accordion";
-import React from "react";
 
 const FAQ = () => {
   const accordionItems = [
