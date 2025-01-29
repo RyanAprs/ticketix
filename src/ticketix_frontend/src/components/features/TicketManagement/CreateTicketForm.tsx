@@ -97,9 +97,9 @@ const CreateTicketForm = () => {
         const priceInICP = BigInt(Math.round(usdToICP * 10000));
         const totalInBigInt = BigInt(total);
         const priceInICPAsNumber = Number(priceInICP);
-        const owner = principal;
-        const result = await actor.postTicket(
-          owner,
+        const creator = principal;
+        const result = await actor.postEvent(
+          creator,
           imageUrl,
           title,
           description,

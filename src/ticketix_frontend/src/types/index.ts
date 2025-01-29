@@ -1,8 +1,6 @@
 export interface UserType {
   id: string;
   username: string;
-  balance: number;
-  tickets: TicketType[];
 }
 
 export interface TicketType {
@@ -14,7 +12,7 @@ export interface TicketType {
   owner: string;
   salesDeadline: number;
   total: number;
-  status: TicketStatus;
+  status: TicketStatusInterface;
 }
 
-export type TicketStatus = "owned" | "forSale" | "used";
+export type TicketStatusInterface = "owned" | "forSale" | "used";

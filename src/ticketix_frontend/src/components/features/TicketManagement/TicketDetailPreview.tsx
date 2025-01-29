@@ -1,22 +1,23 @@
 import CustomButton from "@/components/ui/Button/CustomButton";
-import { TicketStatus } from "@/types";
+import { TicketStatusInterface } from "@/types";
 import { Calendar, Tag, User, Ticket } from "lucide-react";
 
-interface SingleTicketType {
+interface TicketType {
   id: string;
   owner: string;
-  status: TicketStatus;
+  status: TicketStatusInterface;
+  price: number;
 }
 
 interface TicketDetailPreviewProps {
   title: string;
   description: string;
   imageUrl: string;
-  price: number;
+  // price: number;
   salesDeadline: string;
   total: number;
   owner: string;
-  singleTicket: SingleTicketType[];
+  ticket: TicketType[];
   className?: string;
 }
 
@@ -24,15 +25,15 @@ const TicketDetailPreview = ({
   title,
   description,
   imageUrl,
-  price,
+  // price,
   owner,
   salesDeadline,
   total,
-  singleTicket,
+  ticket,
 }: TicketDetailPreviewProps) => {
   const handleBuy = () => {
-    if (singleTicket) {
-      console.log(singleTicket[0].id);
+    if (ticket) {
+      console.log(ticket[0].id);
     }
   };
 
@@ -56,7 +57,7 @@ const TicketDetailPreview = ({
               </div>
               <div className="flex items-center space-x-2 text-white">
                 <Tag className="h-5 w-5" />
-                <span>{price} ICP</span>
+                {/* <span>{price} ICP</span> */}
               </div>
             </div>
           </div>
@@ -110,7 +111,7 @@ const TicketDetailPreview = ({
           <div className="lg:col-span-1">
             <div className="sticky top-8 rounded-lg border bg-white p-6 shadow-sm">
               <div className="mb-6">
-                <p className="text-3xl font-bold text-gray-900">{price} ICP</p>
+                {/* <p className="text-3xl font-bold text-gray-900">{price} ICP</p> */}
                 <p className="text-sm text-gray-500">per ticket</p>
               </div>
 

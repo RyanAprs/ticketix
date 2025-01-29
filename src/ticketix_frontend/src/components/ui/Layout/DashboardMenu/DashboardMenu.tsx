@@ -24,7 +24,7 @@ const DashboardMenu = () => {
     return {
       ...section,
       items: section.items.filter((item) =>
-        ["Profile", "My Tickets"].includes(item.label)
+        ["Profile", "My Tickets", "My Wallet"].includes(item.label)
       ),
     };
   });

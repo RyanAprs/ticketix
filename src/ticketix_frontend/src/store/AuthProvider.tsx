@@ -204,11 +204,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
             user = {
               id: principal.toString(),
               username: username,
-              balance: 0,
-              tickets: [],
             };
 
-            await actor.authenticateUser(principal, username, BigInt(0));
+            await actor.authenticateUser(username);
           }
 
           // Simpan data pengguna ke Redux

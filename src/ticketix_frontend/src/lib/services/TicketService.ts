@@ -38,15 +38,15 @@ export const fetchAllTicketOwned = async (
   }
 };
 
-export const fetchDetailTicket = async (actor: _SERVICE, ticketId: string) => {
+export const fetchDetailTicket = async (actor: _SERVICE, eventId: string) => {
   try {
-    const tickets = await actor.getTicketDetail(ticketId);
+    const events = await actor.getEventDetail(eventId);
 
-    if ("ok" in tickets) {
-      const ticketArray = tickets.ok;
+    if ("ok" in events) {
+      const ticketArray = events.ok;
       return ticketArray;
     } else {
-      console.error("Error fetching tickets:", tickets.err);
+      console.error("Error fetching events:", events.err);
     }
   } catch (error) {
     console.error("Error fetching ticket:", error);

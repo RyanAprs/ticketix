@@ -2,7 +2,6 @@ import Principal "mo:base/Principal";
 import Result "mo:base/Result";
 import Text "mo:base/Text";
 import Types "../types/Types";
-import ledger "canister:icp_ledger_canister";
 
 module {
   // LOGIN/REGISTER
@@ -10,7 +9,6 @@ module {
     userId: Principal,
     users: Types.Users,
     username: Text,
-    balance: Nat,
   ): Result.Result<Types.User, Text> {
     switch (users.get(userId)) {
       case (?_) {
@@ -20,7 +18,6 @@ module {
         let newUser: Types.User = {
           id = userId;
           username = username;
-          balance = balance;
           tickets = [];
         };
         users.put(userId, newUser);
@@ -65,8 +62,6 @@ module {
         let updatedUser: Types.User = {
           id = user.id;
           username = username;
-          balance = user.balance;
-          tickets = user.tickets;
         };
 
         users.put(userId, updatedUser);
@@ -85,24 +80,4 @@ module {
     return null;
   };
 
-  // GET ICP BALANCE
-  public func getAccountBalance(principalId: Principal): async Nat {
-    let balance = await ledger.icrc1_balance_of({
-      owner = principalId;
-      subaccount = null;
-    });
-    return balance;
-  };
-
-  // GET CREDIT BALANCE
-  public func getCreditBalance(userBalances: Types.UserBalances, userId: Principal): Types.UserBalance {
-    switch (userBalances.get(userId)) {
-      case (null) {
-        {balance = 0; id = userId};
-      };
-      case (?balance) {
-        balance
-      };
-    };
-  };
 }

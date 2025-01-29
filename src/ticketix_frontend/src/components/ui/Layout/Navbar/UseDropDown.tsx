@@ -13,6 +13,7 @@ import {
   CircleUserRoundIcon,
   Ticket,
   Tickets,
+  Wallet,
 } from "lucide-react";
 
 import { useAuthManager } from "@/store/AuthProvider";
@@ -24,6 +25,7 @@ export const menuSections = [
     items: [
       { label: "Profile", to: "/dashboard", icon: <CircleUserRoundIcon /> },
       { label: "My Tickets", to: "/dashboard/ticket", icon: <Ticket /> },
+      { label: "My wallet", to: "/dashboard/wallet", icon: <Wallet /> },
       { label: "Find Tickets", to: "/tickets", icon: <Tickets /> },
     ],
     activeClassName: "hover:bg-mainAccent",

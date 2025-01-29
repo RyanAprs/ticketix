@@ -1,39 +1,38 @@
 import BigNumber from "bignumber.js";
 
 import {
-  SingleTicket,
-  ticketStatus,
+  Ticket,
+  TicketStatus,
   User,
 } from "../../../../declarations/ticketix_backend/ticketix_backend.did";
-import { TicketStatus, UserType } from "@/types";
+import { TicketStatusInterface, UserType } from "@/types";
 
-const getTicketStatus = (singleTickets: SingleTicket[]): TicketStatus => {
-  if (singleTickets.length === 0) return "forSale";
-  return mapMotokoTicketStatusToFrontend(singleTickets[0].status);
+const getTicketStatus = (tickets: Ticket[]): TicketStatusInterface => {
+  if (tickets.length === 0) return "forSale";
+  return mapMotokoTicketStatusToFrontend(tickets[0].status);
 };
 
 export const serializeUser = (user: User): UserType => {
   return {
     id: user.id.toText(),
     username: user.username,
-    balance: Number(user.balance),
-    tickets: user.tickets.map((ticket) => ({
-      id: ticket.id,
-      title: ticket.title,
-      description: ticket.description,
-      price: Number(ticket.price),
-      total: Number(ticket.total),
-      owner: ticket.owner.toText(),
-      imageUrl: ticket.imageUrl || "",
-      salesDeadline: Number(ticket.salesDeadline) * 1000,
-      status: getTicketStatus(ticket.singleTicket),
-    })),
+    // tickets: user.tickets.map((ticket) => ({
+    //   id: ticket.id,
+    //   title: ticket.title,
+    //   description: ticket.description,
+    //   price: Number(ticket.price),
+    //   total: Number(ticket.total),
+    //   owner: ticket.owner.toText(),
+    //   imageUrl: ticket.imageUrl || "",
+    //   salesDeadline: Number(ticket.salesDeadline) * 1000,
+    //   status: getTicketStatus(ticket.singleTicket),
+    // })),
   };
 };
 
 const mapMotokoTicketStatusToFrontend = (
-  status: ticketStatus
-): TicketStatus => {
+  status: TicketStatus
+): TicketStatusInterface => {
   if ("owned" in status) return "owned";
   if ("forSale" in status) return "forSale";
   if ("used" in status) return "used";

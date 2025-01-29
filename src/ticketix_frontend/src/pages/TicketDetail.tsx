@@ -5,32 +5,30 @@ import { fetchDetailTicket } from "@/lib/services/TicketService";
 import { getUserById } from "@/lib/services/UserService";
 import { formatNSToDate } from "@/lib/utils";
 import { useAuthManager } from "@/store/AuthProvider";
-import { TicketStatus } from "@/types";
+import { TicketStatusInterface } from "@/types";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-interface SingleTicketType {
-  id: string;
-  owner: string;
-  status: TicketStatus;
-}
-
-interface TicketType {
+interface TicketDetailType {
   id: string;
   title: string;
   description: string;
   imageUrl: string;
-  price: number;
   owner: string;
   salesDeadline: string;
   total: number;
-  singleTicket: SingleTicketType[];
+  ticket: {
+    id: string;
+    owner: string;
+    status: TicketStatusInterface;
+    price: number;
+  }[];
 }
 
 const TicketDetail = () => {
   const { id } = useParams();
   const { actor, principal } = useAuthManager();
-  const [ticket, setTicket] = useState<TicketType | undefined>(undefined);
+  const [ticket, setTicket] = useState<TicketDetailType | undefined>(undefined);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -40,26 +38,30 @@ const TicketDetail = () => {
           setLoading(true);
           const res = await fetchDetailTicket(actor, id);
           if (res) {
-            const user = await getUserById(actor, res.owner);
+            const user = await getUserById(actor, res.creator);
             const salesDeadline = Number(res.salesDeadline);
             const formattedDate = formatNSToDate(
               BigInt(salesDeadline * 1_000_000)
             );
 
             if (user) {
-              const singleTicketsWithOwner = res.singleTicket.map(
-                (ticket: any) => ({
-                  ...ticket,
-                  owner: res.owner,
-                })
-              );
+              const ticket = res.ticket.map((ticket: any) => ({
+                id: ticket.id,
+                owner: ticket.singleOwner,
+                status: ticket.status,
+                price: ticket.price,
+              }));
 
-              const ticketWithOwnerAsString = {
-                ...res,
+              const ticketWithOwnerAsString: TicketDetailType = {
+                id: res.id,
+                title: res.title,
+                description: res.description,
+                imageUrl: res.imageUrl,
+                // price: res.price,
                 owner: user.username,
                 salesDeadline: formattedDate,
                 total: Number(res.total),
-                singleTicket: singleTicketsWithOwner,
+                ticket,
               };
 
               console.log(ticketWithOwnerAsString);
@@ -86,11 +88,10 @@ const TicketDetail = () => {
           title={ticket.title}
           description={ticket.description}
           imageUrl={ticket.imageUrl}
-          price={ticket.price}
           salesDeadline={ticket.salesDeadline}
           total={ticket.total}
           owner={ticket.owner}
-          singleTicket={ticket.singleTicket}
+          ticket={ticket.ticket}
         />
       )}
     </Layout>

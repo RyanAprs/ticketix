@@ -6,7 +6,7 @@ interface TicketPreviewProps {
   id: string;
   title: string;
   imageUrl: string;
-  price: number;
+  // price: number;
   salesDeadline: string;
   total: number;
   className?: string;
@@ -16,7 +16,7 @@ const TicketPreview = ({
   id,
   title,
   imageUrl,
-  price,
+  // price,
   total,
   salesDeadline,
   className,
@@ -43,7 +43,7 @@ const TicketPreview = ({
             <Ticket className="h-5 w-5 text-blue-600" />
             <span className="text-sm text-gray-600">{total} tickets left</span>
           </div>
-          <p className="text-lg font-bold text-blue-600">{price} ICP</p>
+          {/* <p className="text-lg font-bold text-blue-600">{price} ICP</p> */}
         </div>
 
         <div className="flex items-center space-x-2 text-gray-500">

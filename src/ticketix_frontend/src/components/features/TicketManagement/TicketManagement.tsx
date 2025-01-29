@@ -7,7 +7,7 @@ import useWindowSize from "@/hooks/useWindowSize";
 import { cn } from "@/lib/utils/cn";
 import { useAuthManager } from "@/store/AuthProvider";
 
-import { Ticket as TicketType } from "../../../../../declarations/ticketix_backend/ticketix_backend.did";
+import { Event as TicketType } from "../../../../../declarations/ticketix_backend/ticketix_backend.did";
 
 import CustomButton from "@/components/ui/Button/CustomButton";
 import { fetchAllTicketOwned } from "@/lib/services/TicketService";
@@ -20,7 +20,7 @@ const TicketManagement = () => {
   const { actor, principal } = useAuthManager();
   const { isMobile } = useWindowSize();
 
-  const [tickets, setTickets] = useState([] as TicketType[]);
+  const [events, setEvent] = useState([] as TicketType[]);
   const [loading, setLoading] = useState(false);
 
   const accordionItems = [
@@ -47,7 +47,7 @@ const TicketManagement = () => {
       const fetchData = async () => {
         try {
           setLoading(true);
-          await fetchAllTicketOwned(actor, setTickets, principal);
+          await fetchAllTicketOwned(actor, setEvent, principal);
         } catch (error) {
           console.error(error);
         } finally {
@@ -88,11 +88,11 @@ const TicketManagement = () => {
           <div
             className={cn(
               "mt-3 w-full p-3  md:px-5 md:py-4",
-              tickets.length === 0 &&
+              events.length === 0 &&
                 "flex min-h-[200px] max-w-[600px] items-center justify-center md:min-h-[300px]"
             )}
           >
-            {tickets.length === 0 ? (
+            {events.length === 0 ? (
               <div className="mb-4 flex flex-col items-center space-y-3 text-subtext">
                 <p className="text-center font-semibold md:text-lg">
                   No ticket yet, Sale or buy a ticket first!
@@ -101,22 +101,21 @@ const TicketManagement = () => {
             ) : (
               <div className="flex flex-wrap gap-5">
                 <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-                  {tickets.map((ticket) => {
-                    if (!ticket.salesDeadline) return null;
+                  {events.map((event) => {
+                    if (!event.salesDeadline) return null;
 
-                    const salesDeadline = Number(ticket.salesDeadline);
+                    const salesDeadline = Number(event.salesDeadline);
                     const formattedDate = formatNSToDate(
                       BigInt(salesDeadline * 1_000_000)
                     );
 
                     return (
                       <TicketOwnedPreview
-                        key={ticket.id}
-                        id={ticket.id}
-                        title={ticket.title}
-                        total={Number(ticket.total)}
-                        imageUrl={ticket.imageUrl}
-                        price={ticket.price}
+                        key={event.id}
+                        id={event.id}
+                        title={event.title}
+                        total={Number(event.total)}
+                        imageUrl={event.imageUrl}
                         salesDeadline={formattedDate}
                       />
                     );
