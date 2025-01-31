@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import {  XIcon } from "lucide-react";
+import { XIcon } from "lucide-react";
 
 import useUploadImage from "@/hooks/useUploadImage";
 import { useAuthManager } from "@/store/AuthProvider";
@@ -41,7 +41,7 @@ const CreateEventForm = () => {
   const [description, setDescription] = useState("");
   const [priceInput, setPriceInput] = useState("");
   const [total, setTotal] = useState(0);
-  const [salesDeadline, setSalesDeadline] = useState<number | null>(null);
+  const [latestPurchase, setLatestPurchase] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const [formErrors, setFormErrors] = useState<string[]>([]);
 
@@ -65,7 +65,7 @@ const CreateEventForm = () => {
       errors.push("Total ticket must be greater than 0");
     }
 
-    if (!salesDeadline) {
+    if (!latestPurchase) {
       errors.push("Sales deadline is required");
     }
 
@@ -104,12 +104,12 @@ const CreateEventForm = () => {
           title,
           description,
           priceInICPAsNumber,
-          BigInt(salesDeadline || 0),
+          BigInt(latestPurchase || 0),
           totalInBigInt
         );
         if ("ok" in result) {
           resetForm();
-          navigate("/dashboard/ticket");
+          navigate("/dashboard/event");
         } else {
           console.error("Error creating post", result.err);
           setFormErrors([result.err.toString()]);
@@ -127,7 +127,7 @@ const CreateEventForm = () => {
     setDescription("");
     setPriceInput("");
     setTotal(0);
-    setSalesDeadline(null);
+    setLatestPurchase(null);
     resetImage();
     setFormErrors([]);
   };
@@ -135,9 +135,9 @@ const CreateEventForm = () => {
   const handleDateChange = (date: Date | null) => {
     if (date) {
       const timestamp = date.getTime();
-      setSalesDeadline(timestamp);
+      setLatestPurchase(timestamp);
     } else {
-      setSalesDeadline(null);
+      setLatestPurchase(null);
     }
   };
 
@@ -145,7 +145,7 @@ const CreateEventForm = () => {
     <div className="mt-3 rounded-lg border border-border px-5 py-4 shadow-custom">
       <CustomInput
         label="Title"
-        placeholder="Ticket Title"
+        placeholder="Event Title"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
@@ -153,28 +153,28 @@ const CreateEventForm = () => {
         containerClassName="mt-2 md:mt-4"
         textareaClassName="md:min-h-[100px]"
         label="Description"
-        placeholder="Description about the ticket"
+        placeholder="Description about the event"
         maxLength={1000}
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
       <CustomInput
         label="Price ($)"
-        placeholder="Ticket Price in USD"
+        placeholder="Price per ticket for your event in USD"
         type="text"
         value={priceInput}
         onChange={(e) => setPriceInput(e.target.value)}
       />
       <CustomInput
         label="Total Ticket"
-        placeholder="Ticket Total"
+        placeholder="Total ticket for your event"
         type="number"
         value={total}
         onChange={(e) => setTotal(Number(e.target.value))}
       />
       <CustomDateInput
-        label="Sales Deadline"
-        value={salesDeadline ? new Date(salesDeadline) : null}
+        label="Last purchase"
+        value={latestPurchase ? new Date(latestPurchase) : null}
         onChange={handleDateChange}
         containerClassName="mb-4"
       />
@@ -184,7 +184,7 @@ const CreateEventForm = () => {
         <div className="space-y-5">
           <CustomFileInput
             onChange={handleImageChange}
-            placeholder="Upload ticket image"
+            placeholder="Upload event thumbnail"
             containerClassName="max-w-[300px]"
           />
 
@@ -221,7 +221,7 @@ const CreateEventForm = () => {
           onClick={handleCreateNewEvent}
           className="mb-3 mt-5 w-full md:w-[300px]"
         >
-          {loading || isImageUploading ? "Uploading..." : "Post Ticket"}
+          {loading || isImageUploading ? "Uploading..." : "Create Event"}
         </CustomButton>
       </div>
     </div>

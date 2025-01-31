@@ -15,6 +15,8 @@ export interface EventType {
   status: TicketStatusInterface;
 }
 
+export type EventStatusInterface = "upComing" | "completed";
+
 export type TicketStatusInterface = "owned" | "forSale" | "used";
 
 export interface TicketType {

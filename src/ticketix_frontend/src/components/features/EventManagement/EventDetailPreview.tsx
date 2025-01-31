@@ -1,6 +1,13 @@
 import CustomButton from "@/components/ui/Button/CustomButton";
 import { TicketStatusInterface } from "@/types";
-import { Calendar, User, Ticket } from "lucide-react";
+import {
+  Calendar,
+  User,
+  Ticket,
+  CheckCircle,
+  Clock,
+  ChevronRight,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface TicketType {
@@ -19,6 +26,7 @@ interface EventDetailPreviewProps {
   total: number;
   owner: string;
   ticket: TicketType[];
+  status: string;
   className?: string;
 }
 
@@ -30,6 +38,7 @@ const EventDetailPreview = ({
   owner,
   salesDeadline,
   total,
+  status,
 }: EventDetailPreviewProps) => {
   return (
     <div className="mx-auto max-w-6xl px-4">
@@ -48,6 +57,10 @@ const EventDetailPreview = ({
               <div className="flex items-center space-x-2 text-white">
                 <User className="h-5 w-5" />
                 <span>{owner}</span>
+              </div>
+              <div className="flex items-center space-x-2 text-white">
+                {status === "upComing" ? <Clock /> : <CheckCircle />}
+                <span>{status}</span>
               </div>
             </div>
           </div>
@@ -98,31 +111,13 @@ const EventDetailPreview = ({
           </div>
 
           {/* Sidebar */}
-          <div className="lg:col-span-1">
-            <div className="sticky top-8 rounded-lg border bg-white p-6 shadow-sm">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-600">Available Tickets</span>
-                  <span className="font-medium text-gray-900">{total}</span>
-                </div>
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-600">Sales End</span>
-                  <span className="font-medium text-gray-900">
-                    {salesDeadline}
-                  </span>
-                </div>
-              </div>
-
-              <Link to={`/event/${id}/ticket`}>
-                <CustomButton className="mt-6 w-full rounded-lg bg-blue-600 px-4 py-3 text-center font-semibold text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                  Check Ticket
-                </CustomButton>
-              </Link>
-
-              <p className="mt-4 text-center text-sm text-gray-500">
-                Secure checkout powered by Internet Computer
-              </p>
-            </div>
+          <div className="w-full flex justify-center items-end">
+            <Link to={`/event/${id}/ticket`}>
+              <CustomButton className="mt-6 w-full rounded-lg bg-blue-600 px-4 py-3 text-center font-semibold text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                Check Ticket
+                <ChevronRight />
+              </CustomButton>
+            </Link>
           </div>
         </div>
       </div>

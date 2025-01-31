@@ -4,11 +4,11 @@ import { useAuthManager } from "@/store/AuthProvider";
 
 import { Event as EventType } from "../../../../declarations/ticketix_backend/ticketix_backend.did";
 
-import { fetchAllTicketOnSale } from "@/lib/services/TicketService";
 import Layout from "@/components/ui/Layout/Layout";
 import IsLoadingPage from "@/components/features/isLoadingPage/IsLoadingPage";
 import { formatNSToDate } from "@/lib/utils";
 import EventPreview from "@/components/features/EventManagement/EventPreview";
+import { fetchAllEvents } from "@/lib/services/EventService";
 
 const EventPage = () => {
   const { actor } = useAuthManager();
@@ -21,7 +21,10 @@ const EventPage = () => {
       const fetchData = async () => {
         try {
           setLoading(true);
-          await fetchAllTicketOnSale(actor, setEvents);
+          const result = await fetchAllEvents(actor);
+          if (result) {
+            setEvents(result);
+          }
         } catch (error) {
           console.error(error);
         } finally {
@@ -56,7 +59,7 @@ const EventPage = () => {
             {events.length === 0 ? (
               <div className="mb-4 flex flex-col items-center space-y-3 text-subtext">
                 <p className="text-center font-semibold md:text-lg">
-                  No events for sale, check again later!
+                  No events available yet, check again later!
                 </p>
               </div>
             ) : (

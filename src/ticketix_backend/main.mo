@@ -15,6 +15,7 @@ import Float "mo:base/Float";
 import Int "mo:base/Int";
 // import TransactionService "services/TransactionService";
 import EventService "services/EventService";
+import TicketService "services/TicketService";
 
 actor TickeTix {
   private var users: Types.Users = HashMap.HashMap(0, Principal.equal, Principal.hash);
@@ -129,16 +130,6 @@ actor TickeTix {
   ): async Result.Result<Types.Event, Text> {
       return EventService.updateEvent(userId, events, eventId, updateData);
   };
-
-  // UPDATE TICKET STATUS
-   public shared func updateTicketStatus(
-        eventId: Text,
-        userId: Principal,
-        status: Types.TicketStatus   
-    ) : async Result.Result<Types.Event, Text> {
-        return EventService.updateTicketStatus(events, eventId, userId, status);
-    };
-
   
   // GET EVENTS
   public func getAllEventPreviews() : async [Types.Event] {
@@ -152,7 +143,72 @@ actor TickeTix {
     return EventService.getDetailEvent(events, eventId);
   };
 
-  // GET ALL FOR SALE TICKETS
+  // GET OWNED EVENT
+  public func getOwnedEvents(
+      userId: Principal
+  ) : async Result.Result<[Types.Event], Text> {
+      let ownedEvent = Iter.filter<Types.Event>(
+          events.vals(),
+          func (event: Types.Event) : Bool {
+              // Convert array to iterator using Array.vals()
+              let ticketIter = Array.vals(event.ticket);
+              for (ticket in ticketIter) {
+                  if (ticket.status == #owned and ticket.owner == userId) {
+                      return true;
+                  };
+              };
+              return false;
+          }
+      );
+
+      let ticketArray = Iter.toArray(ownedEvent);
+      if (ticketArray.size() == 0) {
+          return #err("You do not own any event.");
+      } else {
+          return #ok(ticketArray);
+      };
+  };
+
+  // GET ALL EVENT BY CREATOR
+  public func getEventByCreator(
+    userId: Principal
+  ): async Result.Result<[Types.Event], Text> {
+    let ownedEvents = Iter.filter<Types.Event>(
+      events.vals(),
+      func (event: Types.Event) : Bool {
+        return event.creator == userId;
+      }
+    );
+    
+    let eventArray = Iter.toArray(ownedEvents);
+    if (eventArray.size() == 0) {
+      return #err("You do not own any event.");
+    } else {
+      return #ok(eventArray);
+    };
+  };
+
+    // DELETE EVENT
+  public func deleteEvent (
+    eventId: Text,
+    userId: Principal,
+  ) : async Result.Result<(), Text> {
+    return EventService.deleteEvent(events, userId, eventId);
+  };
+
+    // COMPLETED EVENT STATUS
+   public shared(msg) func updateEventStatusToCompleted(
+        eventId: Text
+    ): async Result.Result<Types.Event, Text> {
+        return EventService.updateEventStatusToCompleted(
+            events,     
+            eventId,    
+            msg.caller  
+        );
+    };
+
+  // TICKET ENDPOINT ==========================================================================
+    // GET ALL FOR SALE TICKETS
   public func getAllForSaleTicketPreviews() : async Result.Result<[Types.Event], Text> {
       let forSaleTickets = Iter.filter<Types.Event>(
           events.vals(),
@@ -175,56 +231,11 @@ actor TickeTix {
       };
   };
 
-  // GET OWNED TICKETS
-  public func getOwnedTickets(
-      userId: Principal
-  ) : async Result.Result<[Types.Event], Text> {
-      let ownedTickets = Iter.filter<Types.Event>(
-          events.vals(),
-          func (event: Types.Event) : Bool {
-              // Convert array to iterator using Array.vals()
-              let ticketIter = Array.vals(event.ticket);
-              for (ticket in ticketIter) {
-                  if (ticket.status == #owned and ticket.owner == userId) {
-                      return true;
-                  };
-              };
-              return false;
-          }
-      );
-
-      let ticketArray = Iter.toArray(ownedTickets);
-      if (ticketArray.size() == 0) {
-          return #err("You do not own any tickets.");
-      } else {
-          return #ok(ticketArray);
-      };
-  };
-
-  // GET ALL OWNED TICKETS
-  public func getAllOwnedTickets(
-    userId: Principal
-  ): async Result.Result<[Types.Event], Text> {
-    let ownedTickets = Iter.filter<Types.Event>(
-      events.vals(),
-      func (ticket: Types.Event) : Bool {
-        return ticket.creator == userId;
-      }
-    );
-    
-    let ticketArray = Iter.toArray(ownedTickets);
-    if (ticketArray.size() == 0) {
-      return #err("You do not own any tickets.");
-    } else {
-      return #ok(ticketArray);
-    };
-  };
-
   // GET ALL SINGLE OWNER TICKETS
-  public func getAllSingleOwnerTickets(
+  public func getTicketByUserId(
     userId: Principal
     ) : async Result.Result<[Types.Event], Text> {
-        let singleOwnerTickets = Iter.filter<Types.Event>(
+        let ticket = Iter.filter<Types.Event>(
             events.vals(),
             func (event: Types.Event) : Bool {
                 let ticketIter = Array.vals(event.ticket);
@@ -237,37 +248,15 @@ actor TickeTix {
             }
         );
 
-        let ticketArray = Iter.toArray(singleOwnerTickets);
+        let ticketArray = Iter.toArray(ticket);
         if (ticketArray.size() == 0) {
-            return #err("You do not own any single tickets.");
+            return #err("You do not own any tickets.");
         } else {
             return #ok(ticketArray);
         };
   };
 
-  // public func getAllSingleOwnerTicketByEvent(ticketId: Text) : async Result.Result<[Types.Event], Text> {
-  //     let singleOwnerTickets = Iter.filter<Types.Event>(
-  //         events.vals(),
-  //         func (event: Types.Event) : Bool {
-  //             let ticketIter = Array.vals(event.ticket);
-  //             for (single in ticketIter) {
-  //                 if (single.status == #forSale ) {
-  //                     return true;
-  //                 };
-  //             };
-  //             return false;
-  //         }
-  //     );
-
-  //     let ticketArray = Iter.toArray(singleOwnerTickets);
-  //     if (ticketArray.size() == 0) {
-  //         return #err("No tickets for sale available for this event.");
-  //     } else {
-  //         return #ok(ticketArray);
-  //     };
-  // };
-
-  // GET ALL SINGLE OWNER TICKETS BY EVENT
+  // GET ALL FOR SALE TICKETS BY EVENT
   public func getAllForSaleTicketByEvent(eventId: Text) : async Result.Result<[Types.Ticket], Text> {
       switch (events.get(eventId)) {
           case (null) {
@@ -285,14 +274,21 @@ actor TickeTix {
       };
   };
 
-
-  // DELETE TICKET
-  public func deleteTicket (
-    eventId: Text,
-    userId: Principal,
-  ) : async Result.Result<(), Text> {
-    return EventService.deleteEvent(events, userId, eventId);
-  };
+    // UPDATE TICKET STATUS
+    public shared(msg) func updateTicketStatus(
+        eventId : Text,
+        ticketId : Text,
+        status : Types.TicketStatus
+    ) : async Result.Result<Types.Event, Text> {
+        let userId = msg.caller;
+        return TicketService.updateTicketStatus(
+            events, 
+            eventId, 
+            userId, 
+            ticketId, 
+            status
+        );
+    };
 
   // BALANCE ==========================================================================
   // GET ACCOUNT ICP BALANCE

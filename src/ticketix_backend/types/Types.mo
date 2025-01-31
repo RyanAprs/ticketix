@@ -22,11 +22,6 @@ module {
         username: ?Text;
     };
 
-    public type TicketStatus = {
-        #owned;
-        #forSale;
-        #used;
-    };
 
     public type Event = {
         id: Text;               
@@ -37,11 +32,18 @@ module {
         salesDeadline: Int;    
         total: Nat;             
         createdAt: Int;
-        ticket: [Ticket]
+        ticket: [Ticket];
+    };
+
+    public type TicketStatus = {
+        #owned;
+        #forSale;
+        #used;
     };
 
     public type Ticket = {
         id: Text;
+        eventId: Text;
         owner: Principal;
         status: TicketStatus;  
         price: Float;        

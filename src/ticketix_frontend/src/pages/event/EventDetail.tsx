@@ -1,9 +1,9 @@
 import EventDetailPreview from "@/components/features/EventManagement/EventDetailPreview";
 import IsLoadingPage from "@/components/features/isLoadingPage/IsLoadingPage";
 import Layout from "@/components/ui/Layout/Layout";
-import { fetchDetailTicket } from "@/lib/services/TicketService";
+import { fetchDetailTicket } from "@/lib/services/EventService";
 import { getUserById } from "@/lib/services/UserService";
-import { formatNSToDate } from "@/lib/utils";
+import { formatNSToDate, getEventStatus } from "@/lib/utils";
 import { useAuthManager } from "@/store/AuthProvider";
 import { TicketStatusInterface } from "@/types";
 import { useEffect, useState } from "react";
@@ -17,6 +17,7 @@ interface EventDetailType {
   owner: string;
   salesDeadline: string;
   total: number;
+  status: string;
   ticket: {
     id: string;
     owner: string;
@@ -43,6 +44,7 @@ const EventDetail = () => {
         try {
           setLoading(true);
           const res = await fetchDetailTicket(actor, id);
+
           if (res) {
             const user = await getUserById(actor, res.creator);
             const salesDeadline = Number(res.salesDeadline);
@@ -50,12 +52,14 @@ const EventDetail = () => {
               BigInt(salesDeadline * 1_000_000)
             );
 
+            const statusEvent = getEventStatus(res.salesDeadline);
+
             if (user) {
               const ticket = res.ticket.map((ticket: any) => ({
                 id: ticket.id,
                 owner: ticket.singleOwner,
                 status: ticket.status,
-                price: ticket.price,
+                price: Number(ticket.price),
               }));
 
               const ticketWithOwnerAsString: EventDetailType = {
@@ -66,6 +70,7 @@ const EventDetail = () => {
                 owner: user.username,
                 salesDeadline: formattedDate,
                 total: Number(res.total),
+                status: statusEvent,
                 ticket,
               };
 
@@ -95,6 +100,7 @@ const EventDetail = () => {
           imageUrl={ticket.imageUrl}
           salesDeadline={ticket.salesDeadline}
           total={ticket.total}
+          status={ticket.status}
           owner={ticket.owner}
           ticket={ticket.ticket}
         />

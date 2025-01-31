@@ -10,6 +10,7 @@ import CreateEventPage from "./pages/user/CreateEventPage";
 import MyEvent from "./pages/user/MyEvent";
 import EventPage from "./pages/event/EventPage";
 import TicketPage from "./pages/ticket/TicketPage";
+import MyTicket from "./pages/user/MyTicket";
 
 const App = () => {
   const { isAuthenticated, initializeAuth } = useAuthManager();
@@ -32,6 +33,7 @@ const App = () => {
       {/* Protected Routes = Authenticated */}
       <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard/ticket" element={<MyTicket />} />
         <Route path="/dashboard/event" element={<MyEvent />} />
         <Route path="/dashboard/event/post" element={<CreateEventPage />} />
         <Route path="/dashboard/wallet" element={<WalletPage />} />

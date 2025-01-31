@@ -5,7 +5,7 @@ const CreateEventPage = () => {
   return (
     <LayoutDashboard title="Create Ticket" className="w-full">
       <h1 className="text-2xl font-semibold text-title lg:text-3xl">
-        Sale Ticket
+        Create Event
       </h1>
       <CreateEventForm />
     </LayoutDashboard>

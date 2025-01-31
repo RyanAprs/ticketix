@@ -59,10 +59,8 @@ module {
 
         let eventId = Utils.generateUUID(creator, description);
 
-        // Inisialisasi array untuk menyimpan single tickets
         var ticket : [Types.Ticket] = [];
 
-        // Membuat array baru dengan Buffer
         let ticketBuffer = Buffer.Buffer<Types.Ticket>(total);
 
         // Generate ticket
@@ -71,6 +69,7 @@ module {
             
             let newTicket: Types.Ticket = {
                 id = ticketId;
+                eventId = eventId;
                 status = #forSale;
                 owner = creator;
                 price = price;
@@ -79,7 +78,7 @@ module {
             ticketBuffer.add(newTicket);
         };
 
-        // Convert buffer ke array
+        // Convert buffer to array
         ticket := Buffer.toArray(ticketBuffer);
 
         let newEvent : Types.Event = {
@@ -197,6 +196,7 @@ module {
                     let ticketId = Utils.generateUUID(userId, description # Int.toText(i));
                     let newSingleTicket : Types.Ticket = {
                         id = ticketId;
+                        eventId = eventId;
                         owner = userId;
                         status = #forSale;
                         price = price;
@@ -224,12 +224,11 @@ module {
         };
     };
 
-    // UPDATE TICKET STATUS
-    public func updateTicketStatus( 
+    // COMPLETED EVENT STATUS
+    public func updateEventStatusToCompleted( 
         events: Types.Events,
         eventId: Text,
         userId: Principal,
-        status: Types.TicketStatus   
     ) : Result.Result<Types.Event, Text> {
         if (Principal.isAnonymous(userId)) {
             return #err("Anonymous principals are not allowed to update ticket status");
@@ -240,20 +239,14 @@ module {
                 return #err("Ticket not found!");  
             };
             case (?event) {
-                for (ticket in event.ticket.vals()) {
-                    if (ticket.status == #used) {
-                        return #err("Cannot update ticket, some tickets are already used");
-                    };
-                };
-
                 if(not Principal.equal(event.creator, userId)) {
-                    return #err("Only creator can edit this ticket status");
+                    return #err("Only creator can edit this event status");
                 };
 
-                let updatedTicket = { event with status = status };
-                events.put(eventId, updatedTicket); 
+                let updatedEvent = { event with status = #completed };
+                events.put(eventId, updatedEvent); 
 
-                return #ok(updatedTicket); 
+                return #ok(updatedEvent); 
             };
         };
     };

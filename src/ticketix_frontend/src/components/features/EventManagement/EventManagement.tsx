@@ -7,46 +7,27 @@ import useWindowSize from "@/hooks/useWindowSize";
 import { cn } from "@/lib/utils/cn";
 import { useAuthManager } from "@/store/AuthProvider";
 
-import { Event as TicketType } from "../../../../../declarations/ticketix_backend/ticketix_backend.did";
+import { Event as EventType } from "../../../../../declarations/ticketix_backend/ticketix_backend.did";
 
-import { fetchAllTicketOwned } from "@/lib/services/TicketService";
 import { formatNSToDate } from "@/lib/utils";
 import EventOwnedPreview from "./EventOwnedPreview";
 import IsLoadingPage from "../isLoadingPage/IsLoadingPage";
-import Accordion from "@/components/ui/Accordion/accordion";
+import CustomButton from "@/components/ui/Button/CustomButton";
+import { getEventByCreator } from "@/lib/services/EventService";
 
 const EventManagement = () => {
   const { actor, principal } = useAuthManager();
   const { isMobile } = useWindowSize();
 
-  const [events, setEvent] = useState([] as TicketType[]);
+  const [events, setEvent] = useState([] as EventType[]);
   const [loading, setLoading] = useState(false);
-
-  const accordionItems = [
-    {
-      title: "Sell Ticket",
-      content: (
-        <div className="w-full flex flex-col justify-center items-center gap-2">
-          <Link
-            to="/dashboard/ticket/post"
-            className="w-full hover:bg-mainAccent p-2 rounded-lg"
-          >
-            Sell New Ticket
-          </Link>
-          <Link to="" className="w-full hover:bg-mainAccent p-2 rounded-lg">
-            Sell Existing Ticket
-          </Link>
-        </div>
-      ),
-    },
-  ];
 
   useEffect(() => {
     if (actor && principal) {
       const fetchData = async () => {
         try {
           setLoading(true);
-          await fetchAllTicketOwned(actor, setEvent, principal);
+          await getEventByCreator(actor, setEvent, principal);
         } catch (error) {
           console.error(error);
         } finally {
@@ -66,23 +47,19 @@ const EventManagement = () => {
         <>
           <div className="flex flex-col gap-3 md:flex-row md:justify-between">
             <h1 className="text-2xl font-semibold text-title lg:text-3xl">
-              Ticket Management
+              Event Management
             </h1>
-            <Accordion
-              items={accordionItems}
-              className="w-[50%] sm:w-[30%] md:w-[15%]"
-            />
 
-            {/* <Link to={"/dashboard/ticket/post"}>
+            <Link to={"/dashboard/event/post"}>
               <CustomButton
                 variant="secondary"
                 className="w-fit"
                 icon={<PlusIcon className="mr-1 size-5" />}
                 size={isMobile ? "small" : "default"}
               >
-                Sale New Ticket
+                Create Your Event
               </CustomButton>
-            </Link> */}
+            </Link>
           </div>
           <div
             className={cn(
@@ -94,7 +71,7 @@ const EventManagement = () => {
             {events.length === 0 ? (
               <div className="mb-4 flex flex-col items-center space-y-3 text-subtext">
                 <p className="text-center font-semibold md:text-lg">
-                  No ticket yet, Sale or buy a ticket first!
+                  No event yet, Create your event first!
                 </p>
               </div>
             ) : (

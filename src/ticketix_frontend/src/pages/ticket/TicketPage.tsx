@@ -1,3 +1,4 @@
+import IsLoadingPage from "@/components/features/isLoadingPage/IsLoadingPage";
 import TicketEventPreview from "@/components/features/TicketManagement/TicketEventPreview";
 import CustomButton from "@/components/ui/Button/CustomButton";
 import Layout from "@/components/ui/Layout/Layout";
@@ -8,6 +9,8 @@ import { Principal } from "@dfinity/principal";
 import { ArrowLeft } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+
+type Result<T> = { ok?: T; err?: string };
 
 export interface EnhancedTicketType extends TicketType {
   totalTickets: number;
@@ -30,11 +33,12 @@ const TicketPage = () => {
       setIsLoading(true);
       setError(null);
       try {
-        const result = await actor.getAllForSaleTicketByEvent(idTicket);
-        console.log("Raw ticket result:", result);
+        const result = (await actor.getAllForSaleTicketByEvent(
+          idTicket
+        )) as Result<TicketType[]>;
 
-        if (!result || !result.ok) {
-          throw new Error("Invalid result from API");
+        if (!result.ok) {
+          throw new Error(result.err || "Invalid result from API");
         }
 
         const owners = [
@@ -42,32 +46,25 @@ const TicketPage = () => {
             result.ok.map((ticket: TicketType) => ticket.owner.toString())
           ),
         ];
-        console.log("Unique owners:", owners);
 
         const users = await Promise.all(
-          owners.map(async (owner) => {
+          owners.map(async (owner: string) => {
             try {
-              const ownerPrincipal =
-                typeof owner === "string" ? Principal.fromText(owner) : owner;
+              const ownerPrincipal = Principal.fromText(owner);
 
               const user = await getUserById(actor, ownerPrincipal);
-              console.log("Fetched user for owner:", {
-                owner: owner.toString(),
-                user,
-                username: user?.username,
-              });
 
               if (!user) {
-                return { owner: owner.toString(), username: "Unknown User" };
+                return { owner, username: "Unknown User" };
               }
 
               return {
-                owner: owner.toString(),
+                owner,
                 username: user.username || "No Username",
               };
             } catch (error) {
               console.error(`Error fetching user for owner ${owner}:`, error);
-              return { owner: owner.toString(), username: "Error" };
+              return { owner, username: "Error" };
             }
           })
         );
@@ -78,8 +75,6 @@ const TicketPage = () => {
             [owner]: username,
           };
         }, {} as Record<string, string>);
-
-        console.log("Final userMap:", userMap);
 
         const ticketGroups = result.ok.reduce(
           (acc: Record<string, TicketType[]>, ticket: TicketType) => {
@@ -92,7 +87,7 @@ const TicketPage = () => {
         );
 
         const enhancedTickets = Object.entries(ticketGroups).map(
-          ([owner, group]) => ({
+          ([owner, group]: [string, TicketType[]]) => ({
             ...group[0],
             totalTickets: group.length,
             ownerUsername: userMap[owner] || "Unknown",
@@ -100,7 +95,6 @@ const TicketPage = () => {
         );
 
         setTickets(enhancedTickets);
-        console.log("Final processed tickets:", enhancedTickets);
       } catch (error) {
         console.error("Error fetching tickets:", error);
         setError(error instanceof Error ? error.message : "An error occurred");
@@ -128,9 +122,11 @@ const TicketPage = () => {
     );
   }
 
-  if (isLoading) {
-    return (
-      <Layout>
+  return (
+    <Layout>
+      {isLoading ? (
+        <IsLoadingPage />
+      ) : (
         <div className="flex flex-col gap-4">
           <Link to={`/event/${idTicket}`} className="w-3/4">
             <CustomButton className="flex justify-center items-center gap-2">
@@ -138,23 +134,9 @@ const TicketPage = () => {
               Back
             </CustomButton>
           </Link>
-          <div>Loading...</div>
+          <TicketEventPreview tickets={tickets} />
         </div>
-      </Layout>
-    );
-  }
-
-  return (
-    <Layout>
-      <div className="flex flex-col gap-4">
-        <Link to={`/event/${idTicket}`} className="w-3/4">
-          <CustomButton className="flex justify-center items-center gap-2">
-            <ArrowLeft />
-            Back
-          </CustomButton>
-        </Link>
-        <TicketEventPreview tickets={tickets} />
-      </div>
+      )}
     </Layout>
   );
 };

@@ -1,31 +1,24 @@
 import { Principal } from "@dfinity/principal";
 import { _SERVICE } from "../../../../declarations/ticketix_backend/ticketix_backend.did";
 
-export const fetchAllTicketOnSale = async (
-  actor: _SERVICE,
-  setTickets: any
-) => {
+export const fetchAllEvents = async (actor: _SERVICE) => {
   try {
-    const tickets = await actor.getAllForSaleTicketPreviews();
+    const events = await actor.getAllEventPreviews();
 
-    if ("ok" in tickets) {
-      const ticketArray = tickets.ok;
-      setTickets(ticketArray);
-    } else {
-      console.error("Error fetching tickets:", tickets.err);
-    }
+    const ticketArray = events;
+    return ticketArray;
   } catch (error) {
     console.error("Error fetching ticket:", error);
   }
 };
 
-export const fetchAllTicketOwned = async (
+export const getEventByCreator = async (
   actor: _SERVICE,
   setTicketsOwned: any,
   userId: Principal
 ) => {
   try {
-    const tickets = await actor.getAllOwnedTickets(userId);
+    const tickets = await actor.getEventByCreator(userId);
 
     if ("ok" in tickets) {
       const ticketArray = tickets.ok;
