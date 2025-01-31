@@ -3,17 +3,18 @@ import useWindowSize from "@/hooks/useWindowSize";
 import { cn } from "@/lib/utils/cn";
 import { useAuthManager } from "@/store/AuthProvider";
 
-import { Event as EventType } from "../../../declarations/ticketix_backend/ticketix_backend.did";
+import { Event as EventType } from "../../../../declarations/ticketix_backend/ticketix_backend.did";
 
 import { fetchAllTicketOnSale } from "@/lib/services/TicketService";
 import Layout from "@/components/ui/Layout/Layout";
 import IsLoadingPage from "@/components/features/isLoadingPage/IsLoadingPage";
 import { formatNSToDate } from "@/lib/utils";
-import EventPreview from "@/components/features/TicketManagement/EventPreview";
+import EventPreview from "@/components/features/EventManagement/EventPreview";
 
 const EventPage = () => {
   const { actor } = useAuthManager();
 
+  // const [events, setEvents] = useState([] as EventType[]);
   const [events, setEvents] = useState([] as EventType[]);
   const [loading, setLoading] = useState(false);
 
