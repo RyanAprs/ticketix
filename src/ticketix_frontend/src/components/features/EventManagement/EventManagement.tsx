@@ -9,14 +9,13 @@ import { useAuthManager } from "@/store/AuthProvider";
 
 import { Event as TicketType } from "../../../../../declarations/ticketix_backend/ticketix_backend.did";
 
-import CustomButton from "@/components/ui/Button/CustomButton";
 import { fetchAllTicketOwned } from "@/lib/services/TicketService";
 import { formatNSToDate } from "@/lib/utils";
-import TicketOwnedPreview from "./TicketOwnedPreview";
+import EventOwnedPreview from "./EventOwnedPreview";
 import IsLoadingPage from "../isLoadingPage/IsLoadingPage";
 import Accordion from "@/components/ui/Accordion/accordion";
 
-const TicketManagement = () => {
+const EventManagement = () => {
   const { actor, principal } = useAuthManager();
   const { isMobile } = useWindowSize();
 
@@ -110,7 +109,7 @@ const TicketManagement = () => {
                     );
 
                     return (
-                      <TicketOwnedPreview
+                      <EventOwnedPreview
                         key={event.id}
                         id={event.id}
                         title={event.title}
@@ -130,4 +129,4 @@ const TicketManagement = () => {
   );
 };
 
-export default TicketManagement;
+export default EventManagement;

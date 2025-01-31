@@ -13,7 +13,7 @@ import { CustomDateInput } from "@/components/ui/Input/CustomDateInput";
 import useICP from "@/hooks/useICP";
 import { convertUsdToIcp } from "@/lib/utils";
 
-const CreateTicketForm = () => {
+const CreateEventForm = () => {
   const navigate = useNavigate();
   const { actor, principal } = useAuthManager();
   const { fetchIcpUsdPrice } = useICP();
@@ -77,7 +77,7 @@ const CreateTicketForm = () => {
     return errors.length === 0;
   };
 
-  const handleCreateNewTicket = async () => {
+  const handleCreateNewEvent = async () => {
     if (!validateForm()) return null;
 
     try {
@@ -218,7 +218,7 @@ const CreateTicketForm = () => {
         <CustomButton
           variant="secondary"
           disabled={loading || isImageUploading}
-          onClick={handleCreateNewTicket}
+          onClick={handleCreateNewEvent}
           className="mb-3 mt-5 w-full md:w-[300px]"
         >
           {loading || isImageUploading ? "Uploading..." : "Post Ticket"}
@@ -228,4 +228,4 @@ const CreateTicketForm = () => {
   );
 };
 
-export default CreateTicketForm;
+export default CreateEventForm;

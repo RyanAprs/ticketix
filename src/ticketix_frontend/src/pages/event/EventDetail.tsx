@@ -1,5 +1,5 @@
+import EventDetailPreview from "@/components/features/EventManagement/EventDetailPreview";
 import IsLoadingPage from "@/components/features/isLoadingPage/IsLoadingPage";
-import TicketDetailPreview from "@/components/features/TicketManagement/TicketDetailPreview";
 import Layout from "@/components/ui/Layout/Layout";
 import { fetchDetailTicket } from "@/lib/services/TicketService";
 import { getUserById } from "@/lib/services/UserService";
@@ -9,7 +9,7 @@ import { TicketStatusInterface } from "@/types";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-interface TicketDetailType {
+interface EventDetailType {
   id: string;
   title: string;
   description: string;
@@ -25,10 +25,10 @@ interface TicketDetailType {
   }[];
 }
 
-const TicketDetail = () => {
+const EventDetail = () => {
   const { id } = useParams();
   const { actor, principal } = useAuthManager();
-  const [ticket, setTicket] = useState<TicketDetailType | undefined>(undefined);
+  const [ticket, setTicket] = useState<EventDetailType | undefined>(undefined);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -52,12 +52,11 @@ const TicketDetail = () => {
                 price: ticket.price,
               }));
 
-              const ticketWithOwnerAsString: TicketDetailType = {
+              const ticketWithOwnerAsString: EventDetailType = {
                 id: res.id,
                 title: res.title,
                 description: res.description,
                 imageUrl: res.imageUrl,
-                // price: res.price,
                 owner: user.username,
                 salesDeadline: formattedDate,
                 total: Number(res.total),
@@ -84,7 +83,7 @@ const TicketDetail = () => {
       {!ticket || loading ? (
         <IsLoadingPage />
       ) : (
-        <TicketDetailPreview
+        <EventDetailPreview
           title={ticket.title}
           description={ticket.description}
           imageUrl={ticket.imageUrl}
@@ -98,4 +97,4 @@ const TicketDetail = () => {
   );
 };
 
-export default TicketDetail;
+export default EventDetail;

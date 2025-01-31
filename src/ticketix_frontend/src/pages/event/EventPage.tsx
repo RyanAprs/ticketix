@@ -6,12 +6,12 @@ import { useAuthManager } from "@/store/AuthProvider";
 import { Event as EventType } from "../../../declarations/ticketix_backend/ticketix_backend.did";
 
 import { fetchAllTicketOnSale } from "@/lib/services/TicketService";
-import TicketPreview from "@/components/features/TicketManagement/TicketPreview";
 import Layout from "@/components/ui/Layout/Layout";
 import IsLoadingPage from "@/components/features/isLoadingPage/IsLoadingPage";
 import { formatNSToDate } from "@/lib/utils";
+import EventPreview from "@/components/features/TicketManagement/EventPreview";
 
-const Tickets = () => {
+const EventPage = () => {
   const { actor } = useAuthManager();
 
   const [events, setEvents] = useState([] as EventType[]);
@@ -71,7 +71,7 @@ const Tickets = () => {
                   );
 
                   return (
-                    <TicketPreview
+                    <EventPreview
                       key={event.id}
                       id={event.id}
                       title={event.title}
@@ -90,4 +90,4 @@ const Tickets = () => {
   );
 };
 
-export default Tickets;
+export default EventPage;

@@ -9,7 +9,7 @@ interface TicketType {
   price: number;
 }
 
-interface TicketDetailPreviewProps {
+interface EventDetailPreviewProps {
   title: string;
   description: string;
   imageUrl: string;
@@ -21,7 +21,7 @@ interface TicketDetailPreviewProps {
   className?: string;
 }
 
-const TicketDetailPreview = ({
+const EventDetailPreview = ({
   title,
   description,
   imageUrl,
@@ -30,7 +30,7 @@ const TicketDetailPreview = ({
   salesDeadline,
   total,
   ticket,
-}: TicketDetailPreviewProps) => {
+}: EventDetailPreviewProps) => {
   const handleBuy = () => {
     if (ticket) {
       console.log(ticket[0].id);
@@ -146,4 +146,4 @@ const TicketDetailPreview = ({
   );
 };
 
-export default TicketDetailPreview;
+export default EventDetailPreview;

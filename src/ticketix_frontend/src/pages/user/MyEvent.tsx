@@ -1,12 +1,12 @@
-import TicketManagement from "@/components/features/TicketManagement/TicketManagement";
+import EventManagement from "@/components/features/EventManagement/EventManagement";
 import LayoutDashboard from "@/components/ui/Layout/LayoutDashboard";
 
-const MyTickets = () => {
+const MyEvent = () => {
   return (
     <LayoutDashboard title="My Tickets" className="w-full">
-      <TicketManagement  />
+      <EventManagement />
     </LayoutDashboard>
   );
 };
 
-export default MyTickets;
+export default MyEvent;

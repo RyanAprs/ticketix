@@ -1,29 +1,39 @@
 import { cn } from "@/lib/utils/cn";
+import CustomButton from "@/components/ui/Button/CustomButton";
 import { Link } from "react-router-dom";
 import { Calendar, Ticket } from "lucide-react";
+import { useState } from "react";
+import DeleteDialog from "@/components/ui/Dialog/DeleteDialog";
 
-interface TicketPreviewProps {
+interface EventOwnedPreviewProps {
   id: string;
   title: string;
   imageUrl: string;
-  // price: number;
   salesDeadline: string;
   total: number;
   className?: string;
 }
 
-const TicketPreview = ({
+const EventOwnedPreview = ({
   id,
   title,
   imageUrl,
-  // price,
   total,
   salesDeadline,
   className,
-}: TicketPreviewProps) => {
+}: EventOwnedPreviewProps) => {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const handleDeleteClick = () => {
+    setIsDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false);
+  };
+
   return (
-    <Link
-      to={`/ticket/${id}`}
+    <div
       className={cn(
         "min-w-[300px] max-w-md cursor-pointer border bg-offWhite text-subtext transition-all hover:shadow-hover",
         className
@@ -50,9 +60,22 @@ const TicketPreview = ({
           <Calendar className="h-5 w-5" />
           <p className="text-sm">Available until {salesDeadline}</p>
         </div>
+
+        <div className="mt-5 flex items-center justify-center gap-6 md:mt-9 md:gap-10">
+          <CustomButton
+            onClick={() => console.log("Edit")}
+            variant={"secondary"}
+          >
+            Edit
+          </CustomButton>
+
+          <CustomButton onClick={handleDeleteClick}>Delete</CustomButton>
+        </div>
       </div>
-    </Link>
+
+      <DeleteDialog isOpen={isDialogOpen} onClose={handleCloseDialog} />
+    </div>
   );
 };
 
-export default TicketPreview;
+export default EventOwnedPreview;

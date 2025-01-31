@@ -4,11 +4,11 @@ import { useAuthManager } from "./store/AuthProvider";
 import { useEffect } from "react";
 import ProtectedRoute from "./components/features/ProtectedRoute/ProtectedRoute";
 import Dashboard from "./pages/user/Dashboard";
-import MyTickets from "./pages/user/MyTickets";
-import Tickets from "./pages/Tickets";
-import CreateTicketPage from "./pages/user/CreateTicketPage";
-import DetailTicket from "./pages/TicketDetail";
 import WalletPage from "./pages/user/WalletPage";
+import EventDetail from "./pages/event/EventDetail";
+import CreateEventPage from "./pages/user/CreateEventPage";
+import MyEvent from "./pages/user/MyEvent";
+import EventPage from "./pages/event/EventPage";
 
 const App = () => {
   const { isAuthenticated, initializeAuth } = useAuthManager();
@@ -24,14 +24,15 @@ const App = () => {
     <Routes>
       {/* Public Routes */}
       <Route path="/" element={<LandingPage />} />
-      <Route path="/ticket" element={<Tickets />} />
-      <Route path="/ticket/:id" element={<DetailTicket />} />
+      <Route path="/event" element={<EventPage />} />
+      <Route path="/event/:id" element={<EventDetail />} />
+      <Route path="/event/:id/ticket" element={<EventDetail />} />
 
       {/* Protected Routes = Authenticated */}
       <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/dashboard/ticket" element={<MyTickets />} />
-        <Route path="/dashboard/ticket/post" element={<CreateTicketPage />} />
+        <Route path="/dashboard/event" element={<MyEvent />} />
+        <Route path="/dashboard/event/post" element={<CreateEventPage />} />
         <Route path="/dashboard/wallet" element={<WalletPage />} />
       </Route>
     </Routes>

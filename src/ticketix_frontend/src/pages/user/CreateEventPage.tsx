@@ -1,15 +1,15 @@
-import CreateTicketForm from "@/components/features/TicketManagement/CreateTicketForm";
+import CreateEventForm from "@/components/features/EventManagement/CreateEventForm";
 import LayoutDashboard from "@/components/ui/Layout/LayoutDashboard";
 
-const CreateTicketPage = () => {
+const CreateEventPage = () => {
   return (
     <LayoutDashboard title="Create Ticket" className="w-full">
       <h1 className="text-2xl font-semibold text-title lg:text-3xl">
         Sale Ticket
       </h1>
-      <CreateTicketForm />
+      <CreateEventForm />
     </LayoutDashboard>
   );
 };
 
-export default CreateTicketPage;
+export default CreateEventPage;

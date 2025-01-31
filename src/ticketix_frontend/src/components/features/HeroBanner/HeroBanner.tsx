@@ -17,8 +17,8 @@ const HeroBanner = () => {
           <div className="flex items-center gap-3 md:gap-5">
             <h1>Take Control of Your </h1>
             {/* <img
-              src="/images/logo/nekotip.svg"
-              alt="nekotip"
+              src="/images/logo/ticketix.svg"
+              alt="ticketix"
               className="w-[60px] sm:w-[75px] md:w-[110px]"
             /> */}
             {/* <h1>your</h1> */}
@@ -43,18 +43,18 @@ const HeroBanner = () => {
                 size={isMobile ? "small" : "default"}
                 className="md:w-[250px]"
               >
-                My Tickets
+                My Ticket
               </CustomButton>
             </Link>
           )}
 
-          <Link to="/ticket">
+          <Link to="/event">
             <CustomButton
               size={isMobile ? "small" : "default"}
               variant={"secondary"}
               className="md:w-[250px]"
             >
-              Explore TickeTix
+              Explore Event
             </CustomButton>
           </Link>
         </div>
