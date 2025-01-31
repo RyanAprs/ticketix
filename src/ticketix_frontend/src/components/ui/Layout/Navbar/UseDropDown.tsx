@@ -9,6 +9,7 @@ import {
   Transition,
 } from "@headlessui/react";
 import {
+  CalendarCheck2,
   ChevronDown,
   CircleUserRoundIcon,
   Ticket,
@@ -24,8 +25,9 @@ export const menuSections = [
   {
     items: [
       { label: "Profile", to: "/dashboard", icon: <CircleUserRoundIcon /> },
-      { label: "My Tickets", to: "/dashboard/ticket", icon: <Ticket /> },
-      { label: "My wallet", to: "/dashboard/wallet", icon: <Wallet /> },
+      { label: "My Event", to: "/dashboard/event", icon: <CalendarCheck2 /> },
+      { label: "My Ticket", to: "/dashboard/ticket", icon: <Ticket /> },
+      { label: "Wallet", to: "/dashboard/wallet", icon: <Wallet /> },
       { label: "Explore Events", to: "/event", icon: <Tickets /> },
     ],
     activeClassName: "hover:bg-mainAccent",

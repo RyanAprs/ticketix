@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { ChevronDown, XIcon } from "lucide-react";
+import {  XIcon } from "lucide-react";
 
 import useUploadImage from "@/hooks/useUploadImage";
 import { useAuthManager } from "@/store/AuthProvider";

@@ -268,7 +268,7 @@ actor TickeTix {
   // };
 
   // GET ALL SINGLE OWNER TICKETS BY EVENT
-  public func getAllSingleOwnerTicketByEvent(eventId: Text) : async Result.Result<[Types.Ticket], Text> {
+  public func getAllForSaleTicketByEvent(eventId: Text) : async Result.Result<[Types.Ticket], Text> {
       switch (events.get(eventId)) {
           case (null) {
               return #err("Event not found!");

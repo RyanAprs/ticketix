@@ -3,7 +3,7 @@ export interface UserType {
   username: string;
 }
 
-export interface TicketType {
+export interface EventType {
   id: string;
   title: string;
   description: string;
@@ -16,3 +16,11 @@ export interface TicketType {
 }
 
 export type TicketStatusInterface = "owned" | "forSale" | "used";
+
+export interface TicketType {
+  id: string;
+  owner: string;
+  status: TicketStatusInterface;
+  price: number;
+  total: number;
+}

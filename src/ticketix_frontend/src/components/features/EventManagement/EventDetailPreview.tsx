@@ -1,6 +1,7 @@
 import CustomButton from "@/components/ui/Button/CustomButton";
 import { TicketStatusInterface } from "@/types";
-import { Calendar, Tag, User, Ticket } from "lucide-react";
+import { Calendar, User, Ticket } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface TicketType {
   id: string;
@@ -10,10 +11,10 @@ interface TicketType {
 }
 
 interface EventDetailPreviewProps {
+  id: string;
   title: string;
   description: string;
   imageUrl: string;
-  // price: number;
   salesDeadline: string;
   total: number;
   owner: string;
@@ -22,21 +23,14 @@ interface EventDetailPreviewProps {
 }
 
 const EventDetailPreview = ({
+  id,
   title,
   description,
   imageUrl,
-  // price,
   owner,
   salesDeadline,
   total,
-  ticket,
 }: EventDetailPreviewProps) => {
-  const handleBuy = () => {
-    if (ticket) {
-      console.log(ticket[0].id);
-    }
-  };
-
   return (
     <div className="mx-auto max-w-6xl px-4">
       <div className="overflow-hidden rounded-xl bg-white shadow-lg">
@@ -54,10 +48,6 @@ const EventDetailPreview = ({
               <div className="flex items-center space-x-2 text-white">
                 <User className="h-5 w-5" />
                 <span>{owner}</span>
-              </div>
-              <div className="flex items-center space-x-2 text-white">
-                <Tag className="h-5 w-5" />
-                {/* <span>{price} ICP</span> */}
               </div>
             </div>
           </div>
@@ -110,11 +100,6 @@ const EventDetailPreview = ({
           {/* Sidebar */}
           <div className="lg:col-span-1">
             <div className="sticky top-8 rounded-lg border bg-white p-6 shadow-sm">
-              <div className="mb-6">
-                {/* <p className="text-3xl font-bold text-gray-900">{price} ICP</p> */}
-                <p className="text-sm text-gray-500">per ticket</p>
-              </div>
-
               <div className="space-y-4">
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-gray-600">Available Tickets</span>
@@ -128,12 +113,11 @@ const EventDetailPreview = ({
                 </div>
               </div>
 
-              <CustomButton
-                onClick={handleBuy}
-                className="mt-6 w-full rounded-lg bg-blue-600 px-4 py-3 text-center font-semibold text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-              >
-                Buy Ticket
-              </CustomButton>
+              <Link to={`/event/${id}/ticket`}>
+                <CustomButton className="mt-6 w-full rounded-lg bg-blue-600 px-4 py-3 text-center font-semibold text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                  Check Ticket
+                </CustomButton>
+              </Link>
 
               <p className="mt-4 text-center text-sm text-gray-500">
                 Secure checkout powered by Internet Computer

@@ -31,6 +31,12 @@ const EventDetail = () => {
   const [ticket, setTicket] = useState<EventDetailType | undefined>(undefined);
   const [loading, setLoading] = useState(false);
 
+  let idTicket;
+
+  if (id) {
+    idTicket = id.toString() || "";
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       if (actor && id) {
@@ -63,7 +69,6 @@ const EventDetail = () => {
                 ticket,
               };
 
-              console.log(ticketWithOwnerAsString);
               setTicket(ticketWithOwnerAsString);
             }
           }
@@ -84,6 +89,7 @@ const EventDetail = () => {
         <IsLoadingPage />
       ) : (
         <EventDetailPreview
+          id={idTicket ?? ""}
           title={ticket.title}
           description={ticket.description}
           imageUrl={ticket.imageUrl}

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import useWindowSize from "@/hooks/useWindowSize";
 import { cn } from "@/lib/utils/cn";
 import { useAuthManager } from "@/store/AuthProvider";
 
@@ -14,7 +13,6 @@ import EventPreview from "@/components/features/EventManagement/EventPreview";
 const EventPage = () => {
   const { actor } = useAuthManager();
 
-  // const [events, setEvents] = useState([] as EventType[]);
   const [events, setEvents] = useState([] as EventType[]);
   const [loading, setLoading] = useState(false);
 
