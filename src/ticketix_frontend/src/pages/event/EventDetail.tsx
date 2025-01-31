@@ -1,7 +1,7 @@
 import EventDetailPreview from "@/components/features/EventManagement/EventDetailPreview";
 import IsLoadingPage from "@/components/features/isLoadingPage/IsLoadingPage";
 import Layout from "@/components/ui/Layout/Layout";
-import { fetchDetailTicket } from "@/lib/services/EventService";
+import { fetchDetailEvent } from "@/lib/services/EventService";
 import { getUserById } from "@/lib/services/UserService";
 import { formatNSToDate, getEventStatus } from "@/lib/utils";
 import { useAuthManager } from "@/store/AuthProvider";
@@ -43,7 +43,7 @@ const EventDetail = () => {
       if (actor && id) {
         try {
           setLoading(true);
-          const res = await fetchDetailTicket(actor, id);
+          const res = await fetchDetailEvent(actor, id);
 
           if (res) {
             const user = await getUserById(actor, res.creator);

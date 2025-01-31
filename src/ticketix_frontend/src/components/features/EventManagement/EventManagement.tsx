@@ -27,7 +27,10 @@ const EventManagement = () => {
       const fetchData = async () => {
         try {
           setLoading(true);
-          await getEventByCreator(actor, setEvent, principal);
+          const result = await getEventByCreator(actor, principal);
+          if (result) {
+            setEvent(result);
+          }
         } catch (error) {
           console.error(error);
         } finally {

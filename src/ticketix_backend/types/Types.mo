@@ -22,7 +22,6 @@ module {
         username: ?Text;
     };
 
-
     public type Event = {
         id: Text;               
         creator: Principal;       

@@ -5,33 +5,29 @@ export const fetchAllEvents = async (actor: _SERVICE) => {
   try {
     const events = await actor.getAllEventPreviews();
 
-    const ticketArray = events;
-    return ticketArray;
-  } catch (error) {
-    console.error("Error fetching ticket:", error);
-  }
-};
-
-export const getEventByCreator = async (
-  actor: _SERVICE,
-  setTicketsOwned: any,
-  userId: Principal
-) => {
-  try {
-    const tickets = await actor.getEventByCreator(userId);
-
-    if ("ok" in tickets) {
-      const ticketArray = tickets.ok;
-      setTicketsOwned(ticketArray);
-    } else {
-      console.error("Error fetching tickets:", tickets.err);
+    if (events) {
+      return events;
     }
   } catch (error) {
     console.error("Error fetching ticket:", error);
   }
 };
 
-export const fetchDetailTicket = async (actor: _SERVICE, eventId: string) => {
+export const getEventByCreator = async (actor: _SERVICE, userId: Principal) => {
+  try {
+    const events = await actor.getEventByCreator(userId);
+
+    if ("ok" in events) {
+      return events.ok;
+    } else {
+      console.error("Error fetching events:", events);
+    }
+  } catch (error) {
+    console.error("Error fetching ticket:", error);
+  }
+};
+
+export const fetchDetailEvent = async (actor: _SERVICE, eventId: string) => {
   try {
     const events = await actor.getEventDetail(eventId);
 
