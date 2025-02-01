@@ -1,85 +1,54 @@
 import { Link } from "react-router-dom";
-import useWindowSize from "@/hooks/useWindowSize";
 import { useAuthManager } from "@/store/AuthProvider";
-import CustomButton from "@/components/ui/Button/CustomButton";
+import { Button } from "@/components/ui/Button/button";
 
 const HeroBanner = () => {
   const { login, isAuthenticated } = useAuthManager();
-  const { isMobile } = useWindowSize();
 
   return (
-    <div className="flex w-full justify-center border-b">
-      <section className="relative font-jetbrainsMono w-full max-w-[1280px] px-4 pb-8 sm:pb-12 md:pb-36 md:pt-10">
-        <p className="mb-4 text-center text-sm font-medium text-subtext md:mb-5 md:text-xl">
+    <div className="flex w-full justify-center items-center bg-gradient-to-b from-blue-300 to-blue-600 t h-[617px] text-white rounded-xl">
+      <section className="relative font-jetbrainsMono w-full max-w-[1248px] px-4 pb-8 sm:pb-12 md:pb-36 md:pt-10 mt-16">
+        <p className="mb-4 text-center text-sm font-medium md:mb-5 md:text-xl">
           Trusted and Transparent Ticket Transactions
         </p>
         <div className="flex flex-col items-center text-center text-4xl font-semibold xs:text-5xl md:text-7xl">
           <div className="flex items-center gap-3 md:gap-5">
             <h1>Take Control of Your </h1>
-            {/* <img
-              src="/images/logo/ticketix.svg"
-              alt="ticketix"
-              className="w-[60px] sm:w-[75px] md:w-[110px]"
-            /> */}
-            {/* <h1>your</h1> */}
           </div>
           <h1>Event Journey</h1>
         </div>
 
         <div className="mt-5 flex items-center justify-center gap-6 md:mt-9 md:gap-10">
           {!isAuthenticated && (
-            <CustomButton
-              size={isMobile ? "small" : "default"}
-              className="md:w-[250px]"
+            <Button
+              size="lg"
+              className="bg-blue-400 rounded-lg shadow-lg border-x border-t border-blue-100"
               onClick={login}
             >
               Join Now
-            </CustomButton>
+            </Button>
           )}
 
           {isAuthenticated && (
             <Link to="/dashboard/ticket">
-              <CustomButton
-                size={isMobile ? "small" : "default"}
-                className="md:w-[250px]"
+              <Button
+                size="lg"
+                className="bg-blue-400 rounded-lg shadow-lg border-x border-t border-blue-100"
               >
                 My Ticket
-              </CustomButton>
+              </Button>
             </Link>
           )}
 
           <Link to="/event">
-            <CustomButton
-              size={isMobile ? "small" : "default"}
-              variant={"secondary"}
-              className="md:w-[250px]"
+            <Button
+              size="lg"
+              className="bg-blue-600 rounded-lg shadow-lg border-x border-t border-blue-100"
             >
               Explore Event
-            </CustomButton>
+            </Button>
           </Link>
         </div>
-
-        {/* FLOATING ICONS */}
-        {/* <img
-          src="/images/star-left.svg"
-          alt="star"
-          className="absolute left-12 top-6 hidden w-20 justify-center md:flex lg:left-24 lg:top-10"
-        />
-        <img
-          src="/images/hexagon-left.svg"
-          alt="star"
-          className="absolute bottom-10 left-24 hidden w-20 justify-center md:flex lg:bottom-10 lg:left-48"
-        />
-        <img
-          src="/images/hexagon-right.svg"
-          alt="star"
-          className="absolute right-12 top-6 hidden w-20 justify-center md:flex lg:right-28 lg:top-10"
-        />
-        <img
-          src="/images/star-right.svg"
-          alt="star"
-          className="absolute bottom-10 right-24 hidden w-20 justify-center md:flex lg:bottom-10 lg:right-48"
-        /> */}
       </section>
     </div>
   );

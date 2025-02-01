@@ -74,7 +74,7 @@ const FAQ = () => {
     <div className="flex w-full justify-center">
       <section className="w-full max-w-[1280px] px-4 py-7 md:py-12">
         <div className="mx-auto w-full max-w-[720px]">
-          <h1 className="mb-6 text-xl font-bold text-subtext lg:text-2xl">
+          <h1 className="mb-6 text-xl font-bold text-black lg:text-2xl">
             Frequently Asked Questions (FAQ)
           </h1>
           <Accordion items={accordionItems} />

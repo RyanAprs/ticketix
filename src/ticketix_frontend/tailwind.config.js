@@ -22,7 +22,7 @@ export default {
       },
       colors: {
         bg: "#FFE4E1",
-        mainAccent: "#FEC2C3",
+        mainAccent: "#2764F3",
         secondaryAccent: "#D9C3F2",
         thirdAccent: "#C3CFF2",
         title: "#3E3D39",
@@ -40,6 +40,8 @@ export default {
         "7A6858": "#7A6858",
         "3E3D39": "#3E3D39",
         "5A534F": "#5A534F",
+        gradientStart: "#6495ED",
+        gradientEnd: "#0057D9",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {

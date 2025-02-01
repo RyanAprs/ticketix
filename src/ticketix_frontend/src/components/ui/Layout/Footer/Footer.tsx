@@ -29,7 +29,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="w-full border-t bg-mainAccent py-8 font-medium text-subtext">
+    <footer className="w-full border-t bg-blue-100 py-8 font-medium text-subtext">
       <section className="flex flex-col gap-6 px-4 md:gap-14 xl:flex-row xl:justify-center xl:gap-20">
         <div className="w-[350px]">
           <img

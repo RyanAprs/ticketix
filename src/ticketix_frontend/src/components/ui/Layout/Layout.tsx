@@ -27,10 +27,10 @@ const Layout = ({ children, className, title, fullWidth }: LayoutProps) => {
           )}
         >
           {isTablet ? <MobileNavbar /> : <Navbar />}
-          <div className="mb-10 mt-6 flex w-full justify-center lg:mb-14 lg:mt-10">
+          <div className="mb-10 -mt-16 flex w-full justify-center lg:mb-14 ">
             <main
               className={cn(
-                "w-full px-4",
+                "w-full px-4 mx-8 z-10",
                 !fullWidth && "max-w-[1280px]",
                 className
               )}

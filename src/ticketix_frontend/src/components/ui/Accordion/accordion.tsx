@@ -30,11 +30,12 @@ const Accordion = ({
       default: {
         button: cn(
           "flex w-full items-center justify-between rounded-lg px-5 py-3 text-left md:h-[60px]",
-          "bg-mainAccent text-subtext hover:bg-mainAccent/90 text-base",
-          isActive && "bg-mainAccent/90 rounded-b-none "
+          "bg-blue-200 text-subtext hover:bg-blue-100 text-base",
+          isActive && "bg-blue-200 rounded-b-none "
         ),
-        panel: "bg-bg rounded-b-lg px-4 py-3 text-subtext text-sm md:text-base",
-        wrapper: "mb-3 rounded-lg border border-border/20 shadow-custom",
+        panel:
+          "bg-blue-100 rounded-b-lg px-4 py-3 text-subtext text-sm md:text-base",
+        wrapper: "mb-3 rounded-lg border border-border/20 ",
       },
     };
     return variants[variant];
