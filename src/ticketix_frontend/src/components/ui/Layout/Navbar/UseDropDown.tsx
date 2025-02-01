@@ -28,7 +28,7 @@ export const menuSections = [
       { label: "My Event", to: "/dashboard/event", icon: <CalendarCheck2 /> },
       { label: "My Ticket", to: "/dashboard/ticket", icon: <Ticket /> },
       { label: "Wallet", to: "/dashboard/wallet", icon: <Wallet /> },
-      { label: "Explore Events", to: "/event", icon: <Tickets /> },
+      { label: "Explore Event", to: "/event", icon: <Tickets /> },
     ],
     activeClassName: "hover:bg-mainAccent",
   },

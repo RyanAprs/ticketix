@@ -13,9 +13,9 @@ import Debug "mo:base/Debug";
 import Nat8 "mo:base/Nat8";
 import Float "mo:base/Float";
 import Int "mo:base/Int";
-// import TransactionService "services/TransactionService";
 import EventService "services/EventService";
 import TicketService "services/TicketService";
+import TransactionService "services/TransactionService";
 
 actor TickeTix {
   private var users: Types.Users = HashMap.HashMap(0, Principal.equal, Principal.hash);
@@ -52,7 +52,7 @@ actor TickeTix {
     public shared (msg) func authenticateUser(
       username: Text,
     ): async Result.Result<Types.User, Text> {
-      return UserService.authenticateUser( msg.caller, users, username);
+      return UserService.authenticateUser(msg.caller, users, username, userBalances);
     };
 
     // GET CALLER PRINCIPAL
@@ -106,6 +106,20 @@ actor TickeTix {
     public query func deleteUser(userId : Principal) : async ?Types.User {
       return users.remove(userId);
     };
+
+    // public func getUserBalance(
+    //   userId: Principal,
+    //   userBalances: HashMap.HashMap<Principal, Types.UserBalance>
+    // ): Result.Result<Float, Text> {
+    //     switch (userBalances.get(userId)) {
+    //       case (?balance) {
+    //         return #ok(balance.balance); 
+    //       };
+    //       case null {
+    //         return #err("User not found"); 
+    //       };
+    //     }
+    // };
 
   // EVENTS ENDPOINT ==========================================================
   // POST EVENT
@@ -357,31 +371,36 @@ actor TickeTix {
   };
 
   // TRANSACTION ==============================================================
-  // // Function to purchase tickets
-  //  public shared(msg) func purchaseTickets(
-  //     ticketId: Text, 
-  //     quantity: Nat
-  //   ) : async Result.Result<Text, Text> {
-  //       let buyer = msg.caller;
-  //       return await TransactionService.purchaseTickets(tickets, ticketId, quantity, userBalances, buyer, transactions);
-  //   };
-    
-  //   // Helper function to get available tickets
-  //   public query func getAvailableTickets(ticketId: Text) : async Nat {
-  //       switch(tickets.get(ticketId)) {
-  //           case null { 0 };
-  //           case (?ticket) {
-  //               Array.filter<Types.SingleTicket>(
-  //                   ticket.singleTicket,
-  //                   func(t: Types.SingleTicket) : Bool { 
-  //                       switch(t.status) {
-  //                           case (#forSale) { true };
-  //                           case (_) { false };
-  //                       };
-  //                   }
-  //               ).size();
-  //           };
-  //       };
-  //   };
+  // PURCHASE TICKETS
+  public shared (msg) func purchaseTickets(
+    eventId: Text,
+    ticketIds: [Text],
+  ) : async Result.Result<Text, Text> {
+      let buyer = msg.caller;
+      
+      return await TransactionService.buyTickets(
+          events,        
+          transactions,  
+          userBalances,  
+          buyer,
+          eventId,
+          ticketIds
+      );
+  };
+
+  public shared (msg) func buyTicketsDemo(
+    eventId: Text,
+    ticketIds: [Text],
+  ) : async Result.Result<Text, Text> {
+      let buyer = msg.caller;
+      
+      return await TransactionService.buyTicketsDemo(
+          events,        
+          transactions,  
+          buyer,
+          eventId,
+          ticketIds
+      );
+  };
 
 };

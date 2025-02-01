@@ -21,17 +21,15 @@ const MobileNavbar = () => {
   const regularSections = menuSections.slice(0, -1);
   const logoutSection = menuSections[menuSections.length - 1];
 
-
   return (
     <nav className="flex h-[65px] items-center justify-between border-b px-4">
       <Link to={"/"}>
-        {/* <img
+        <img
           alt="ticketix logo"
-          src="/images/logo/ticketix-logo.svg"
+          src="/images/logo/LogoTicketix.svg"
           loading="eager"
           className="w-32"
-        ></img> */}
-        TickeTix
+        ></img>
       </Link>
 
       <div className="flex items-center gap-2">

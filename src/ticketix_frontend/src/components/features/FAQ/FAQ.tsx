@@ -68,24 +68,6 @@ const FAQ = () => {
         </p>
       ),
     },
-    {
-      title: "What happens if I lose my NFT ticket?",
-      content: (
-        <p>
-          Since your NFT ticket is stored in your wallet, you won’t lose access
-          to it. Just ensure your wallet is secure and backed up.
-        </p>
-      ),
-    },
-    {
-      title: "How do I access my event with an NFT ticket?",
-      content: (
-        <p>
-          On the event day, simply show your NFT ticket from your wallet at the
-          venue for seamless entry.
-        </p>
-      ),
-    },
   ];
 
   return (

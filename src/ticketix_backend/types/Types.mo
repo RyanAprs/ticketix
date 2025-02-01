@@ -15,7 +15,7 @@ module {
 
     public type UserBalance = {
         id: Principal;
-        balance: Nat;
+        balance: Float;
     };
 
     public type UserUpdateData = {
@@ -63,7 +63,7 @@ module {
         seller: Principal;      
         ticket: Ticket;         
         totalTicket: Nat;      
-        amount: Nat;            
+        amount: Float;            
         timestamp: Int;         
     };
 };

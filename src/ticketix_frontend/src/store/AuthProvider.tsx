@@ -70,60 +70,88 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   );
 
   const initializeAuth = useCallback(async () => {
+    setAuthState((prev) => ({ ...prev, isLoading: true }));
     const authClient = await AuthClient.create({
       idleOptions: { disableIdle: true },
     });
 
-    try {
-      if (await authClient.isAuthenticated()) {
-        const identity = authClient.getIdentity();
-        const principal = identity.getPrincipal();
-        const actor = await createActor(identity);
+    if (await authClient.isAuthenticated()) {
+      const identity = authClient.getIdentity();
+      const principal = identity.getPrincipal();
+      const actor = await createActor(identity);
 
-        setAuthState({
-          identity,
-          principal,
-          actor,
-          isLoading: false,
-          authClient,
-        });
+      setAuthState({
+        identity,
+        principal,
+        actor,
+        isLoading: false,
+        authClient,
+      });
 
-        const users = await actor.getUserByPrincipal(principal);
-
-        if (users && users.length > 0) {
-          const matchedUsers = users.filter(
-            (user) => user.id.toText() === principal.toText()
-          );
-
-          if (matchedUsers.length > 0) {
-            matchedUsers.forEach((user) => {
-              dispatch(setUser(serializeUser(user)));
-            });
-          } else {
-            console.log("No users found with the same principal");
-          }
-        } else {
-          console.log("No users found");
-        }
-
-        dispatch(setIsAuthenticated(true));
-      } else {
-        const anonymousActor = await createActor();
-        setAuthState({
-          identity: null,
-          principal: null,
-          actor: anonymousActor,
-          isLoading: false,
-          authClient,
-        });
-        dispatch(setIsAuthenticated(false));
-      }
-    } catch (error) {
-      console.error("Error initializing auth:", error);
-      setAuthState((prev) => ({ ...prev, isLoading: false }));
+      dispatch(setIsAuthenticated(true));
+    } else {
+      const anonymousActor = await createActor();
+      setAuthState({
+        identity: null,
+        principal: null,
+        actor: anonymousActor,
+        isLoading: false,
+        authClient,
+      });
       dispatch(setUser(null));
       dispatch(setIsAuthenticated(false));
     }
+
+    // try {
+    //   if (await authClient.isAuthenticated()) {
+    //     const identity = authClient.getIdentity();
+    //     const principal = identity.getPrincipal();
+    //     const actor = await createActor(identity);
+
+    //     setAuthState({
+    //       identity,
+    //       principal,
+    //       actor,
+    //       isLoading: false,
+    //       authClient,
+    //     });
+
+    //     const users = await actor.getUserByPrincipal(principal);
+
+    //     if (users && users.length > 0) {
+    //       const matchedUsers = users.filter(
+    //         (user) => user.id.toText() === principal.toText()
+    //       );
+
+    //       if (matchedUsers.length > 0) {
+    //         matchedUsers.forEach((user) => {
+    //           dispatch(setUser(serializeUser(user)));
+    //         });
+    //       } else {
+    //         console.log("No users found with the same principal");
+    //       }
+    //     } else {
+    //       console.log("No users found");
+    //     }
+
+    //     dispatch(setIsAuthenticated(true));
+    //   } else {
+    //     const anonymousActor = await createActor();
+    //     setAuthState({
+    //       identity: null,
+    //       principal: null,
+    //       actor: anonymousActor,
+    //       isLoading: false,
+    //       authClient,
+    //     });
+    //     dispatch(setIsAuthenticated(false));
+    //   }
+    // } catch (error) {
+    //   console.error("Error initializing auth:", error);
+    //   setAuthState((prev) => ({ ...prev, isLoading: false }));
+    //   dispatch(setUser(null));
+    //   dispatch(setIsAuthenticated(false));
+    // }
   }, [createActor, dispatch]);
 
   // Logout handler
@@ -146,32 +174,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       console.error("Logout failed:", error);
     }
   }, [createActor, dispatch, navigate]);
-
-  const connectPlugWallet = useCallback(async () => {
-    try {
-      if (window.ic?.plug) {
-        const isConnected = window.ic.plug.isConnected;
-
-        if (!isConnected) {
-          const connected = await window.ic.plug.requestConnect({
-            whitelist: [BACKEND_CANISTER_ID],
-          });
-          if (connected) {
-            await window.ic.plug.createAgent();
-            const principal = await window.ic.plug.getPrincipal();
-            console.log("Connected to Plug Wallet with Principal:", principal);
-          } else {
-            console.error("User denied connection to Plug Wallet");
-          }
-        }
-      } else {
-        console.error("Plug Wallet is not available on this browser.");
-      }
-    } catch (error) {
-      console.error("Error connecting to Plug Wallet:", error);
-      return null;
-    }
-  }, []);
 
   const login = useCallback(async () => {
     setAuthState((prev) => ({ ...prev, isLoading: true }));
@@ -206,7 +208,23 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
               username: username,
             };
 
-            await actor.authenticateUser(username);
+            const result = await actor.authenticateUser(username);
+            if ("ok" in result) {
+              console.log(result.ok);
+
+              setAuthState({
+                identity,
+                principal,
+                actor,
+                isLoading: false,
+                authClient,
+              });
+              dispatch(setUser(serializeUser(result.ok)));
+              dispatch(setIsAuthenticated(true));
+              navigate("/dashboard", { replace: true });
+            } else {
+              throw new Error(result.err);
+            }
           }
 
           // Simpan data pengguna ke Redux

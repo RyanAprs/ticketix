@@ -85,19 +85,6 @@ const WalletPage = () => {
     // }
   };
 
-  const selectPercentage = (percentage: number) => {
-    switch (percentage) {
-      case 25:
-        setAmount((25 / 100) * parseFloat(creditBalance));
-        break;
-      case 50:
-        setAmount((50 / 100) * parseFloat(creditBalance));
-        break;
-      case 100:
-        setAmount(parseFloat(creditBalance));
-    }
-  };
-
   return (
     <LayoutDashboard title="My Wallet" className="w-full">
       <h1 className="text-2xl font-semibold text-title lg:text-3xl">
@@ -128,96 +115,7 @@ const WalletPage = () => {
             </div>
           </div>
         </div>
-        <div className="max-w-[345px] rounded-lg border p-4 pt-3 shadow-custom">
-          <h2 className="text-xl font-semibold text-title">Credit Balance</h2>
-          <p className="my-3 font-montserrat text-lg font-medium md:text-xl">
-            {creditBalance} ICP
-          </p>
-          <Button
-            variant="secondary"
-            // shadow={false}
-            // disabled={creditBalance <= '0'}
-            onClick={() => setOpenModal(true)}
-          >
-            Withdraw
-          </Button>
-        </div>
       </div>
-
-      <ModalCustom
-        title="Withdraw Funds"
-        isOpen={openModal}
-        onClose={() => setOpenModal(false)}
-        className="max-w-[700px]"
-        disableClose={isLoading}
-      >
-        <div className="px-5 py-3 text-subtext">
-          <h2 className="mt-2 text-xl font-semibold text-title">
-            Available Balance
-          </h2>
-          <p className="font-montserrat text-lg font-medium md:text-xl">
-            {creditBalance} ICP
-          </p>
-          <div className="mt-3 flex items-center gap-3">
-            <CustomInput
-              value={amount}
-              onChange={handleAmountChange}
-              type="number"
-              min="0.01"
-              step="0.01"
-              label="Amount"
-              labelClassName="text-start"
-            />
-          </div>
-          <div className="mt-3 flex gap-3">
-            <Button
-              className="w-full bg-mainAccent/30"
-              size="sm"
-              //   shadow={false}
-              onClick={() => selectPercentage(25)}
-            >
-              25%
-            </Button>
-            <Button
-              className="w-full bg-mainAccent/30"
-              size="sm"
-              //   shadow={false}
-              onClick={() => selectPercentage(50)}
-            >
-              50%
-            </Button>
-            <Button
-              className="w-full bg-mainAccent/30"
-              size="sm"
-              //   shadow={false}
-              onClick={() => selectPercentage(100)}
-            >
-              100%
-            </Button>
-          </div>
-          {/* <div className="mt-3 flex items-center gap-3">
-            <CustomInput
-              value={depositAddress}
-              onChange={(e) => setDepositAddress(e.target.value)}
-              min="0.01"
-              step="0.01"
-              label="Your Address"
-              labelClassName="text-start"
-              placeholder="Enter your withdrawal address"
-            />
-          </div> */}
-          <div className="flex w-full justify-end">
-            <Button
-              variant="secondary"
-              className="mb-3 mt-5"
-              disabled={isLoading}
-              onClick={handleWithdrawal}
-            >
-              {isLoading ? "Processing..." : "Confirm Withdrawal"}
-            </Button>
-          </div>
-        </div>
-      </ModalCustom>
     </LayoutDashboard>
   );
 };

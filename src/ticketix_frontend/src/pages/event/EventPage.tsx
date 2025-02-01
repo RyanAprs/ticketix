@@ -22,6 +22,8 @@ const EventPage = () => {
         try {
           setLoading(true);
           const result = await fetchAllEvents(actor);
+          console.log(result);
+
           if (result) {
             setEvents(result);
           }

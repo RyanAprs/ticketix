@@ -9,7 +9,8 @@ module {
     userId: Principal,
     users: Types.Users,
     username: Text,
-  ): Result.Result<Types.User, Text> {
+    userBalances: Types.UserBalances
+): Result.Result<Types.User, Text> {
     switch (users.get(userId)) {
       case (?_) {
         return #err("User already registered");
@@ -20,11 +21,16 @@ module {
           username = username;
           tickets = [];
         };
+        let initialBalance: Types.UserBalance = {
+          id = userId;
+          balance = 10.0; 
+        };
+        userBalances.put(userId, initialBalance); 
         users.put(userId, newUser);
         return #ok(newUser); 
       };
     }
-  };
+};
 
   // UPDATE USER PROFILE
   public func updateUserProfile(

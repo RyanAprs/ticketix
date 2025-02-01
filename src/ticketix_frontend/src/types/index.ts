@@ -25,4 +25,5 @@ export interface TicketType {
   status: TicketStatusInterface;
   price: number;
   total: number;
+  eventId: string;
 }

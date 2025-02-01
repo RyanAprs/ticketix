@@ -6,7 +6,7 @@ const Footer = () => {
       title: "Quick Links",
       links: [
         { name: "About Us", to: "#" },
-        { name: "Explore Tickets", to: "/tickets" },
+        { name: "Explore Events", to: "/event" },
       ],
     },
     {
@@ -32,12 +32,12 @@ const Footer = () => {
     <footer className="w-full border-t bg-mainAccent py-8 font-medium text-subtext">
       <section className="flex flex-col gap-6 px-4 md:gap-14 xl:flex-row xl:justify-center xl:gap-20">
         <div className="w-[350px]">
-          {/* <img
-            src="/images/logo/ticketix-logo.svg"
+          <img
             alt="ticketix logo"
-            className="mb-2 w-28 md:w-40"
-          /> */}
-          TickeTix
+            src="/images/logo/LogoTicketix.svg"
+            loading="eager"
+            className="w-32"
+          ></img>
           <p className="max-w-[350px] font-medium">
             Ticket Transactions through secure blockchain technology.
           </p>

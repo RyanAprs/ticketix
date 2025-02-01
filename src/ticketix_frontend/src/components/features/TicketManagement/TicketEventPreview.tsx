@@ -2,7 +2,10 @@ import { Button } from "@/components/ui/Button/button";
 import CustomButton from "@/components/ui/Button/CustomButton";
 import { CustomInput } from "@/components/ui/Input/CustomInput";
 import ModalCustom from "@/components/ui/Modal/ModalCustom";
+import { transferIcp } from "@/lib/services/TransactionService";
 import { EnhancedTicketType } from "@/pages/ticket/TicketPage";
+import { useAuthManager } from "@/store/AuthProvider";
+import { Principal } from "@dfinity/principal";
 import { Ticket } from "lucide-react";
 import { useState } from "react";
 
@@ -12,20 +15,127 @@ interface TicketEventPreviewProps {
 
 const TicketEventPreview = ({ tickets }: TicketEventPreviewProps) => {
   const [openModal, setOpenModal] = useState(false);
+  const [selectedTicket, setSelectedTicket] =
+    useState<EnhancedTicketType | null>(null);
   const [ticketCount, setTicketCount] = useState<number>(1);
   const [error, setError] = useState<string>("");
+  const [loading, setLoading] = useState(false);
+  const { isAuthenticated, actor, principal } = useAuthManager();
 
-  const handlePurchase = (ticket: EnhancedTicketType) => {
-    if (ticketCount > ticket.totalTickets) {
+  const handleOpenModal = (ticket: EnhancedTicketType) => {
+    setSelectedTicket(ticket);
+    setTicketCount(1);
+    setError("");
+    setOpenModal(true);
+  };
+
+  const handlePurchase = async () => {
+    if (!selectedTicket) return;
+
+    if (ticketCount > selectedTicket.totalTickets) {
       setError("Jumlah tiket yang dibeli melebihi stok tersedia.");
       return;
     }
 
-    const selectedTickets = Array(ticketCount).fill(ticket.id);
-    console.log("Ticket IDs:", selectedTickets);
+    try {
+      setLoading(true);
+      setError("");
 
-    setError("");
-    setOpenModal(false);
+      if (!isAuthenticated) {
+        throw new Error("Please login first");
+      }
+
+      const totalCost = selectedTicket.price * ticketCount;
+
+      const selectedTickets = Array(ticketCount).fill(selectedTicket.id);
+
+      await transferIcp({
+        to: selectedTicket.owner.toString(),
+        amount: totalCost,
+        ticketIds: selectedTickets,
+      });
+
+      console.log({
+        eventId: selectedTicket.eventId,
+        ticketIds: selectedTickets,
+        buyer: principal,
+        seller: Principal.fromText(selectedTicket.owner.toString()),
+        amount: totalCost,
+      });
+
+      if (actor) {
+        // Record purchase in backend
+        const result = await actor.purchaseTickets(
+          selectedTicket.eventId,
+          selectedTickets
+        );
+
+        console.log(result);
+
+        if ("err" in result) {
+          throw new Error(result.err);
+        }
+
+        // Success handling
+        console.log("Purchase successful!");
+        setOpenModal(false);
+
+        // Optional: Refresh ticket list or show success message
+        // await refreshTickets();
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Purchase failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handlePurchaseDemo = async () => {
+    if (!selectedTicket) return;
+
+    if (ticketCount > selectedTicket.totalTickets) {
+      setError("Jumlah tiket yang dibeli melebihi stok tersedia.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError("");
+
+      if (!isAuthenticated) {
+        throw new Error("Please login first");
+      }
+
+      const selectedTickets = Array(ticketCount).fill(selectedTicket.id);
+
+      if (actor) {
+        // Record purchase in backend using demo function
+        const result = await actor.buyTicketsDemo(
+          selectedTicket.eventId,
+          selectedTickets
+        );
+
+        console.log("Purchase demo result:", result);
+
+        if ("err" in result) {
+          throw new Error(result.err);
+        }
+
+        // Success handling
+        console.log("Demo purchase successful!");
+        setOpenModal(false);
+
+        // Optionally show success message to user
+
+        // Optional: Refresh ticket list to show updated ownership
+        // await refreshTickets();
+      }
+    } catch (err) {
+      console.error("Demo purchase error:", err);
+      setError(err instanceof Error ? err.message : "Demo purchase failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -57,7 +167,7 @@ const TicketEventPreview = ({ tickets }: TicketEventPreviewProps) => {
               </div>
 
               <CustomButton
-                onClick={() => setOpenModal(true)}
+                onClick={() => handleOpenModal(ticket)}
                 className="w-full py-2.5 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors duration-200 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
                 Purchase Ticket
@@ -73,25 +183,46 @@ const TicketEventPreview = ({ tickets }: TicketEventPreviewProps) => {
         onClose={() => setOpenModal(false)}
         className="max-w-[700px]"
       >
-        <div className="px-5 py-3 text-subtext">
-          <div className="mt-3 flex items-center gap-3">
-            <CustomInput
-              type="number"
-              label="Total Ticket"
-              labelClassName="text-start"
-              value={ticketCount}
-              onChange={(e) => setTicketCount(Number(e.target.value))}
-            />
+        {selectedTicket && (
+          <div className="px-5 py-3">
+            <div className="mt-3 flex items-center gap-3">
+              <CustomInput
+                type="number"
+                label="Total Ticket"
+                labelClassName="text-start"
+                value={ticketCount}
+                min={1}
+                max={selectedTicket.totalTickets}
+                onChange={(e) => setTicketCount(Number(e.target.value))}
+              />
+            </div>
+
+            <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+              <p className="text-gray-700 font-medium">Total Cost</p>
+              <p className="text-xl font-bold text-indigo-600">
+                {(selectedTicket.price * ticketCount).toFixed(2)} ICP
+              </p>
+            </div>
+
+            {error && <div className="mt-3 text-red-500 text-sm">{error}</div>}
           </div>
-          {error && <p className="text-red-500 text-sm">{error}</p>}
-        </div>
-        <div className="flex w-full justify-end">
+        )}
+
+        <div className="flex w-full justify-end gap-3 px-5 pb-5">
+          <Button
+            variant="outline"
+            onClick={() => setOpenModal(false)}
+            className="mb-3 mt-5"
+          >
+            Cancel
+          </Button>
           <Button
             variant="secondary"
             className="mb-3 mt-5"
-            onClick={() => handlePurchase(tickets[0])}
+            onClick={handlePurchaseDemo}
+            disabled={loading || !selectedTicket || ticketCount < 1}
           >
-            Purchase
+            {loading ? "Processing..." : "Confirm Purchase"}
           </Button>
         </div>
       </ModalCustom>

@@ -13,12 +13,12 @@ const Navbar = () => {
       >
         <div className="flex items-center gap-x-[60px]">
           <Link to={"/"}>
-            {/* <img
+            <img
               alt="ticketix logo"
-              src=""
+              src="/images/logo/LogoTicketix.svg"
               loading="eager"
-            ></img> */}
-            TickeTix
+              className="w-32"
+            ></img>
           </Link>
           <ul className="flex items-center gap-x-10 font-semibold text-subtext">
             {isAuthenticated && (
@@ -27,7 +27,7 @@ const Navbar = () => {
               </li>
             )}
             <li className="hover:text-black">
-              <Link to="/event">Explore Events</Link>
+              <Link to="/event">Explore Event</Link>
             </li>
             <li className="cursor-pointer hover:text-black">Support</li>
           </ul>

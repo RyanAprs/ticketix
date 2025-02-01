@@ -1,19 +1,13 @@
 interface Window {
   ic?: {
     plug?: {
-      isConnected: boolean;
-      requestConnect: (options?: { whitelist: string[] }) => Promise<boolean>;
-      createAgent: () => Promise<void>;
-      getPrincipal: () => Promise<string>;
-      agent?: {
-        fetchRootKey: () => Promise<void>;
-      };
-      requestBalance?: () => Promise<any>;
-      transfer?: (options: {
-        to: string;
+      requestConnect: () => Promise<boolean>;
+      requestTransfer: (params: {
+        to: Principal;
         amount: number;
-        memo?: string;
-      }) => Promise<any>;
+      }) => Promise<number>;
+      getPrincipal: () => Promise<Principal>;
+      isConnected: () => Promise<boolean>;
     };
   };
 }
