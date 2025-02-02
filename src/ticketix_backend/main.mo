@@ -283,6 +283,31 @@ actor TickeTix {
       return #ok(userTickets);
   };
 
+  // GET ALL TICKET BY OWNER AND STATUS OWNED
+  public shared(_msg) func getTicketByOwnerOwnedStatus(
+    userId: Principal
+  ) : async Result.Result<[Types.Ticket], Text> {
+    var userTickets : [Types.Ticket] = [];
+
+    for (event in events.vals()) {
+        let ownedTickets = Array.filter(
+            event.ticket,
+            func (ticket: Types.Ticket) : Bool {
+                Principal.equal(ticket.owner, userId) and ticket.status == #owned;
+            }
+        );
+
+        if (ownedTickets.size() > 0) {
+            userTickets := Array.append(userTickets, ownedTickets);
+        };
+    };
+
+    if (userTickets.size() == 0) {
+        return #err("You do not own any tickets");
+    };
+      return #ok(userTickets);
+  };
+
   // GET ALL FOR SALE TICKETS BY EVENT
   public func getAllForSaleTicketByEvent(eventId: Text) : async Result.Result<[Types.Ticket], Text> {
       switch (events.get(eventId)) {

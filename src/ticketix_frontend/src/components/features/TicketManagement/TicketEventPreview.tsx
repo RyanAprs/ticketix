@@ -140,12 +140,12 @@ const TicketEventPreview = ({ tickets }: TicketEventPreviewProps) => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 ">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {tickets.map((ticket, index) => (
           <div
             key={index}
-            className="bg-white rounded-xl p-6 hover:shadow-xl transition-all duration-300 border border-gray-100"
+            className="bg-white rounded-xl p-6 shadow-xl transition-all duration-300 border border-gray-100"
           >
             <div className="flex flex-col space-y-4">
               <div className="flex items-center justify-between">

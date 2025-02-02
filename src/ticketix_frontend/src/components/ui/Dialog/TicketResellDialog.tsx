@@ -68,7 +68,7 @@ const TicketResellDialog: React.FC<TicketResellDialogProps> = ({
                         </div>
                         <div>
                           <p className="font-medium text-gray-900">
-                            Ticket #{index + 1}
+                            Ticket #{ticket.id}
                           </p>
                           <p className="text-sm text-gray-500">
                             Event ID: {ticket.eventId}
@@ -89,7 +89,7 @@ const TicketResellDialog: React.FC<TicketResellDialogProps> = ({
                         }
                         className="w-full py-2 px-4 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                       >
-                        List for Resale
+                        Resale
                       </CustomButton>
                     </div>
                   </div>

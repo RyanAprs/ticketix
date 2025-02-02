@@ -2,7 +2,7 @@ import IsLoadingPage from "@/components/features/isLoadingPage/IsLoadingPage";
 import TicketEventPreview from "@/components/features/TicketManagement/TicketEventPreview";
 import CustomButton from "@/components/ui/Button/CustomButton";
 import Layout from "@/components/ui/Layout/Layout";
-import { getTicketByOwner } from "@/lib/services/TicketService";
+import { getTicketByOwnerOwnedStatus } from "@/lib/services/TicketService";
 import { getUserById } from "@/lib/services/UserService";
 import { useAuthManager } from "@/store/AuthProvider";
 import { TicketType } from "@/types";
@@ -145,7 +145,7 @@ const TicketPage = () => {
       const fetchOwnedTicket = async () => {
         try {
           setIsLoading(true);
-          const result = await getTicketByOwner(actor, principal);
+          const result = await getTicketByOwnerOwnedStatus(actor, principal);
           console.log(result);
 
           if (result) {
@@ -181,24 +181,24 @@ const TicketPage = () => {
 
   return (
     <Layout>
-      {isLoading ? (
-        <IsLoadingPage />
-      ) : (
-        <div className="flex flex-col gap-4 mt-20">
-          <div className="flex justify-between items-center">
-            <Link to={`/event/${eventId}`} className="w-3/4">
-              <CustomButton className="flex justify-center items-center gap-2 text-white">
-                <ArrowLeft />
-                Back
-              </CustomButton>
-            </Link>
-            <CustomButton className="text-white" onClick={handleResellClick}>
-              Resell Ticket
+      <div className="flex flex-col gap-4 mt-20">
+        <div className="flex justify-between items-center">
+          <Link to={`/event/${eventId}`} className="w-3/4">
+            <CustomButton className="flex justify-center items-center gap-2 text-white">
+              <ArrowLeft />
+              Back
             </CustomButton>
-          </div>
-          <TicketEventPreview tickets={tickets} />
+          </Link>
+          <CustomButton className="text-white" onClick={handleResellClick}>
+            Resale Ticket
+          </CustomButton>
         </div>
-      )}
+        {isLoading ? (
+          <IsLoadingPage />
+        ) : (
+          <TicketEventPreview tickets={tickets} />
+        )}
+      </div>
 
       <TicketResellDialog
         onConfirmResell={onConfirmResell}

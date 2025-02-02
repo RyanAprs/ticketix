@@ -36,12 +36,9 @@ const TicketManagement = () => {
 
   const filteredTickets = tickets.filter((ticket) => {
     if (filterStatus === "all") return true;
-    if (filterStatus === "owned" && ticket.status.owned !== undefined)
-      return true;
-    if (filterStatus === "forSale" && ticket.status.forSale !== undefined)
-      return true;
-    if (filterStatus === "used" && ticket.status.used !== undefined)
-      return true;
+    if (filterStatus === "owned" && "owned" in ticket.status) return true;
+    if (filterStatus === "forSale" && "forSale" in ticket.status) return true;
+    if (filterStatus === "used" && "used" in ticket.status) return true;
     return false;
   });
 
@@ -96,7 +93,7 @@ const TicketManagement = () => {
                   </p>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 w-full">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-1 lg:grid-cols-2 w-full">
                   {filteredTickets.map((ticket, index) => (
                     <div
                       key={index}

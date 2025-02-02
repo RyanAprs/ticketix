@@ -39,25 +39,23 @@ const EventPage = () => {
   }, [actor]);
 
   return (
-    <>
-      {loading ? (
-        <Layout>
+    <Layout>
+      <div className="flex flex-col gap-3 md:flex-row md:justify-between mt-20">
+        <h1 className="text-2xl font-semibold text-title lg:text-3xl">
+          Find Your events
+        </h1>
+      </div>
+      <div
+        className={cn(
+          "mt-3 w-full  p-3  md:px-5 md:py-4",
+          events.length === 0 &&
+            "flex min-h-[200px] max-w-[600px] items-center justify-center md:min-h-[300px]"
+        )}
+      >
+        {loading ? (
           <IsLoadingPage />
-        </Layout>
-      ) : (
-        <Layout>
-          <div className="flex flex-col gap-3 md:flex-row md:justify-between mt-20">
-            <h1 className="text-2xl font-semibold text-title lg:text-3xl">
-              Find Your events
-            </h1>
-          </div>
-          <div
-            className={cn(
-              "mt-3 w-full  p-3  md:px-5 md:py-4",
-              events.length === 0 &&
-                "flex min-h-[200px] max-w-[600px] items-center justify-center md:min-h-[300px]"
-            )}
-          >
+        ) : (
+          <>
             {events.length === 0 ? (
               <div className="mb-4 flex flex-col items-center space-y-3 text-subtext">
                 <p className="text-center font-semibold md:text-lg">
@@ -87,10 +85,10 @@ const EventPage = () => {
                 })}
               </div>
             )}
-          </div>
-        </Layout>
-      )}
-    </>
+          </>
+        )}
+      </div>
+    </Layout>
   );
 };
 

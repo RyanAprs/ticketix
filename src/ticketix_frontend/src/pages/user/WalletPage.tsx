@@ -57,9 +57,9 @@ const WalletPage = () => {
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
               <h1 className="text-2xl font-semibold text-title lg:text-3xl">
-                Your Tickets
+                Your Wallet
               </h1>
-              <p className="mt-1 text-xl text-gray-500">
+              <p className="mt-1 text-lg text-gray-500">
                 Manage your ICP tokens and transactions
               </p>
             </div>
