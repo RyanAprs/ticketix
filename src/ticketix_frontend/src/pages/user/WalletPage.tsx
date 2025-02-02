@@ -5,24 +5,47 @@ import { ArrowUpDown, Copy, ExternalLink, Wallet } from "lucide-react";
 
 const WalletPage = () => {
   const { actor, principal } = useAuthManager();
-  const [icpBalance, setIcpBalance] = useState("0");
+  const [icpBalance, setIcpBalance] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // Convert principal to string for display
   const principalText = principal ? principal.toString() : "Not connected";
 
   useEffect(() => {
     if (actor && principal) {
-      const fetchData = async () => {
-        const result = await actor.getUserBalance(principal);
-        setIcpBalance(result[0].balance);
+      const fetchBalance = async () => {
+        setIsLoading(true);
+        setError(null);
+        try {
+          const result = await actor.getUserBalance(principal);
+          if (result && result.length > 0) {
+            const balance = result[0]?.balance;
+            const numericBalance = Number(balance);
+            setIcpBalance(isNaN(numericBalance) ? 0 : numericBalance);
+          }
+        } catch (err) {
+          setError(
+            err instanceof Error ? err.message : "Failed to fetch balance"
+          );
+          console.error("Error fetching balance:", err);
+        } finally {
+          setIsLoading(false);
+        }
       };
-      fetchData();
+      fetchBalance();
     }
   }, [actor, principal]);
 
   const handleCopyAddress = () => {
     if (principal) {
-      navigator.clipboard.writeText(principal.toString());
+      navigator.clipboard
+        .writeText(principal.toString())
+        .then(() => {
+          console.log("Address copied to clipboard");
+        })
+        .catch((err) => {
+          console.error("Failed to copy address:", err);
+        });
     }
   };
 
@@ -33,10 +56,10 @@ const WalletPage = () => {
           {/* Header Section */}
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
-              <h1 className="text-2xl font-semibold text-gray-900 lg:text-3xl">
-                My Wallet
+              <h1 className="text-2xl font-semibold text-title lg:text-3xl">
+                Your Tickets
               </h1>
-              <p className="mt-1 text-sm text-gray-500">
+              <p className="mt-1 text-xl text-gray-500">
                 Manage your ICP tokens and transactions
               </p>
             </div>
@@ -46,8 +69,8 @@ const WalletPage = () => {
           <div>
             <div className="pb-4">
               <div className="flex items-center gap-2">
-                <Wallet className="h-5 w-5" />
-                ICP Wallet
+                <Wallet className="h-10 w-10" />
+                <p className="text-xl">ICP Wallet</p>
               </div>
             </div>
             <div>
@@ -70,11 +93,11 @@ const WalletPage = () => {
                 {/* Address Section */}
                 <div className="space-y-4">
                   <div className="rounded-lg bg-gray-50 p-4">
-                    <p className="text-sm font-medium text-gray-500">
+                    <p className="text-xl font-medium text-gray-500">
                       Wallet Address
                     </p>
                     <div className="mt-2 flex items-center gap-2">
-                      <div className="w-full overflow-hidden text-ellipsis rounded-md bg-white p-2 text-sm">
+                      <div className="w-full overflow-hidden text-ellipsis rounded-md bg-white p-2 text-lg">
                         {principalText}
                       </div>
                       <button
@@ -82,7 +105,7 @@ const WalletPage = () => {
                         className="rounded-md p-2 hover:bg-gray-100"
                         title="Copy address"
                       >
-                        <Copy className="h-4 w-4" />
+                        <Copy className="h-8 w-h-8" />
                       </button>
                     </div>
                   </div>

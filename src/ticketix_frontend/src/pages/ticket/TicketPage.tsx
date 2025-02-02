@@ -1,25 +1,17 @@
 import IsLoadingPage from "@/components/features/isLoadingPage/IsLoadingPage";
 import TicketEventPreview from "@/components/features/TicketManagement/TicketEventPreview";
-import { Button } from "@/components/ui/Button/button";
 import CustomButton from "@/components/ui/Button/CustomButton";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/Dialog/dialog";
 import Layout from "@/components/ui/Layout/Layout";
 import { getTicketByOwner } from "@/lib/services/TicketService";
 import { getUserById } from "@/lib/services/UserService";
 import { useAuthManager } from "@/store/AuthProvider";
 import { TicketType } from "@/types";
 import { Principal } from "@dfinity/principal";
-import { ArrowLeft, Ticket } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Ticket as TicketOwnedType } from "../../../../declarations/ticketix_backend/ticketix_backend.did";
+import TicketResellDialog from "@/components/ui/Dialog/TicketResellDialog";
 
 type Result<T> = { ok?: T; err?: string };
 
@@ -35,7 +27,6 @@ const TicketPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [ticketOwned, setTicketOwned] = useState([] as TicketOwnedType[]);
 
   const handleResellClick = () => {
@@ -46,7 +37,33 @@ const TicketPage = () => {
     setIsDialogOpen(false);
   };
 
-  const idTicket = id ?? "";
+  const eventId = id ?? "";
+
+  const resellTicket = async (eventId: string, ticketId: string) => {
+    if (!actor || !principal) return;
+
+    try {
+      const result = await actor.resellTicketsDemo(
+        eventId,
+        principal,
+        ticketId
+      );
+      if ("ok" in result) {
+        alert("Ticket resold successfully!");
+        window.location.reload();
+      } else {
+        throw new Error(result.err || "Failed to resell ticket");
+      }
+    } catch (error) {
+      console.error("Error reselling ticket:", error);
+      alert("Failed to resell ticket. Please try again.");
+    }
+  };
+
+  const onConfirmResell = (eventId: string, ticketId: string) => {
+    resellTicket(eventId, ticketId);
+    handleCloseDialog();
+  };
 
   useEffect(() => {
     if (!actor) return;
@@ -56,7 +73,7 @@ const TicketPage = () => {
       setError(null);
       try {
         const result = (await actor.getAllForSaleTicketByEvent(
-          idTicket
+          eventId
         )) as Result<TicketType[]>;
 
         if (!result.ok) {
@@ -127,7 +144,7 @@ const TicketPage = () => {
     if (actor && principal) {
       const fetchOwnedTicket = async () => {
         try {
-          setLoading(true);
+          setIsLoading(true);
           const result = await getTicketByOwner(actor, principal);
           console.log(result);
 
@@ -137,24 +154,20 @@ const TicketPage = () => {
         } catch (error) {
           console.error(error);
         } finally {
-          setLoading(false);
+          setIsLoading(false);
         }
       };
       fetchOwnedTicket();
     }
 
     fetchData();
-  }, [actor, idTicket]);
-
-  const handleResellTicket = () => {
-    handleCloseDialog();
-  };
+  }, [actor, eventId]);
 
   if (error) {
     return (
       <Layout>
         <div className="flex flex-col gap-4">
-          <Link to={`/event/${idTicket}`} className="w-3/4">
+          <Link to={`/event/${eventId}`} className="w-3/4">
             <CustomButton className="flex justify-center items-center gap-2">
               <ArrowLeft />
               Back
@@ -173,7 +186,7 @@ const TicketPage = () => {
       ) : (
         <div className="flex flex-col gap-4 mt-20">
           <div className="flex justify-between items-center">
-            <Link to={`/event/${idTicket}`} className="w-3/4">
+            <Link to={`/event/${eventId}`} className="w-3/4">
               <CustomButton className="flex justify-center items-center gap-2 text-white">
                 <ArrowLeft />
                 Back
@@ -187,56 +200,12 @@ const TicketPage = () => {
         </div>
       )}
 
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="w-96 h-1/2">
-          <DialogHeader>
-            <DialogTitle>Resell Tickets</DialogTitle>
-            <DialogDescription>
-              Select the tickets you want to resell.
-            </DialogDescription>
-          </DialogHeader>
-          <>
-            {ticketOwned.length === 0 ? (
-              <div className="text-center text-subtext">
-                <p className="font-semibold md:text-lg">
-                  No ticket yet, Buy first!
-                </p>
-              </div>
-            ) : (
-              <div className="flex flex-col gap-4">
-                {ticketOwned.map((ticket, index) => (
-                  <div
-                    key={index}
-                    className="bg-blue-200 rounded-xl p-6 hover:shadow-xl transition-all duration-300 border border-gray-100"
-                  >
-                    <div className="flex flex-col">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          <Ticket className="w-5 h-5 text-indigo-500" />
-                        </div>
-                        <span className="text-lg font-semibold text-indigo-600">
-                          {ticket.price} ICP
-                        </span>
-                      </div>
-                      <Link to={`/event/${ticket.eventId}`}>
-                        <CustomButton className="w-full py-2.5 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors duration-200 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                          Sell Ticket
-                        </CustomButton>
-                      </Link>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </>
-          <DialogFooter>
-            <Button variant="outline" onClick={handleCloseDialog}>
-              Cancel
-            </Button>
-            <Button onClick={handleResellTicket}>Confirm Resell</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <TicketResellDialog
+        onConfirmResell={onConfirmResell}
+        ticketOwned={ticketOwned}
+        onOpenChange={setIsDialogOpen}
+        open={isDialogOpen}
+      />
     </Layout>
   );
 };

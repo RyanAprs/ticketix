@@ -13,12 +13,14 @@ const LayoutDashboard = ({ children, className, title }: LayoutProps) => {
   if (title) {
     pageTitle = title + " - TickeTix";
   }
+
   return (
-    <div className="h-full w-full">
+    <div className="h-screen w-screen flex flex-col">
       {isTablet ? <MobileNavbar /> : <Navbar />}
-      <div className={cn("flex h-full w-full")}>
+
+      <div className="flex flex-1 w-full">
         {!isTablet && <DashboardMenu />}
-        <main className={cn("mb-4 p-4 lg:p-7", className)}>{children}</main>
+        <main className={cn("flex-1 w-full p-4", className)}>{children}</main>
       </div>
     </div>
   );

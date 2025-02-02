@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import { PlusIcon } from "lucide-react";
+import { CalendarCheck, PlusIcon } from "lucide-react";
 
 import useWindowSize from "@/hooks/useWindowSize";
 import { cn } from "@/lib/utils/cn";
@@ -43,71 +43,74 @@ const EventManagement = () => {
   }, [actor, principal]);
 
   return (
-    <>
-      <>
-        <div className="flex flex-col gap-3 md:flex-row md:justify-between">
-          <h1 className="text-2xl font-semibold text-title lg:text-3xl">
-            Event Management
-          </h1>
+    <div className="flex flex-col w-full min-h-screen px-4 md:px-8 gap-6">
+      {/* Header dan Tombol */}
+      <div className="w-full flex flex-col gap-3 md:flex-row md:justify-between">
+        <h1 className="text-2xl font-semibold text-title lg:text-3xl">
+          Manage Your Event
+        </h1>
 
-          <Link to={"/dashboard/event/post"}>
-            <CustomButton
-              variant="secondary"
-              className="w-fit"
-              icon={<PlusIcon className="mr-1 size-5" />}
-              size={isMobile ? "small" : "default"}
-            >
-              Create Your Event
-            </CustomButton>
-          </Link>
-        </div>
-        <div
-          className={cn(
-            "mt-3 w-full p-3  md:px-5 md:py-4",
-            events.length === 0 &&
-              "flex min-h-[200px] max-w-[600px] items-center justify-center md:min-h-[300px]"
-          )}
-        >
-          {loading ? (
-            <IsLoadingPage />
-          ) : (
-            <>
-              {events.length === 0 ? (
-                <div className="mb-4 flex flex-col items-center space-y-3 text-subtext">
-                  <p className="text-center font-semibold md:text-lg">
-                    No event yet, Create your event first!
-                  </p>
-                </div>
-              ) : (
-                <div className="flex flex-wrap gap-5">
-                  <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-                    {events.map((event) => {
-                      if (!event.salesDeadline) return null;
+        <Link to={"/dashboard/event/post"}>
+          <CustomButton
+            variant="secondary"
+            className="w-fit"
+            icon={<PlusIcon className="mr-1 size-5" />}
+            size={isMobile ? "small" : "default"}
+          >
+            Create Your Event
+          </CustomButton>
+        </Link>
+      </div>
 
-                      const salesDeadline = Number(event.salesDeadline);
-                      const formattedDate = formatNSToDate(
-                        BigInt(salesDeadline * 1_000_000)
-                      );
+      {/* Event List Section */}
+      <div
+        className={cn(
+          "w-full",
+          events.length === 0 &&
+            "flex items-center justify-center min-h-[200px] md:min-h-[300px]"
+        )}
+      >
+        {loading ? (
+          <IsLoadingPage />
+        ) : (
+          <>
+            {events.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-12 bg-gray-50 rounded-lg w-full">
+                <CalendarCheck className="w-12 h-12 text-gray-400 mb-4" />
+                <p className="text-lg font-medium text-gray-900">
+                  No Events Available
+                </p>
+                <p className="mt-1 text-sm text-gray-500">
+                  No events found, Create your event first
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 w-full">
+                {events.map((event) => {
+                  if (!event.salesDeadline) return null;
 
-                      return (
-                        <EventOwnedPreview
-                          key={event.id}
-                          id={event.id}
-                          title={event.title}
-                          total={Number(event.total)}
-                          imageUrl={event.imageUrl}
-                          salesDeadline={formattedDate}
-                        />
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-            </>
-          )}
-        </div>
-      </>
-    </>
+                  const salesDeadline = Number(event.salesDeadline);
+                  const formattedDate = formatNSToDate(
+                    BigInt(salesDeadline * 1_000_000)
+                  );
+
+                  return (
+                    <EventOwnedPreview
+                      key={event.id}
+                      id={event.id}
+                      title={event.title}
+                      total={Number(event.total)}
+                      imageUrl={event.imageUrl}
+                      salesDeadline={formattedDate}
+                    />
+                  );
+                })}
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    </div>
   );
 };
 

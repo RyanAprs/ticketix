@@ -41,7 +41,7 @@ const EventDetailPreview = ({
   status,
 }: EventDetailPreviewProps) => {
   return (
-    <div className="mx-auto max-w-6xl px-4">
+    <div className="mx-auto max-w-6xl px-4 mt-20">
       <div className="overflow-hidden rounded-xl bg-white shadow-lg">
         {/* Hero Section */}
         <div className="relative h-96">

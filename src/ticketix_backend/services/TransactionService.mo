@@ -301,7 +301,7 @@ module {
                 let updatedEvent = {
                     event with
                     total = event.total - ticketIds.size();
-                    ticket = updatedTickets;  // Simpan array tiket yang sudah diupdate
+                    ticket = updatedTickets;  
                 };
                 events.put(eventId, updatedEvent);
 
@@ -311,7 +311,7 @@ module {
                     id = transactionId;
                     buyer = buyer;
                     seller = event.creator; 
-                    ticket = updatedTickets;  // Gunakan tiket yang sudah diupdate
+                    ticket = updatedTickets;  
                     totalTicket = ticketIds.size();
                     amount = 0; 
                     timestamp = Time.now();
@@ -328,53 +328,58 @@ module {
         seller: Principal,
         eventId: Text,
         ticketId: Text,
-    ) : async Result.Result<Text, Text> {
-        // CHECK IF THE EVENT EXISTS
-        switch (events.get(eventId)) {
-            case null {
-                return #err("Event not found");
-            };
-            case (?event) {
-                // CHECK IF THE TICKET EXIST AND IS OWNED BY THE SELLER
-                switch (Array.find(event.ticket, func (t: Types.Ticket) : Bool { t.id == ticketId })) {
-                    case null {
-                        return #err("Ticket not found");
-                    };
-                    case (?ticket) {
-                        // CHECK IF TICKET BELONGS TO THIS EVENT
-                        if (ticket.eventId != eventId) {
-                            return #err("Ticket does not belong to this event");
+        ) : async Result.Result<Text, Text> {
+            // CHECK IF THE EVENT EXISTS
+            switch (events.get(eventId)) {
+                case null {
+                    return #err("Event not found");
+                };
+                case (?event) {
+                    // CHECK IF THE TICKET EXIST AND IS OWNED BY THE SELLER
+                    switch (Array.find(event.ticket, func (t: Types.Ticket) : Bool { t.id == ticketId })) {
+                        case null {
+                            return #err("Ticket not found");
                         };
-                        
-                        if (ticket.owner != seller) {
-                            return #err("You do not own this ticket");
-                        };
-                        if (ticket.status != #owned) {
-                            return #err("Ticket is not owned");
-                        };
-
-                        // UPDATE THE TICKET STATUS TO FORSALE
-                        let updatedTicket: Types.Ticket = {
-                            id = ticket.id;
-                            eventId = ticket.eventId;
-                            owner = seller;
-                            status = #forSale;
-                            price = ticket.price;
-                        };
-                        let updatedTickets = Array.map(event.ticket, func (t: Types.Ticket) : Types.Ticket {
-                            if (t.id == ticketId) {
-                                return updatedTicket;
-                            } else {
-                                return t;
+                        case (?ticket) {
+                            // CHECK IF TICKET BELONGS TO THIS EVENT
+                            if (ticket.eventId != eventId) {
+                                return #err("Ticket does not belong to this event");
                             };
-                        });
-                        events.put(eventId, { event with ticket = updatedTickets });
+                            
+                            if (ticket.owner != seller) {
+                                return #err("You do not own this ticket");
+                            };
+                            if (ticket.status != #owned) {
+                                return #err("Ticket is not owned");
+                            };
 
-                        return #ok("Ticket is now for sale");
+                            // UPDATE THE TICKET STATUS TO FORSALE
+                            let updatedTicket: Types.Ticket = {
+                                id = ticket.id;
+                                eventId = ticket.eventId;
+                                owner = seller;
+                                status = #forSale;
+                                price = ticket.price;
+                            };
+
+                            let updatedTickets = Array.map(event.ticket, func (t: Types.Ticket) : Types.Ticket {
+                                if (t.id == ticketId) {
+                                    return updatedTicket;
+                                } else {
+                                    return t;
+                                };
+                            });
+                            
+                            events.put(eventId, { event with 
+                                ticket = updatedTickets; 
+                                total = event.total + 1 
+                            });
+
+                            return #ok("Ticket is now for sale");
+                        };
                     };
                 };
             };
-        };
-  };
+    };
 
 }

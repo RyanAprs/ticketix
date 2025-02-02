@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import useWindowSize from "@/hooks/useWindowSize";
 import { cn } from "@/lib/utils/cn";
 import { useAuthManager } from "@/store/AuthProvider";
 import IsLoadingPage from "../isLoadingPage/IsLoadingPage";
@@ -7,13 +6,12 @@ import { getTicketByOwner } from "@/lib/services/TicketService";
 import { Ticket as TicketType } from "../../../../../declarations/ticketix_backend/ticketix_backend.did";
 import { Ticket } from "lucide-react";
 import CustomButton from "@/components/ui/Button/CustomButton";
-import { Link } from "react-router-dom";
 
 const TicketManagement = () => {
   const { actor, principal } = useAuthManager();
-  const { isMobile } = useWindowSize();
   const [loading, setLoading] = useState(false);
   const [tickets, setTickets] = useState([] as TicketType[]);
+  const [filterStatus, setFilterStatus] = useState("all");
 
   useEffect(() => {
     if (actor && principal) {
@@ -36,63 +34,101 @@ const TicketManagement = () => {
     }
   }, [actor, principal]);
 
-  if (loading) return <IsLoadingPage />;
+  const filteredTickets = tickets.filter((ticket) => {
+    if (filterStatus === "all") return true;
+    if (filterStatus === "owned" && ticket.status.owned !== undefined)
+      return true;
+    if (filterStatus === "forSale" && ticket.status.forSale !== undefined)
+      return true;
+    if (filterStatus === "used" && ticket.status.used !== undefined)
+      return true;
+    return false;
+  });
 
   return (
     <>
-      <div className="flex flex-col w-full h-full space-y-6">
+      <div className="flex flex-col w-full min-h-screen px-4 md:px-8 gap-6">
         <div className="w-full flex flex-col gap-3 md:flex-row md:justify-between">
           <h1 className="text-2xl font-semibold text-title lg:text-3xl">
             Your Tickets
           </h1>
+
+          {/* Filter Buttons */}
+          <div className="flex space-x-2">
+            {["all", "owned", "forSale", "used"].map((status) => (
+              <CustomButton
+                key={status}
+                className={cn(
+                  "py-2 px-4 text-sm font-medium rounded-lg",
+                  filterStatus === status
+                    ? "bg-indigo-600 text-white"
+                    : "bg-gray-200 text-gray-700"
+                )}
+                onClick={() => setFilterStatus(status)}
+              >
+                {status === "all"
+                  ? "All"
+                  : status.charAt(0).toUpperCase() + status.slice(1)}
+              </CustomButton>
+            ))}
+          </div>
         </div>
 
-        <div
-          className={cn(
-            "w-full",
-            tickets.length === 0 &&
-              "flex items-center justify-center min-h-[200px] md:min-h-[300px]"
-          )}
-        >
-          {loading ? (
-            <IsLoadingPage />
-          ) : (
-            <>
-              {tickets.length === 0 ? (
-                <div className="text-center text-subtext">
-                  <p className="font-semibold md:text-lg">
-                    No ticket yet, Buy first!
+        {loading ? (
+          <IsLoadingPage />
+        ) : (
+          <>
+            <div
+              className={cn(
+                "w-full",
+                filteredTickets.length === 0 &&
+                  "flex items-center justify-center min-h-[200px] md:min-h-[300px]"
+              )}
+            >
+              {filteredTickets.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-12 bg-gray-50 rounded-lg w-full">
+                  <Ticket className="w-12 h-12 text-gray-400 mb-4" />
+                  <p className="text-lg font-medium text-gray-900">
+                    No Tickets Available
+                  </p>
+                  <p className="mt-1 text-sm text-gray-500">
+                    No tickets found for this category.
                   </p>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {tickets.map((ticket, index) => (
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 w-full">
+                  {filteredTickets.map((ticket, index) => (
                     <div
                       key={index}
-                      className="bg-white rounded-xl p-6 hover:shadow-xl transition-all duration-300 border border-gray-100"
+                      className="bg-white rounded-xl p-4 shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 w-full"
                     >
-                      <div className="flex flex-col space-y-4">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-2">
-                            <Ticket className="w-5 h-5 text-indigo-500" />
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center space-x-3">
+                          <div className="p-2 bg-indigo-50 rounded-lg">
+                            <Ticket className="w-10 h-10 text-indigo-600" />
                           </div>
-                          <span className="text-lg font-semibold text-indigo-600">
-                            {ticket.price} ICP
-                          </span>
+                          <div className="text-xl">
+                            <p className="font-medium text-gray-900">
+                              Ticket #{ticket.id}
+                            </p>
+                            <p className="text-sm text-gray-500">
+                              Event ID: {ticket.eventId}
+                            </p>
+                          </div>
                         </div>
-                        <Link to={`/event/${ticket.eventId}`}>
-                          <CustomButton className="w-full py-2.5 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors duration-200 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            Sell Ticket
-                          </CustomButton>
-                        </Link>
+                        <div className="text-right">
+                          <p className="text-lg font-semibold text-indigo-600">
+                            {ticket.price} ICP
+                          </p>
+                        </div>
                       </div>
                     </div>
                   ))}
                 </div>
               )}
-            </>
-          )}
-        </div>
+            </div>
+          </>
+        )}
       </div>
     </>
   );
