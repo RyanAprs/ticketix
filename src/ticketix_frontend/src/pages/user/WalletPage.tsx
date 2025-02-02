@@ -2,12 +2,16 @@ import React, { useEffect, useState } from "react";
 import LayoutDashboard from "@/components/ui/Layout/LayoutDashboard";
 import { useAuthManager } from "@/store/AuthProvider";
 import { ArrowUpDown, Copy, ExternalLink, Wallet } from "lucide-react";
+import { TransactionType } from "@/types";
+import { getTransactions } from "@/lib/services/TransactionService";
+import { getUserById } from "@/lib/services/UserService";
 
 const WalletPage = () => {
   const { actor, principal } = useAuthManager();
   const [icpBalance, setIcpBalance] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [transactions, setTransactions] = useState<TransactionType[]>([]);
 
   const principalText = principal ? principal.toString() : "Not connected";
 
@@ -18,7 +22,6 @@ const WalletPage = () => {
         setError(null);
         try {
           const result = await actor.getUserBalance(principal);
-          console.log(result);
 
           if (result && result.length > 0) {
             const balance = result[0]?.balance;
@@ -34,7 +37,27 @@ const WalletPage = () => {
           setIsLoading(false);
         }
       };
+
+      const fetchTransactions = async () => {
+        setIsLoading(true);
+        setError(null);
+        try {
+          const result = await getTransactions(actor, principal);
+          if (result) {
+            setTransactions(result);
+          }
+        } catch (err) {
+          setError(
+            err instanceof Error ? err.message : "Failed to fetch transactions"
+          );
+          console.error("Error fetching transactions:", err);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
       fetchBalance();
+      fetchTransactions();
     }
   }, [actor, principal]);
 
@@ -121,9 +144,32 @@ const WalletPage = () => {
                   Recent Transactions
                 </h3>
                 <div className="rounded-lg border">
-                  <div className="p-4 text-center text-sm text-gray-500">
-                    No recent transactions
-                  </div>
+                  {transactions.length > 0 ? (
+                    transactions.map((transaction, index) => (
+                      <div key={index} className="p-4 border-b last:border-b-0">
+                        <div className="flex justify-between">
+                          <div>
+                            <p className="text-sm font-medium text-gray-700">
+                              From: {transaction.buyerUsername}
+                            </p>
+                            <p className="text-sm font-medium text-gray-700">
+                              To: {transaction.sellerUsername}
+                            </p>
+                          </div>
+                          <div className="text-sm text-gray-500">
+                            {transaction.date}
+                          </div>
+                        </div>
+                        <p className="mt-2 text-lg font-bold text-gray-900">
+                          Amount: {transaction.amount} ICP
+                        </p>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="p-4 text-center text-sm text-gray-500">
+                      No recent transactions
+                    </div>
+                  )}
                 </div>
               </div>
 

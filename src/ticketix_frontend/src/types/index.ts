@@ -30,3 +30,11 @@ export interface TicketType {
   total: number;
   eventId: string;
 }
+
+export interface TransactionType {
+  id: string;
+  amount: number;
+  sellerUsername: string;
+  buyerUsername: string;
+  date: string;
+}
