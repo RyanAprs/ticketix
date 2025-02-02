@@ -108,11 +108,12 @@ const TicketEventPreview = ({ tickets }: TicketEventPreviewProps) => {
 
       const selectedTickets = Array(ticketCount).fill(selectedTicket.id);
 
-      if (actor) {
+      if (actor && principal) {
         // Record purchase in backend using demo function
         const result = await actor.buyTicketsDemo(
           selectedTicket.eventId,
-          selectedTickets
+          selectedTickets,
+          principal
         );
 
         console.log("Purchase demo result:", result);

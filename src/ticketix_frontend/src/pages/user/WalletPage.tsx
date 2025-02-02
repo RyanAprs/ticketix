@@ -1,116 +1,117 @@
 import React, { useEffect, useState } from "react";
-
-import { CopyIcon } from "lucide-react";
-
-import { Button } from "@/components/ui/Button/button";
-import { CustomInput } from "@/components/ui/Input/CustomInput";
 import LayoutDashboard from "@/components/ui/Layout/LayoutDashboard";
-import ModalCustom from "@/components/ui/Modal/ModalCustom";
-import useUser from "@/hooks/useUser";
-import { convertToE8s, convertToICP } from "@/lib/utils";
 import { useAuthManager } from "@/store/AuthProvider";
+import { ArrowUpDown, Copy, ExternalLink, Wallet } from "lucide-react";
 
 const WalletPage = () => {
-  const { actor } = useAuthManager();
-  //   const { getICPBalance, getCreditBalance, user } = useUser();
-
+  const { actor, principal } = useAuthManager();
   const [icpBalance, setIcpBalance] = useState("0");
-  const [creditBalance, setCreditBalance] = useState("0");
-  // const [depositAddress, setDepositAddress] = useState(
-  //   user?.depositAddress ?? '',
-  // );
-  const [amount, setAmount] = useState(0);
-  const [openModal, setOpenModal] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
-  //   useEffect(() => {
-  //     getICPBalance().then((result) => {
-  //       setIcpBalance(convertToICP(parseInt(result.toString())).toString());
-  //     });
-  //   }, [getICPBalance]);
+  // Convert principal to string for display
+  const principalText = principal ? principal.toString() : "Not connected";
 
-  //   useEffect(() => {
-  //     getCreditBalance().then((result) => {
-  //       setCreditBalance(convertToICP(parseInt(result.toString())).toString());
-  //     });
-  //   }, [getCreditBalance]);
+  useEffect(() => {
+    if (actor && principal) {
+      const fetchData = async () => {
+        const result = await actor.getUserBalance(principal);
+        setIcpBalance(result[0].balance);
+      };
+      fetchData();
+    }
+  }, [actor, principal]);
 
-  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseFloat(e.target.value);
-    setAmount(isNaN(value) ? 0 : value);
-  };
-
-  // HANDLE WITHDRAW
-  const handleWithdrawal = async () => {
-    // if (!actor) return;
-    // if (amount <= 0) {
-    //   alert('Please enter a valid amount');
-    //   return;
-    // }
-    // // if (!depositAddress) {
-    // //   alert('Please enter your withdrawal address');
-    // //   return;
-    // // }
-    // try {
-    //   setIsLoading(true);
-    //   const amountInE8s = BigInt(convertToE8s(amount));
-    //   const result = await actor.withdraw(amountInE8s);
-    //   if ('ok' in result) {
-    //     getICPBalance().then((result) => {
-    //       setIcpBalance(convertToICP(parseInt(result.toString())).toString());
-    //     });
-    //     getCreditBalance().then((result) => {
-    //       setCreditBalance(
-    //         convertToICP(parseInt(result.toString())).toString(),
-    //       );
-    //     });
-    //     alert('Withdrawal successful');
-    //     setOpenModal(false);
-    //   } else if ('err' in result) {
-    //     alert(`Withdrawal failed: ${result.err}`);
-    //   }
-    // } catch (error) {
-    //   console.error(error);
-    //   alert('An error occurred');
-    // } finally {
-    //   setIsLoading(false);
-    // }
-  };
-
-  const copyToClipboard = () => {
-    // if (user?.depositAddress) {
-    //   navigator.clipboard.writeText(user.depositAddress).then(() => {
-    //     console.log('Copied to clipboard');
-    //   });
-    // }
+  const handleCopyAddress = () => {
+    if (principal) {
+      navigator.clipboard.writeText(principal.toString());
+    }
   };
 
   return (
-    <LayoutDashboard title="My Wallet" className="w-full">
-      <h1 className="text-2xl font-semibold text-title lg:text-3xl">
-        My Wallet
-      </h1>
-      <div className="mt-3 space-y-5 text-subtext md:w-fit">
-        <div className="rounded-lg border p-4 pt-3 shadow-custom">
-          <h2 className="text-xl font-semibold text-title">ICP Wallet</h2>
-          <div className="mt-2 flex flex-col gap-2 md:flex-row md:gap-5">
+    <LayoutDashboard>
+      <div className="p-6 w-full bg-gray-50">
+        <div className="max-w-7xl mx-auto space-y-6">
+          {/* Header Section */}
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
-              <p className="font-medium">Balance</p>
-              <p className="font-montserrat text-lg font-medium md:text-xl">
-                {icpBalance} ICP
+              <h1 className="text-2xl font-semibold text-gray-900 lg:text-3xl">
+                My Wallet
+              </h1>
+              <p className="mt-1 text-sm text-gray-500">
+                Manage your ICP tokens and transactions
               </p>
             </div>
+          </div>
 
+          {/* Main Wallet Card */}
+          <div>
+            <div className="pb-4">
+              <div className="flex items-center gap-2">
+                <Wallet className="h-5 w-5" />
+                ICP Wallet
+              </div>
+            </div>
             <div>
-              <p className="font-medium">Deposit Address</p>
-              <div className="mt-1 flex items-center gap-3">
-                <p className="h-full w-full resize-none break-all rounded-sm bg-mainAccent/30 px-4 py-2 font-montserrat text-sm font-medium focus:outline-none focus:ring-0 md:w-[500px] md:text-base">
-                  {/* {user?.depositAddress} */}
-                </p>
-                <CopyIcon
-                  onClick={copyToClipboard}
-                  className="cursor-pointer text-subtext hover:text-black"
-                />
+              <div className="grid gap-6 md:grid-cols-2">
+                {/* Balance Section */}
+                <div className="space-y-4">
+                  <div className="rounded-lg bg-gray-50 p-4">
+                    <p className="text-sm font-medium text-gray-500">
+                      Total Balance
+                    </p>
+                    <div className="mt-2 flex items-baseline">
+                      <span className="text-3xl font-bold">{icpBalance}</span>
+                      <span className="ml-2 text-lg font-medium text-gray-500">
+                        ICP
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Address Section */}
+                <div className="space-y-4">
+                  <div className="rounded-lg bg-gray-50 p-4">
+                    <p className="text-sm font-medium text-gray-500">
+                      Wallet Address
+                    </p>
+                    <div className="mt-2 flex items-center gap-2">
+                      <div className="w-full overflow-hidden text-ellipsis rounded-md bg-white p-2 text-sm">
+                        {principalText}
+                      </div>
+                      <button
+                        onClick={handleCopyAddress}
+                        className="rounded-md p-2 hover:bg-gray-100"
+                        title="Copy address"
+                      >
+                        <Copy className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Recent Transactions Section */}
+              <div className="mt-6">
+                <h3 className="mb-4 flex items-center gap-2 font-semibold">
+                  <ArrowUpDown className="h-4 w-4" />
+                  Recent Transactions
+                </h3>
+                <div className="rounded-lg border">
+                  <div className="p-4 text-center text-sm text-gray-500">
+                    No recent transactions
+                  </div>
+                </div>
+              </div>
+
+              {/* Actions Section */}
+              <div className="mt-6 flex flex-wrap gap-4">
+                <button className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
+                  Send
+                  <ArrowUpDown className="h-4 w-4" />
+                </button>
+                <button className="inline-flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium hover:bg-gray-50">
+                  View on Explorer
+                  <ExternalLink className="h-4 w-4" />
+                </button>
               </div>
             </div>
           </div>

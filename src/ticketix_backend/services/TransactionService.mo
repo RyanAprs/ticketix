@@ -111,7 +111,7 @@ module {
                             id = transactionId;
                             buyer = buyer;
                             seller = event.creator;
-                            ticket = event.ticket[0];
+                            ticket = event.ticket;
                             totalTicket = ticketIds.size();
                             amount = totalCost;
                             timestamp = Time.now();
@@ -245,95 +245,90 @@ module {
 //         };
 //   };
 
-public func buyTicketsDemo(
-    events: Types.Events,
-    transactions: Types.Transactions,
-    buyer: Principal,
-    eventId: Text,
-    ticketIds: [Text]
-) : async Result.Result<Text, Text> {
-    // CHECK IF THE EVENT EXISTS
-    switch (events.get(eventId)) {
-        case null {
-            return #err("Event not found");
-        };
-        case (?event) {
-            // CHECK IF THE REQUESTED NUMBER OF TICKETS IS AVAILABLE
-            if (ticketIds.size() > event.total) {
-                return #err("Not enough tickets available");
+    public func buyTicketsDemo(
+        events: Types.Events,
+        transactions: Types.Transactions,
+        buyer: Principal,
+        eventId: Text,
+        ticketIds: [Text]
+    ) : async Result.Result<Text, Text> {
+        // CHECK IF THE EVENT EXISTS
+        switch (events.get(eventId)) {
+            case null {
+                return #err("Event not found");
             };
+            case (?event) {
+                // CHECK IF THE REQUESTED NUMBER OF TICKETS IS AVAILABLE
+                if (ticketIds.size() > event.total) {
+                    return #err("Not enough tickets available");
+                };
 
-            // CHECK IF TICKETS ARE AVAILABLE AND NOT OWNED
-            for (ticketId in ticketIds.vals()) {
-                switch (Array.find(event.ticket, func (t: Types.Ticket) : Bool { t.id == ticketId })) {
-                    case null {
-                        return #err("Ticket not found");
-                    };
-                    case (?ticket) {
-                        if (ticket.status == #owned and Principal.equal(ticket.owner, buyer)) {
-                            return #err("Ticket already owned");
+                // CHECK IF TICKETS ARE AVAILABLE AND NOT OWNED
+                for (ticketId in ticketIds.vals()) {
+                    switch (Array.find(event.ticket, func (t: Types.Ticket) : Bool { t.id == ticketId })) {
+                        case null {
+                            return #err("Ticket not found");
+                        };
+                        case (?ticket) {
+                            if (ticket.status == #owned and Principal.equal(ticket.owner, buyer)) {
+                                return #err("Ticket already owned");
+                            };
                         };
                     };
                 };
-            };
 
-            // UPDATE THE TICKETS
-            for (ticketId in ticketIds.vals()) {
-                switch (Array.find(event.ticket, func (t: Types.Ticket) : Bool { t.id == ticketId })) {
-                    case null {
-                        return #err("Ticket not found");
-                    };
-                    case (?ticket) {
-                        let updatedTicket: Types.Ticket = {
-                            id = ticket.id;
-                            eventId = ticket.eventId;
-                            owner = buyer;
-                            status = #owned;
-                            price = ticket.price;
-                        };
-                        let updatedTickets = Array.map(event.ticket, func (t: Types.Ticket) : Types.Ticket {
-                            if (t.id == ticketId) updatedTicket else t
-                        });
-                        events.put(eventId, { event with ticket = updatedTickets });
-                    };
+                // Buat array tiket yang baru
+                var updatedTickets = event.ticket;
+                
+                // UPDATE THE TICKETS
+                for (ticketId in ticketIds.vals()) {
+                    updatedTickets := Array.map(updatedTickets, func (t: Types.Ticket) : Types.Ticket {
+                        if (t.id == ticketId) {
+                            {
+                                id = t.id;
+                                eventId = t.eventId;
+                                owner = buyer;  
+                                status = #owned;
+                                price = t.price;
+                            }
+                        } else {
+                            t
+                        }
+                    });
                 };
-            };
 
-            // REDUCE THE TOTAL NUMBER OF AVAILABLE TICKETS
-            let updatedTotal = event.total - ticketIds.size(); 
-            let updatedEvent = {
-                event with total = updatedTotal;
-            };
-            events.put(eventId, updatedEvent);
+                // REDUCE THE TOTAL NUMBER OF AVAILABLE TICKETS AND UPDATE EVENT
+                let updatedEvent = {
+                    event with
+                    total = event.total - ticketIds.size();
+                    ticket = updatedTickets;  // Simpan array tiket yang sudah diupdate
+                };
+                events.put(eventId, updatedEvent);
 
-            // CREATE TRANSACTION
-            let transactionId = Principal.toText(buyer) # "-" # Int.toText(Time.now());
-            let transaction: Types.Transaction = {
-                id = transactionId;
-                buyer = buyer;
-                seller = event.creator; 
-                ticket = event.ticket[0];
-                totalTicket = ticketIds.size();
-                amount = 0; 
-                timestamp = Time.now();
-            };
-            transactions.put(buyer, transaction);
+                // CREATE TRANSACTION
+                let transactionId = Principal.toText(buyer) # "-" # Int.toText(Time.now());
+                let transaction: Types.Transaction = {
+                    id = transactionId;
+                    buyer = buyer;
+                    seller = event.creator; 
+                    ticket = updatedTickets;  // Gunakan tiket yang sudah diupdate
+                    totalTicket = ticketIds.size();
+                    amount = 0; 
+                    timestamp = Time.now();
+                };
+                transactions.put(buyer, transaction);
 
-            return #ok(transactionId);
+                return #ok(transactionId);
+            };
         };
     };
-};
 
-    public func sellTicket(
-        _users: Types.Users,
+    public func resellTicketsDemo(
         events: Types.Events,
-        _transactions: Types.Transactions,
-        _userBalances: Types.UserBalances,
         seller: Principal,
         eventId: Text,
         ticketId: Text,
-        price: Float
-    ) : Result.Result<Text, Text> {
+    ) : async Result.Result<Text, Text> {
         // CHECK IF THE EVENT EXISTS
         switch (events.get(eventId)) {
             case null {
@@ -346,6 +341,11 @@ public func buyTicketsDemo(
                         return #err("Ticket not found");
                     };
                     case (?ticket) {
+                        // CHECK IF TICKET BELONGS TO THIS EVENT
+                        if (ticket.eventId != eventId) {
+                            return #err("Ticket does not belong to this event");
+                        };
+                        
                         if (ticket.owner != seller) {
                             return #err("You do not own this ticket");
                         };
@@ -353,13 +353,13 @@ public func buyTicketsDemo(
                             return #err("Ticket is not owned");
                         };
 
-                        // UPDATE THE TICKET STATUS TI FIRSALE
+                        // UPDATE THE TICKET STATUS TO FORSALE
                         let updatedTicket: Types.Ticket = {
                             id = ticket.id;
                             eventId = ticket.eventId;
                             owner = seller;
                             status = #forSale;
-                            price = price;
+                            price = ticket.price;
                         };
                         let updatedTickets = Array.map(event.ticket, func (t: Types.Ticket) : Types.Ticket {
                             if (t.id == ticketId) {

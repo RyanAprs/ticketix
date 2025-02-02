@@ -43,7 +43,7 @@ const CustomTextarea = forwardRef<HTMLTextAreaElement, CustomTextareaProps>(
         <textarea
           ref={ref}
           className={cn(
-            "w-full resize-none rounded-lg border bg-bg p-3 placeholder-subtext/60",
+            "w-full resize-none rounded-lg border bg-blue-200 p-3 placeholder-subtext/60",
             "focus:border-border focus:outline-none focus:ring-1 focus:ring-border",
             textareaClassName
           )}

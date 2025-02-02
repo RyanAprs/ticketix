@@ -46,7 +46,7 @@ const EventPage = () => {
         </Layout>
       ) : (
         <Layout>
-          <div className="flex flex-col gap-3 md:flex-row md:justify-between">
+          <div className="flex flex-col gap-3 md:flex-row md:justify-between mt-20">
             <h1 className="text-2xl font-semibold text-title lg:text-3xl">
               Find Your events
             </h1>

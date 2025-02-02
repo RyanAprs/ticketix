@@ -33,19 +33,20 @@ const DashboardMenu = () => {
     <aside className="h-[calc(100vh-81px)] w-full max-w-[250px] border-r border-border">
       <div className="flex flex-col divide-y divide-border">
         {dashboardMenu.map((section, sectionIndex) => (
-          <div key={sectionIndex} className="space-y-1 p-2">
+          <div key={sectionIndex} className="space-y-1 p-2 text-mainAccent">
             {section.items.map((item, itemIndex) => (
               <Link
                 key={itemIndex}
                 to={item.to ?? "#"}
                 className={cn(
-                  "flex w-full items-center gap-2 rounded-xl px-4 py-3 text-base font-medium text-subtext",
+                  "flex w-full items-center gap-2 rounded-xl px-4 py-3 text-base font-medium",
+                  "text-mainAccent",
                   item.to === history &&
                     [
-                      "bg-mainAccent",
-                      "bg-secondaryAccent",
-                      "bg-thirdAccent",
-                      "bg-mainAccent",
+                      "bg-mainAccent text-white",
+                      "bg-secondaryAccent text-white",
+                      "bg-thirdAccent text-white",
+                      "bg-mainAccent text-white",
                     ][sectionIndex],
                   section.activeClassName
                 )}
@@ -58,7 +59,10 @@ const DashboardMenu = () => {
         ))}
       </div>
       <div className="mt-5 border-border px-3 pt-6">
-        <CustomButton className="w-full px-0 shadow-none" onClick={logout}>
+        <CustomButton
+          className="w-full px-0 shadow-none text-white"
+          onClick={logout}
+        >
           Logout
         </CustomButton>
       </div>

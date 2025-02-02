@@ -102,6 +102,18 @@ actor TickeTix {
       };
     };
 
+    // GET USER BY PRINCIPAL
+    public query func getUserBalance(userPrincipal: Principal): async ?Types.UserBalance {
+      switch(userBalances.get(userPrincipal)) {
+          case (?user) {
+              return ?user;  
+          };
+          case null {
+              return null;  
+          };
+      };
+    };
+
     // DELETE USER
     public query func deleteUser(userId : Principal) : async ?Types.User {
       return users.remove(userId);
@@ -371,6 +383,24 @@ actor TickeTix {
   };
 
   // TRANSACTION ==============================================================
+  // GET TRANSACTION BY USER ID
+  public func getTransactionByUserId(
+    userId: Principal
+  ): async Result.Result<[Types.Transaction], Text> {
+    let userTransactions = Iter.filter<Types.Transaction>(
+      transactions.vals(),
+      func (transaction: Types.Transaction) : Bool {
+        return transaction.buyer == userId or transaction.seller == userId;
+      }
+    );
+    
+    let transactionArray = Iter.toArray(userTransactions);
+    if (transactionArray.size() == 0) {
+      return #err("You do not own any transaction.");
+    } else {
+      return #ok(transactionArray);
+    };
+  };
   // PURCHASE TICKETS
   public shared (msg) func purchaseTickets(
     eventId: Text,
@@ -388,11 +418,12 @@ actor TickeTix {
       );
   };
 
-  public shared (msg) func buyTicketsDemo(
+  public func buyTicketsDemo(
     eventId: Text,
     ticketIds: [Text],
+    buyer: Principal
   ) : async Result.Result<Text, Text> {
-      let buyer = msg.caller;
+      // let buyer = msg.caller;
       
       return await TransactionService.buyTicketsDemo(
           events,        
@@ -401,6 +432,19 @@ actor TickeTix {
           eventId,
           ticketIds
       );
+  };
+
+  public func resellTicketsDemo(
+    eventId: Text,
+    seller: Principal,
+    ticketId: Text,
+  ): async Result.Result<Text, Text> {
+    return await TransactionService.resellTicketsDemo(
+      events, 
+      seller, 
+      eventId, 
+      ticketId
+    );
   };
 
 };

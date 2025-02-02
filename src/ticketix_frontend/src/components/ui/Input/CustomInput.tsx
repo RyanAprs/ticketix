@@ -57,7 +57,7 @@ const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>(
           <input
             ref={ref}
             className={cn(
-              "w-full rounded-lg border bg-bg p-3 placeholder-subtext/60",
+              "w-full rounded-lg border bg-blue-200 p-3 placeholder-subtext/60",
               "focus:border-border focus:outline-none focus:ring-1 focus:ring-border",
               prefix && "pl-8",
               inputClassName

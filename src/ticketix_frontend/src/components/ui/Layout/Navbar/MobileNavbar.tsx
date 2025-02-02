@@ -1,16 +1,12 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-
 import { User2Icon } from "lucide-react";
-
 import useUser from "@/hooks/useUser";
 import { useAuthManager } from "@/store/AuthProvider";
-
 import Drawer from "../../Drawer/Drawer";
-
 import { menuSections } from "./UseDropDown";
-import CustomButton from "../../Button/CustomButton";
 import { cn } from "@/lib/utils/cn";
+import { Button } from "../../Button/button";
 
 const MobileNavbar = () => {
   const { isAuthenticated, login, logout } = useAuthManager();
@@ -22,32 +18,32 @@ const MobileNavbar = () => {
   const logoutSection = menuSections[menuSections.length - 1];
 
   return (
-    <nav className="flex h-[65px] items-center justify-between border-b px-4">
-      <Link to={"/"}>
+    <nav className="flex h-[65px] items-center justify-between px-10 z-50">
+      <Link to={"/"} className="flex gap-2 justify-center items-center">
         <img
           alt="ticketix logo"
-          src="/images/logo/LogoTicketix.svg"
+          src="/images/logo/LogoTicketix2.svg"
           loading="eager"
-          className="w-32"
+          className="w-12"
         ></img>
+        <h1 className="text-xl font-semibold text-mainAccent">TickeTix</h1>
       </Link>
 
       <div className="flex items-center gap-2">
         {isAuthenticated ? (
           <div
             onClick={() => setOpenMenu(true)}
-            className="flex size-11 items-center justify-center overflow-hidden rounded-full bg-mainAccent text-subtext"
+            className="flex size-11 items-center justify-center overflow-hidden rounded-full bg-mainAccent text-white"
           >
-            {/* {user?.profilePic ? (
-              <img src={user.profilePic} alt="ticketix" />
-            ) : (
-            )} */}
             <User2Icon />
           </div>
         ) : (
-          <CustomButton onClick={login} size="small">
+          <Button
+            className="rounded-full bg-mainAccent"
+            onClick={() => login()}
+          >
             Login
-          </CustomButton>
+          </Button>
         )}
       </div>
 
@@ -71,7 +67,7 @@ const MobileNavbar = () => {
                       to={item.to ?? ""}
                       onClick={() => setOpenMenu(false)}
                       className={cn(
-                        "flex w-full items-center gap-1.5 px-4 py-3 text-base font-medium text-subtext",
+                        "flex w-full items-center gap-1.5 px-4 py-3 text-base font-medium text-white",
                         "transition-colors duration-150",
                         "border-b border-[#3E3D39]/10 last:border-0"
                       )}
@@ -95,7 +91,7 @@ const MobileNavbar = () => {
                   setOpenMenu(false);
                 }}
                 className={cn(
-                  "block w-full bg-mainAccent/50 px-4 py-4 text-base font-medium text-subtext"
+                  "block w-full bg-mainAccent/50 px-4 py-4 text-base font-medium text-white"
                 )}
               >
                 {item.label}

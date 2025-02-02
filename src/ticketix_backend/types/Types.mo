@@ -61,7 +61,7 @@ module {
         id: Text;               
         buyer: Principal;       
         seller: Principal;      
-        ticket: Ticket;         
+        ticket: [Ticket];         
         totalTicket: Nat;      
         amount: Float;            
         timestamp: Int;         

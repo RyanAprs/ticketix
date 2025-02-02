@@ -25,12 +25,12 @@ const SecondHeroBanner = () => {
       <div className="text-black font-medium text-[18px]">
         <h2>Trusted and Trasparent Ticket Transactions</h2>
       </div>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 p-2 lg:bg-blue-100 bg-white rounded-full">
         {items.map((item, index) => {
           return (
             <div
               key={index}
-              className="flex gap-2 p-2 rounded-full bg-blue-100 justify-center items-center"
+              className="flex gap-2 p-2 rounded-full lg:bg-white bg-blue-100 justify-center items-center"
             >
               <img src="/images/logo/LogoTicketix2.svg" alt="ticketix logo" />
               <p className="text-blue-600 font-medium text-[16px]">

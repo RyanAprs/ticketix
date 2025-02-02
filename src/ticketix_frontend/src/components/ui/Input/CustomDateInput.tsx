@@ -67,7 +67,7 @@ const CustomDateInput = React.forwardRef<
             <Button
               variant={"outline"}
               className={cn(
-                "w-full justify-start text-left font-normal rounded-lg border bg-bg p-3 placeholder-subtext/60",
+                "w-full justify-start text-left font-normal rounded-lg border bg-blue-200 p-4 placeholder-subtext/60",
                 "focus:border-border focus:outline-none focus:ring-1 focus:ring-border",
                 !date && "text-muted-foreground",
                 inputClassName
@@ -84,7 +84,7 @@ const CustomDateInput = React.forwardRef<
           <PopoverContent className="w-auto p-0">
             <Calendar
               className={cn(
-                "w-full rounded-lg border bg-bg p-3 placeholder-subtext/60",
+                "w-full rounded-lg border bg-blue-200 p-3 placeholder-subtext/60",
                 "focus:border-border focus:outline-none focus:ring-1 focus:ring-border"
               )}
               mode="single"

@@ -41,7 +41,7 @@ const CustomFileInput: React.FC<CustomFileInputProps> = ({
     <div className={cn("w-full", containerClassName)}>
       <div
         className={cn(
-          "relative flex items-center rounded-lg border bg-mainAccent font-medium hover:shadow-hover",
+          "relative flex items-center rounded-lg border bg-blue-200 font-medium hover:shadow-hover",
           disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer",
           error && "border-red-500",
           className

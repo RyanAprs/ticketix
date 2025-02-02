@@ -29,15 +29,18 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="w-full border-t bg-blue-100 py-8 font-medium text-subtext">
+    <footer className="w-full border-t bg-blue-100 py-8 font-medium text-subtext font-jetbrainsMono">
       <section className="flex flex-col gap-6 px-4 md:gap-14 xl:flex-row xl:justify-center xl:gap-20">
         <div className="w-[350px]">
-          <img
-            alt="ticketix logo"
-            src="/images/logo/LogoTicketix.svg"
-            loading="eager"
-            className="w-32"
-          ></img>
+          <Link to={"/"} className="flex gap-2 items-center">
+            <img
+              alt="ticketix logo"
+              src="/images/logo/LogoTicketix2.svg"
+              loading="eager"
+              className="w-12"
+            ></img>
+            <h1 className="text-xl font-semibold text-mainAccent">TickeTix</h1>
+          </Link>
           <p className="max-w-[350px] font-medium">
             Ticket Transactions through secure blockchain technology.
           </p>
