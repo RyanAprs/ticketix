@@ -18,6 +18,8 @@ const WalletPage = () => {
         setError(null);
         try {
           const result = await actor.getUserBalance(principal);
+          console.log(result);
+
           if (result && result.length > 0) {
             const balance = result[0]?.balance;
             const numericBalance = Number(balance);

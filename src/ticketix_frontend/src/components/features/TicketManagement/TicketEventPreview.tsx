@@ -8,6 +8,7 @@ import { useAuthManager } from "@/store/AuthProvider";
 import { Principal } from "@dfinity/principal";
 import { Ticket } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface TicketEventPreviewProps {
   tickets: EnhancedTicketType[];
@@ -21,6 +22,7 @@ const TicketEventPreview = ({ tickets }: TicketEventPreviewProps) => {
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const { isAuthenticated, actor, principal } = useAuthManager();
+  const navigate = useNavigate();
 
   const handleOpenModal = (ticket: EnhancedTicketType) => {
     setSelectedTicket(ticket);
@@ -107,13 +109,14 @@ const TicketEventPreview = ({ tickets }: TicketEventPreviewProps) => {
       }
 
       const selectedTickets = Array(ticketCount).fill(selectedTicket.id);
+      console.log(selectedTicket);
 
       if (actor && principal) {
-        // Record purchase in backend using demo function
         const result = await actor.buyTicketsDemo(
           selectedTicket.eventId,
           selectedTickets,
-          principal
+          principal,
+          selectedTicket.principal
         );
 
         console.log("Purchase demo result:", result);
@@ -122,14 +125,8 @@ const TicketEventPreview = ({ tickets }: TicketEventPreviewProps) => {
           throw new Error(result.err);
         }
 
-        // Success handling
-        console.log("Demo purchase successful!");
+        navigate("/dashboard/ticket");
         setOpenModal(false);
-
-        // Optionally show success message to user
-
-        // Optional: Refresh ticket list to show updated ownership
-        // await refreshTickets();
       }
     } catch (err) {
       console.error("Demo purchase error:", err);

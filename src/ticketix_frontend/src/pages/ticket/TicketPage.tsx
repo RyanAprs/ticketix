@@ -129,6 +129,7 @@ const TicketPage = () => {
             ...group[0],
             totalTickets: group.length,
             ownerUsername: userMap[owner] || "Unknown",
+            principal: Principal.fromText(owner),
           })
         );
 

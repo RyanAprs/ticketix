@@ -446,16 +446,18 @@ actor TickeTix {
   public func buyTicketsDemo(
     eventId: Text,
     ticketIds: [Text],
-    buyer: Principal
+    buyer: Principal,
+    seller: Principal
   ) : async Result.Result<Text, Text> {
-      // let buyer = msg.caller;
       
       return await TransactionService.buyTicketsDemo(
           events,        
           transactions,  
+          userBalances,
           buyer,
           eventId,
-          ticketIds
+          ticketIds,
+          seller
       );
   };
 

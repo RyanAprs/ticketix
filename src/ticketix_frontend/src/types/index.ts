@@ -1,3 +1,5 @@
+import { Principal } from "@dfinity/principal";
+
 export interface UserType {
   id: string;
   username: string;
@@ -22,6 +24,7 @@ export type TicketStatusInterface = "owned" | "forSale" | "used";
 export interface TicketType {
   id: string;
   owner: string;
+  principal: Principal;
   status: TicketStatusInterface;
   price: number;
   total: number;

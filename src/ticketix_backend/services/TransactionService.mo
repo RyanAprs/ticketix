@@ -248,9 +248,11 @@ module {
     public func buyTicketsDemo(
         events: Types.Events,
         transactions: Types.Transactions,
+        userBalances: Types.UserBalances,
         buyer: Principal,
         eventId: Text,
-        ticketIds: [Text]
+        ticketIds: [Text],
+        seller: Principal
     ) : async Result.Result<Text, Text> {
         // CHECK IF THE EVENT EXISTS
         switch (events.get(eventId)) {
@@ -261,6 +263,34 @@ module {
                 // CHECK IF THE REQUESTED NUMBER OF TICKETS IS AVAILABLE
                 if (ticketIds.size() > event.total) {
                     return #err("Not enough tickets available");
+                };
+
+                // CALCULATE TOTAL PRICE OF SELECTED TICKETS
+                var totalPrice: Float = 0;
+                for (ticketId in ticketIds.vals()) {
+                    switch (Array.find(event.ticket, func (t: Types.Ticket) : Bool { t.id == ticketId })) {
+                        case null {
+                            return #err("Ticket not found");
+                        };
+                        case (?ticket) {
+                            if (ticket.status == #owned and Principal.equal(ticket.owner, buyer)) {
+                                return #err("Ticket already owned");
+                            };
+                            totalPrice += ticket.price;
+                        };
+                    };
+                };
+
+                // CHECK IF BUYER HAS ENOUGH BALANCE
+                switch (userBalances.get(buyer)) {
+                    case null {
+                        return #err("Buyer balance not found");
+                    };
+                    case (?buyerBalance) {
+                        if (buyerBalance.balance < totalPrice) {
+                            return #err("Insufficient balance");
+                        };
+                    };
                 };
 
                 // CHECK IF TICKETS ARE AVAILABLE AND NOT OWNED
@@ -287,7 +317,7 @@ module {
                             {
                                 id = t.id;
                                 eventId = t.eventId;
-                                owner = buyer;  
+                                owner = buyer;  // Set the owner to the buyer
                                 status = #owned;
                                 price = t.price;
                             }
@@ -305,15 +335,40 @@ module {
                 };
                 events.put(eventId, updatedEvent);
 
+                // UPDATE USER BALANCES
+                switch (userBalances.get(buyer)) {
+                    case (?buyerBalance) {
+                        userBalances.put(buyer, { id = buyer; balance = buyerBalance.balance - totalPrice });
+                    };
+                    case null {};
+                };
+
+                // UPDATE SELLER BALANCE
+                for (ticketId in ticketIds.vals()) {
+                    switch (Array.find(event.ticket, func (t: Types.Ticket) : Bool { t.id == ticketId })) {
+                        case (?ticket) {
+                            switch (userBalances.get(ticket.owner)) {
+                                case (?sellerBalance) {
+                                    userBalances.put(ticket.owner, { id = ticket.owner; balance = sellerBalance.balance + ticket.price });
+                                };
+                                case null {
+                                    userBalances.put(ticket.owner, { id = ticket.owner; balance = ticket.price });
+                                };
+                            };
+                        };
+                        case null {};
+                    };
+                };
+
                 // CREATE TRANSACTION
                 let transactionId = Principal.toText(buyer) # "-" # Int.toText(Time.now());
                 let transaction: Types.Transaction = {
                     id = transactionId;
                     buyer = buyer;
-                    seller = event.creator; 
+                    seller = seller;  
                     ticket = updatedTickets;  
                     totalTicket = ticketIds.size();
-                    amount = 0; 
+                    amount = totalPrice;  
                     timestamp = Time.now();
                 };
                 transactions.put(buyer, transaction);
