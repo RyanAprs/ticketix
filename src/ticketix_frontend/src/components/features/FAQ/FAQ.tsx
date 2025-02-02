@@ -72,11 +72,23 @@ const FAQ = () => {
 
   return (
     <div className="flex w-full justify-center">
-      <section className="w-full max-w-[1280px] px-4 py-7 md:py-12">
-        <div className="mx-auto w-full max-w-[720px]">
-          <h1 className="mb-6 text-xl font-bold text-black lg:text-2xl">
-            Frequently Asked Questions (FAQ)
-          </h1>
+      <section className="w-full max-w-[1280px] px-4 py-3 md:py-7 flex justify-between items-center">
+        <div className="flex flex-col justify-between w-full h-full">
+          <div className="flex flex-col gap-6">
+            <p className="font-normal text-lg">
+              Frequently asked question (faq)
+            </p>
+            <div className="font-semibold text-4xl">
+              <h1>Have questions in mind?</h1>
+              <h1>Let’s us answer it</h1>
+            </div>
+          </div>
+          <div className="font-normal text-lg">
+            <p>Don’t answer your question? </p>
+            <p>let email us @Ticketix.gmail.com</p>
+          </div>
+        </div>
+        <div className="mx-auto w-full max-w-[687px]">
           <Accordion items={accordionItems} />
         </div>
       </section>

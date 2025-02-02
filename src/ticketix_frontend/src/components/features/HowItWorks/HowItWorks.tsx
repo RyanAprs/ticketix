@@ -1,8 +1,9 @@
-import React from "react";
-
 const HowItWorks = () => {
   return (
-    <section className=" py-20 md:py-24">
+    <section className="py-20 md:py-24 flex flex-col gap-6 justify-center items-center">
+      <div>
+        <img src="/images/image/MusicFestival.png" alt="MusicFestival" />
+      </div>
       <div className="container mx-auto px-4">
         <h1 className="mb-6 text-center text-2xl font-semibold text-black md:mb-12 lg:text-3xl">
           How TickeTix Works
