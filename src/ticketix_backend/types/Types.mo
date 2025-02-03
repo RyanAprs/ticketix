@@ -28,8 +28,9 @@ module {
         title: Text;            
         description: Text;      
         imageUrl: Text;        
-        salesDeadline: Int;    
-        total: Nat;             
+        eventDate: Int;    
+        total: Nat;    
+        location: Text;         
         createdAt: Int;
         ticket: [Ticket];
     };
@@ -53,8 +54,9 @@ module {
         description: ?Text;      
         imageUrl: ?Text;        
         price: ?Float;             
-        salesDeadline: ?Int;    
+        eventDate: ?Int;
         total: ?Nat;             
+        location: ?Text;    
     };
 
     public type Transaction = {

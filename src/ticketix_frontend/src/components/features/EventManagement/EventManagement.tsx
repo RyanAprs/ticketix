@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
-import { CalendarCheck, PlusIcon } from "lucide-react";
-
+import { CalendarX, PlusIcon } from "lucide-react";
 import useWindowSize from "@/hooks/useWindowSize";
 import { cn } from "@/lib/utils/cn";
 import { useAuthManager } from "@/store/AuthProvider";
-
 import { Event as EventType } from "../../../../../declarations/ticketix_backend/ticketix_backend.did";
-
 import { formatNSToDate } from "@/lib/utils";
 import EventOwnedPreview from "./EventOwnedPreview";
 import IsLoadingPage from "../isLoadingPage/IsLoadingPage";
@@ -76,7 +72,7 @@ const EventManagement = () => {
           <>
             {events.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 rounded-lg w-full">
-                <CalendarCheck className="w-12 h-12 text-gray-400 mb-4" />
+                <CalendarX className="w-12 h-12 text-gray-400 mb-4" />
                 <p className="text-lg font-medium text-gray-900">
                   No Events Available
                 </p>
@@ -87,11 +83,11 @@ const EventManagement = () => {
             ) : (
               <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 w-full">
                 {events.map((event) => {
-                  if (!event.salesDeadline) return null;
+                  if (!event.eventDate) return null;
 
-                  const salesDeadline = Number(event.salesDeadline);
+                  const eventDate = Number(event.eventDate);
                   const formattedDate = formatNSToDate(
-                    BigInt(salesDeadline * 1_000_000)
+                    BigInt(eventDate * 1_000_000)
                   );
 
                   return (
@@ -101,7 +97,7 @@ const EventManagement = () => {
                       title={event.title}
                       total={Number(event.total)}
                       imageUrl={event.imageUrl}
-                      salesDeadline={formattedDate}
+                      eventDate={formattedDate}
                     />
                   );
                 })}

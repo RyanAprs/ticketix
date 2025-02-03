@@ -20,8 +20,9 @@ module {
         title: Text,
         description: Text,
         price: Float,
-        salesDeadline: Int,
+        eventDate: Int,
         total: Nat,
+        location: Text,
     ) : Result.Result<Types.Event, Text> {
         if (Principal.isAnonymous(creator)) {
             return #err("Anonymous principals cannot post content");
@@ -53,8 +54,12 @@ module {
         };
 
         // validate sales deadline ticket
-        if (salesDeadline < 0) {
+        if (eventDate < 0) {
             return #err("Sales deadline cannot be empty");
+        };
+
+        if (location == "") {
+            return #err("Location cannot be empty");
         };
 
         let eventId = Utils.generateUUID(creator, description);
@@ -88,10 +93,11 @@ module {
             description = description;
             imageUrl = imageUrl;
             price = price;
-            salesDeadline = salesDeadline;
+            eventDate = eventDate;
             total = total;
             createdAt = Time.now();
             ticket = ticket;
+            location = location;
         };
 
         events.put(eventId, newEvent);
@@ -155,9 +161,9 @@ module {
                 };
 
                 // VALIDATE SALES DEADLINE
-                let salesDeadline = switch (updateData.salesDeadline) {
-                    case (null) { event.salesDeadline };
-                    case (?newSalesDeadline) { newSalesDeadline };
+                let eventDate = switch (updateData.eventDate) {
+                    case (null) { event.eventDate };
+                    case (?neweventDate) { neweventDate };
                 };
 
                 // VALIDATE TOTAL
@@ -168,6 +174,16 @@ module {
                             return #err("New total cannot be less than existing tickets");
                         };
                         newTotal 
+                    };
+                };
+
+                let location = switch (updateData.location) {
+                    case (null) { event.location };
+                    case (?newLocation) {
+                        if (Text.size(newLocation) < 1) {
+                            return #err("location cannot be empty");
+                        };
+                        newLocation;
                     };
                 };
 
@@ -211,10 +227,11 @@ module {
                     title = title;
                     description = description;
                     imageUrl = imageUrl;
-                    salesDeadline = salesDeadline;
+                    eventDate = eventDate;
                     total = total;
                     createdAt = event.createdAt;
                     ticket = ticket;
+                    location = location;
                 };
 
                 // UPDATE EVENT

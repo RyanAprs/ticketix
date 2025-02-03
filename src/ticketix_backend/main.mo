@@ -119,20 +119,6 @@ actor TickeTix {
       return users.remove(userId);
     };
 
-    // public func getUserBalance(
-    //   userId: Principal,
-    //   userBalances: HashMap.HashMap<Principal, Types.UserBalance>
-    // ): Result.Result<Float, Text> {
-    //     switch (userBalances.get(userId)) {
-    //       case (?balance) {
-    //         return #ok(balance.balance); 
-    //       };
-    //       case null {
-    //         return #err("User not found"); 
-    //       };
-    //     }
-    // };
-
   // EVENTS ENDPOINT ==========================================================
   // POST EVENT
   public func postEvent(
@@ -141,11 +127,22 @@ actor TickeTix {
       title: Text,
       description: Text,
       price: Float, 
-      salesDeadline: Int,
+      eventDate: Int,
       total: Nat,
+      location: Text,
     ) : async Result.Result<Types.Event, Text> {
       let priceInUSD = price / 10000; 
-      return EventService.postEvent(events, creator, imageUrl, title, description, priceInUSD, salesDeadline, total);
+      return EventService.postEvent(
+        events, 
+        creator, 
+        imageUrl, 
+        title, 
+        description, 
+        priceInUSD, 
+        eventDate, 
+        total, 
+        location
+      );
     };
 
   // UPDATE EVENT
@@ -306,6 +303,29 @@ actor TickeTix {
         return #err("You do not own any tickets");
     };
       return #ok(userTickets);
+  };
+
+  // GET TICKET BY ID
+  public shared(_msg) func getTicketById(
+    ticketId: Text
+  ) : async Result.Result<Types.Ticket, Text> {
+      for (event in events.vals()) {
+          let foundTicket = Array.find(
+              event.ticket,
+              func (ticket: Types.Ticket) : Bool {
+                  ticket.id == ticketId
+              }
+          );
+
+          switch (foundTicket) {
+              case (?ticket) {
+                  return #ok(ticket);
+              };
+              case (null) {};
+          };
+      };
+      
+      return #err("Ticket not found");
   };
 
   // GET ALL FOR SALE TICKETS BY EVENT

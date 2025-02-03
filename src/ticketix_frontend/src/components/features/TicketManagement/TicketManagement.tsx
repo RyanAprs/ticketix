@@ -4,8 +4,9 @@ import { useAuthManager } from "@/store/AuthProvider";
 import IsLoadingPage from "../isLoadingPage/IsLoadingPage";
 import { getTicketByOwner } from "@/lib/services/TicketService";
 import { Ticket as TicketType } from "../../../../../declarations/ticketix_backend/ticketix_backend.did";
-import { Ticket } from "lucide-react";
+import { Ticket, TicketX } from "lucide-react";
 import CustomButton from "@/components/ui/Button/CustomButton";
+import { Link } from "react-router-dom";
 
 const TicketManagement = () => {
   const { actor, principal } = useAuthManager();
@@ -84,7 +85,7 @@ const TicketManagement = () => {
             >
               {filteredTickets.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-12 rounded-lg w-full">
-                  <Ticket className="w-12 h-12 text-gray-400 mb-4" />
+                  <TicketX className="w-12 h-12 text-gray-400 mb-4" />
                   <p className="text-lg font-medium text-gray-900">
                     No Tickets Available
                   </p>
@@ -95,7 +96,8 @@ const TicketManagement = () => {
               ) : (
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 w-full">
                   {filteredTickets.map((ticket, index) => (
-                    <div
+                    <Link
+                      to={`/dashboard/ticket/${ticket.id}`}
                       key={index}
                       className="bg-white rounded-xl p-4 shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 w-full cursor-pointer"
                     >
@@ -119,7 +121,7 @@ const TicketManagement = () => {
                           </p>
                         </div>
                       </div>
-                    </div>
+                    </Link>
                   ))}
                 </div>
               )}

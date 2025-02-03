@@ -97,9 +97,15 @@ export const convertIcpToUsd = (
   return Number(usdAmount.toFixed(decimals));
 };
 
-export const getEventStatus = (salesDeadline: bigint): string => {
-  const salesDeadlineDate = new Date(Number(salesDeadline));
+export const getEventStatus = (eventDate: bigint): string => {
+  const eventDateDate = new Date(Number(eventDate));
   const today = new Date();
 
-  return today > salesDeadlineDate ? "Completed" : "upComing";
+  if (today.getTime() > eventDateDate.getTime()) {
+    return "Completed";
+  } else if (today.toDateString() === eventDateDate.toDateString()) {
+    return "Ongoing";
+  } else {
+    return "Upcoming";
+  }
 };

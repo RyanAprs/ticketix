@@ -15,9 +15,10 @@ interface EventDetailType {
   description: string;
   imageUrl: string;
   owner: string;
-  salesDeadline: string;
+  eventDate: string;
   total: number;
   status: string;
+  location: string;
   ticket: {
     id: string;
     owner: string;
@@ -49,14 +50,11 @@ const EventDetail = () => {
             console.log(res);
             const isCrator = res.creator === principal;
 
-            console.log(isCrator);
             const user = await getUserById(actor, res.creator);
-            const salesDeadline = Number(res.salesDeadline);
-            const formattedDate = formatNSToDate(
-              BigInt(salesDeadline * 1_000_000)
-            );
+            const eventDate = Number(res.eventDate);
+            const formattedDate = formatNSToDate(BigInt(eventDate * 1_000_000));
 
-            const statusEvent = getEventStatus(res.salesDeadline);
+            const statusEvent = getEventStatus(res.eventDate);
 
             if (user) {
               const ticket = res.ticket.map((ticket: any) => ({
@@ -72,9 +70,10 @@ const EventDetail = () => {
                 description: res.description,
                 imageUrl: res.imageUrl,
                 owner: user.username,
-                salesDeadline: formattedDate,
+                eventDate: formattedDate,
                 total: Number(res.total),
                 status: statusEvent,
+                location: res.location,
                 ticket,
               };
 
@@ -102,11 +101,12 @@ const EventDetail = () => {
           title={ticket.title}
           description={ticket.description}
           imageUrl={ticket.imageUrl}
-          salesDeadline={ticket.salesDeadline}
+          eventDate={ticket.eventDate}
           total={ticket.total}
           status={ticket.status}
           owner={ticket.owner}
           ticket={ticket.ticket}
+          location={ticket.location}
         />
       )}
     </Layout>

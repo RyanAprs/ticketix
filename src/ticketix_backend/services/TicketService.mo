@@ -73,10 +73,11 @@ module {
                             title = event.title;
                             description = event.description;
                             imageUrl = event.imageUrl;
-                            salesDeadline = event.salesDeadline;
+                            eventDate = event.eventDate;
                             total = event.total;
                             createdAt = event.createdAt;
                             ticket = updatedTickets;
+                            location = event.location;
                         };
 
                         events.put(eventId, updatedEvent);

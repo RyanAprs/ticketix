@@ -9,10 +9,6 @@ const items = [
     icon: <Key />,
     title: "ICP Ecosystem",
   },
-  {
-    icon: <TicketCheck />,
-    title: "NFT",
-  },
 ];
 
 const SecondHeroBanner = () => {

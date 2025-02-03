@@ -41,7 +41,8 @@ const CreateEventForm = () => {
   const [description, setDescription] = useState("");
   const [priceInput, setPriceInput] = useState("");
   const [total, setTotal] = useState(0);
-  const [latestPurchase, setLatestPurchase] = useState<number | null>(null);
+  const [location, setLocation] = useState("");
+  const [eventDate, setEventDate] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const [formErrors, setFormErrors] = useState<string[]>([]);
 
@@ -65,7 +66,7 @@ const CreateEventForm = () => {
       errors.push("Total ticket must be greater than 0");
     }
 
-    if (!latestPurchase) {
+    if (!eventDate) {
       errors.push("Sales deadline is required");
     }
 
@@ -104,8 +105,9 @@ const CreateEventForm = () => {
           title,
           description,
           priceInICPAsNumber,
-          BigInt(latestPurchase || 0),
-          totalInBigInt
+          BigInt(eventDate || 0),
+          totalInBigInt,
+          location
         );
         if ("ok" in result) {
           resetForm();
@@ -127,7 +129,7 @@ const CreateEventForm = () => {
     setDescription("");
     setPriceInput("");
     setTotal(0);
-    setLatestPurchase(null);
+    setEventDate(null);
     resetImage();
     setFormErrors([]);
   };
@@ -135,9 +137,9 @@ const CreateEventForm = () => {
   const handleDateChange = (date: Date | null) => {
     if (date) {
       const timestamp = date.getTime();
-      setLatestPurchase(timestamp);
+      setEventDate(timestamp);
     } else {
-      setLatestPurchase(null);
+      setEventDate(null);
     }
   };
 
@@ -172,9 +174,16 @@ const CreateEventForm = () => {
         value={total}
         onChange={(e) => setTotal(Number(e.target.value))}
       />
+      <CustomInput
+        label="Location"
+        placeholder="Event Location"
+        type="text"
+        value={location}
+        onChange={(e) => setLocation(e.target.value)}
+      />
       <CustomDateInput
-        label="Last purchase"
-        value={latestPurchase ? new Date(latestPurchase) : null}
+        label="Event Date"
+        value={eventDate ? new Date(eventDate) : null}
         onChange={handleDateChange}
         containerClassName="mb-4"
       />

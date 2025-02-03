@@ -7,7 +7,7 @@ import { transferIcp } from "@/lib/services/TransactionService";
 import { EnhancedTicketType } from "@/pages/ticket/TicketPage";
 import { useAuthManager } from "@/store/AuthProvider";
 import { Principal } from "@dfinity/principal";
-import { Ticket } from "lucide-react";
+import { Ticket, TicketX } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -77,7 +77,6 @@ const TicketEventPreview = ({ tickets, isOwner }: TicketEventPreviewProps) => {
       });
 
       if (actor) {
-        // Record purchase in backend
         const result = await actor.purchaseTickets(
           selectedTicket.eventId,
           selectedTickets
@@ -89,12 +88,8 @@ const TicketEventPreview = ({ tickets, isOwner }: TicketEventPreviewProps) => {
           throw new Error(result.err);
         }
 
-        // Success handling
-        console.log("Purchase successful!");
+        alert("Purchase successful!");
         setOpenModal(false);
-
-        // Optional: Refresh ticket list or show success message
-        // await refreshTickets();
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Purchase failed");
@@ -107,7 +102,7 @@ const TicketEventPreview = ({ tickets, isOwner }: TicketEventPreviewProps) => {
     if (!selectedTicket) return;
 
     if (ticketCount > selectedTicket.totalTickets) {
-      setError("Jumlah tiket yang dibeli melebihi stok tersedia.");
+      setError("The number of tickets purchased exceeded the available stock!");
       return;
     }
 
@@ -129,8 +124,6 @@ const TicketEventPreview = ({ tickets, isOwner }: TicketEventPreviewProps) => {
           selectedTicket.principal
         );
 
-        console.log("Purchase demo result:", result);
-
         if ("err" in result) {
           throw new Error(result.err);
         }
@@ -147,49 +140,60 @@ const TicketEventPreview = ({ tickets, isOwner }: TicketEventPreviewProps) => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 ">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {tickets.map((ticket, index) => (
-          <div
-            key={index}
-            className="bg-white rounded-xl p-6 shadow-xl transition-all duration-300 border border-gray-100"
-          >
-            <div className="flex flex-col space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <Ticket className="w-5 h-5 text-indigo-500" />
-                  <p className="text-sm font-medium text-gray-600 truncate">
-                    {ticket.ownerUsername}
-                  </p>
+    <div className="container mx-auto px-4 py-8">
+      {tickets.length === 0 ? (
+        <div className="text-center py-10 flex flex-col gap-4">
+          <TicketX />
+          <p className="text-lg font-semibold text-gray-600">
+            No tickets available
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {tickets.map((ticket, index) => (
+            <div
+              key={index}
+              className="bg-white rounded-xl p-6 shadow-xl transition-all duration-300 border border-gray-100"
+            >
+              <div className="flex flex-col space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <Ticket className="w-5 h-5 text-indigo-500" />
+                    <p className="text-sm font-medium text-gray-600 truncate">
+                      {ticket.ownerUsername}
+                    </p>
+                  </div>
+                  <span className="text-lg font-semibold text-indigo-600">
+                    {ticket.price} ICP
+                  </span>
                 </div>
-                <span className="text-lg font-semibold text-indigo-600">
-                  {ticket.price} ICP
-                </span>
-              </div>
 
-              <div className="flex items-center justify-between py-3 border-y border-gray-100">
-                <span className="text-sm text-gray-500">Available Tickets</span>
-                <span className="text-sm font-medium text-gray-900">
-                  {ticket.totalTickets}
-                </span>
-              </div>
+                <div className="flex items-center justify-between py-3 border-y border-gray-100">
+                  <span className="text-sm text-gray-500">
+                    Available Tickets
+                  </span>
+                  <span className="text-sm font-medium text-gray-900">
+                    {ticket.totalTickets}
+                  </span>
+                </div>
 
-              {!isOwner && (
-                <CustomButton
-                  onClick={() =>
-                    isAuthenticated
-                      ? handleOpenModal(ticket)
-                      : handleDialogOpen()
-                  }
-                  className="w-full py-2.5 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors duration-200 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
-                  Purchase Ticket
-                </CustomButton>
-              )}
+                {!isOwner && (
+                  <CustomButton
+                    onClick={() =>
+                      isAuthenticated
+                        ? handleOpenModal(ticket)
+                        : handleDialogOpen()
+                    }
+                    className="w-full py-2.5 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors duration-200 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  >
+                    Purchase Ticket
+                  </CustomButton>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       <ModalCustom
         title="Purchase Ticket"

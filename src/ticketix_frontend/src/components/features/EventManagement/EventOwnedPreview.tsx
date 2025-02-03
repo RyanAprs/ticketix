@@ -1,6 +1,5 @@
 import { cn } from "@/lib/utils/cn";
 import CustomButton from "@/components/ui/Button/CustomButton";
-import { Link } from "react-router-dom";
 import { Calendar, Ticket } from "lucide-react";
 import { useState } from "react";
 import DeleteDialog from "@/components/ui/Dialog/DeleteDialog";
@@ -9,7 +8,7 @@ interface EventOwnedPreviewProps {
   id: string;
   title: string;
   imageUrl: string;
-  salesDeadline: string;
+  eventDate: string;
   total: number;
   className?: string;
 }
@@ -19,7 +18,7 @@ const EventOwnedPreview = ({
   title,
   imageUrl,
   total,
-  salesDeadline,
+  eventDate,
   className,
 }: EventOwnedPreviewProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -57,7 +56,7 @@ const EventOwnedPreview = ({
 
         <div className="flex items-center space-x-2 text-gray-500">
           <Calendar className="h-5 w-5" />
-          <p className="text-sm">Available until {salesDeadline}</p>
+          <p className="text-sm">Available until {eventDate}</p>
         </div>
 
         <div className="mt-5 flex flex-col items-center justify-center gap-4 md:flex-row md:gap-10">

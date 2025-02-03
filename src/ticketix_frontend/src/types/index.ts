@@ -12,12 +12,12 @@ export interface EventType {
   imageUrl: string;
   price: number;
   owner: string;
-  salesDeadline: number;
+  eventDate: number;
   total: number;
   status: TicketStatusInterface;
 }
 
-export type EventStatusInterface = "upComing" | "completed";
+export type EventStatusInterface = "upComing" | "completed" | "onGoing";
 
 export type TicketStatusInterface = "owned" | "forSale" | "used";
 

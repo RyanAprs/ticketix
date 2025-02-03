@@ -7,6 +7,9 @@ import {
   CheckCircle,
   Clock,
   ChevronRight,
+  Timer,
+  TimerReset,
+  MapPin,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -22,11 +25,12 @@ interface EventDetailPreviewProps {
   title: string;
   description: string;
   imageUrl: string;
-  salesDeadline: string;
+  eventDate: string;
   total: number;
   owner: string;
   ticket: TicketType[];
   status: string;
+  location: string;
   className?: string;
 }
 
@@ -36,9 +40,10 @@ const EventDetailPreview = ({
   description,
   imageUrl,
   owner,
-  salesDeadline,
+  eventDate,
   total,
   status,
+  location,
 }: EventDetailPreviewProps) => {
   return (
     <div className="mx-auto max-w-6xl px-4 mt-20">
@@ -59,8 +64,14 @@ const EventDetailPreview = ({
                 <span>{owner}</span>
               </div>
               <div className="flex items-center space-x-2 text-white">
-                {status === "upComing" ? <Clock /> : <CheckCircle />}
+                {status === "Upcoming" && <Timer />}
+                {status === "Ongoing" && <TimerReset />}
+                {status === "Completed" && <CheckCircle />}
                 <span>{status}</span>
+              </div>
+              <div className="flex items-center space-x-2 text-white">
+                <MapPin className="h-5 w-5" />
+                <span>{location}</span>
               </div>
             </div>
           </div>
@@ -90,18 +101,24 @@ const EventDetailPreview = ({
                       <Calendar className="h-6 w-6 text-blue-600" />
                       <div>
                         <p className="text-sm text-gray-500">Sales Deadline</p>
-                        <p className="font-medium text-gray-900">
-                          {salesDeadline}
-                        </p>
+                        <p className="font-medium text-gray-900">{eventDate}</p>
                       </div>
                     </div>
                     <div className="flex items-center space-x-3">
                       <Ticket className="h-6 w-6 text-blue-600" />
                       <div>
-                        <p className="text-sm text-gray-500">
-                          Available Tickets
-                        </p>
-                        <p className="font-medium text-gray-900">{total}</p>
+                        {total < 1 ? (
+                          <p className="text-sm text-gray-500">
+                            No ticket available
+                          </p>
+                        ) : (
+                          <>
+                            <p className="text-sm text-gray-500">
+                              Available Tickets
+                            </p>
+                            <p className="font-medium text-gray-900">{total}</p>
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>
