@@ -6,7 +6,7 @@ const HeroBanner = () => {
   const { login, isAuthenticated } = useAuthManager();
 
   return (
-    <div className="flex w-full justify-center items-center bg-gradient-to-b from-blue-300 to-blue-600 min-h-[400px] md:h-[617px] text-white rounded-xl md:px-4 px-1">
+    <div className="flex w-full justify-center items-center bg-gradient-to-b from-blue-300 to-blue-600 min-h-[400px] md:h-[617px] text-white rounded-xl md:px-4 sm:px-1 px-0">
       <section className="relative font-jetbrainsMono w-full max-w-[1248px] py-12 md:py-16 lg:py-20">
         {/* Subheading */}
         <p className="mb-4 text-center text-xs sm:text-sm md:text-xl font-medium md:mb-5 px-2">

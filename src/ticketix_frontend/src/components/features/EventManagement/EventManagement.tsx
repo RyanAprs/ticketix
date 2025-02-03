@@ -43,7 +43,7 @@ const EventManagement = () => {
   }, [actor, principal]);
 
   return (
-    <div className="flex flex-col w-full min-h-screen px-4 md:px-8 gap-6">
+    <div className="flex flex-col w-full min-h-screen px-1 md:px-8 gap-4 md:py-2 py-4 md:gap-6">
       {/* Header dan Tombol */}
       <div className="w-full flex flex-col gap-3 md:flex-row md:justify-between">
         <h1 className="text-2xl font-semibold text-title lg:text-3xl">

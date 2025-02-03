@@ -18,7 +18,7 @@ const MobileNavbar = () => {
   const logoutSection = menuSections[menuSections.length - 1];
 
   return (
-    <nav className="flex h-[65px] items-center justify-between md:px-10 px-7 z-50">
+    <nav className="flex h-[65px] items-center justify-between md:px-10 sm:px-7 px-2 z-50 md:py-4 py-2">
       <Link to={"/"} className="flex gap-2 justify-center items-center">
         <img
           alt="ticketix logo"

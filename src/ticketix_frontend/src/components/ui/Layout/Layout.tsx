@@ -30,7 +30,7 @@ const Layout = ({ children, className, title, fullWidth }: LayoutProps) => {
           <div className="mb-10 -mt-16 flex w-full justify-center lg:mb-14 ">
             <main
               className={cn(
-                "w-full px-4 md:mx-8 mx-2 z-10",
+                "w-full px-4 md:mx-8 sm:mx-2 mx-0 z-10",
                 !fullWidth && "max-w-[1280px]",
                 className
               )}

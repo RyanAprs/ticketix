@@ -51,7 +51,7 @@ const TicketManagement = () => {
           </h1>
 
           {/* Filter Buttons */}
-          <div className="flex space-x-2">
+          <div className="flex flex-wrap gap-2">
             {["all", "owned", "forSale", "used"].map((status) => (
               <CustomButton
                 key={status}
@@ -83,7 +83,7 @@ const TicketManagement = () => {
               )}
             >
               {filteredTickets.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-12  rounded-lg w-full">
+                <div className="flex flex-col items-center justify-center py-12 rounded-lg w-full">
                   <Ticket className="w-12 h-12 text-gray-400 mb-4" />
                   <p className="text-lg font-medium text-gray-900">
                     No Tickets Available
@@ -93,18 +93,18 @@ const TicketManagement = () => {
                   </p>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-1 lg:grid-cols-2 w-full">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 w-full">
                   {filteredTickets.map((ticket, index) => (
                     <div
                       key={index}
-                      className="bg-white rounded-xl p-4 shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 w-full"
+                      className="bg-white rounded-xl p-4 shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 w-full cursor-pointer"
                     >
-                      <div className="flex items-center justify-between mb-3">
+                      <div className="flex flex-col md:flex-row items-center justify-between mb-3">
                         <div className="flex items-center space-x-3">
                           <div className="p-2 bg-indigo-50 rounded-lg">
                             <Ticket className="w-10 h-10 text-indigo-600" />
                           </div>
-                          <div className="text-xl flex flex-col gap-2 justify-center items-start">
+                          <div className="text-xl flex flex-col gap-1 justify-center items-start">
                             <p className="font-medium text-gray-900">
                               Ticket #{ticket.id}
                             </p>
@@ -113,7 +113,7 @@ const TicketManagement = () => {
                             </p>
                           </div>
                         </div>
-                        <div className="text-right">
+                        <div className="text-right mt-2 md:mt-0">
                           <p className="text-lg font-semibold text-indigo-600">
                             {ticket.price} ICP
                           </p>

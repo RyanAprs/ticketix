@@ -60,15 +60,19 @@ const EventOwnedPreview = ({
           <p className="text-sm">Available until {salesDeadline}</p>
         </div>
 
-        <div className="mt-5 flex items-center justify-center gap-6 md:mt-9 md:gap-10">
+        <div className="mt-5 flex flex-col items-center justify-center gap-4 md:flex-row md:gap-10">
           <CustomButton
             onClick={() => console.log("Edit")}
             variant={"secondary"}
+            className="w-full md:w-auto"
           >
             Edit
           </CustomButton>
 
-          <CustomButton className="text-white" onClick={handleDeleteClick}>
+          <CustomButton
+            className="text-white w-full md:w-auto"
+            onClick={handleDeleteClick}
+          >
             Delete
           </CustomButton>
         </div>

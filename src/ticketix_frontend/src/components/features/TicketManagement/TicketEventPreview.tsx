@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/Button/button";
 import CustomButton from "@/components/ui/Button/CustomButton";
+import LoginDialog from "@/components/ui/Dialog/LoginDialog";
 import { CustomInput } from "@/components/ui/Input/CustomInput";
 import ModalCustom from "@/components/ui/Modal/ModalCustom";
 import { transferIcp } from "@/lib/services/TransactionService";
@@ -24,6 +25,15 @@ const TicketEventPreview = ({ tickets, isOwner }: TicketEventPreviewProps) => {
   const [loading, setLoading] = useState(false);
   const { isAuthenticated, actor, principal } = useAuthManager();
   const navigate = useNavigate();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const handleDialogOpen = () => {
+    setIsDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false);
+  };
 
   const handleOpenModal = (ticket: EnhancedTicketType) => {
     setSelectedTicket(ticket);
@@ -166,7 +176,11 @@ const TicketEventPreview = ({ tickets, isOwner }: TicketEventPreviewProps) => {
 
               {!isOwner && (
                 <CustomButton
-                  onClick={() => handleOpenModal(ticket)}
+                  onClick={() =>
+                    isAuthenticated
+                      ? handleOpenModal(ticket)
+                      : handleDialogOpen()
+                  }
                   className="w-full py-2.5 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors duration-200 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
                   Purchase Ticket
@@ -226,6 +240,8 @@ const TicketEventPreview = ({ tickets, isOwner }: TicketEventPreviewProps) => {
           </Button>
         </div>
       </ModalCustom>
+
+      <LoginDialog isOpen={isDialogOpen} onClose={handleCloseDialog} />
     </div>
   );
 };
