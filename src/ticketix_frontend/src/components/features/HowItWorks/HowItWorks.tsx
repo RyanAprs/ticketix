@@ -1,6 +1,6 @@
 const HowItWorks = () => {
   return (
-    <section className="py-20 md:py-24 flex flex-col gap-6 justify-center items-center">
+    <section className=" flex md:flex-col flex-col-reverse gap-6 justify-center items-center">
       <div>
         <img src="/images/image/MusicFestival.png" alt="MusicFestival" />
       </div>
@@ -8,7 +8,7 @@ const HowItWorks = () => {
         <h1 className="mb-6 text-center text-2xl font-semibold text-black md:mb-12 lg:text-3xl">
           How TickeTix Works
         </h1>
-        <div className="grid grid-cols-1 gap-8 text-subtext md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 text-subtext md:grid-cols-3">
           <div className="text-center">
             <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-mainAccent">
               <span className="text-2xl font-bold text-white">1</span>
