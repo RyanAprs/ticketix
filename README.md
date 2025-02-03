@@ -10,11 +10,11 @@
 
 ## 🚀 Key Features of TickeTix 
 
-**Event Management**: Organizers can efficiently manage events, sell tickets, and track attendees.
-**Security & Transparency**: Every transaction is permanently recorded on the blockchain, preventing ticket fraud and ensuring trust.
-**Flexible Ticket Transactions**: Users can safely purchase tickets and resell unused ones through the resale feature.
-**Unique QR Code Validation**: Each ticket comes with an encrypted QR code, valid for a one-time event check-in.
-**Decentralization & Lower Costs**: By eliminating intermediaries, transactions become faster and more cost-effective.
+- **Event Management**: Organizers can efficiently manage events, sell tickets, and track attendees.
+- **Security & Transparency**: Every transaction is permanently recorded on the blockchain, preventing ticket fraud and ensuring trust.
+- **Flexible Ticket Transactions**: Users can safely purchase tickets and resell unused ones through the resale feature.
+- **Unique QR Code Validation**: Each ticket comes with an encrypted QR code, valid for a one-time event check-in.
+- **Decentralization & Lower Costs**: By eliminating intermediaries, transactions become faster and more cost-effective.
 
 ---
 
