@@ -12,6 +12,7 @@ import EventPage from "./pages/event/EventPage";
 import TicketPage from "./pages/ticket/TicketPage";
 import MyTicket from "./pages/user/MyTicket";
 import TicketDetailPage from "./pages/ticket/TicketDetailPage";
+import TicketScannerPage from "./pages/ticket/TicketScannerPage";
 
 const App = () => {
   const { isAuthenticated, initializeAuth } = useAuthManager();
@@ -37,6 +38,10 @@ const App = () => {
         <Route path="/dashboard/ticket" element={<MyTicket />} />
         <Route path="/dashboard/ticket/:id" element={<TicketDetailPage />} />
         <Route path="/dashboard/event" element={<MyEvent />} />
+        <Route
+          path="/dashboard/event/scan-ticket"
+          element={<TicketScannerPage />}
+        />
         <Route path="/dashboard/event/post" element={<CreateEventPage />} />
         <Route path="/dashboard/wallet" element={<WalletPage />} />
       </Route>

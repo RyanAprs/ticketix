@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { CalendarX, PlusIcon } from "lucide-react";
+import { CalendarX, Camera, PlusIcon } from "lucide-react";
 import useWindowSize from "@/hooks/useWindowSize";
 import { cn } from "@/lib/utils/cn";
 import { useAuthManager } from "@/store/AuthProvider";
@@ -46,16 +46,28 @@ const EventManagement = () => {
           Manage Your Event
         </h1>
 
-        <Link to={"/dashboard/event/post"}>
-          <CustomButton
-            variant="secondary"
-            className="w-fit"
-            icon={<PlusIcon className="mr-1 size-5" />}
-            size={isMobile ? "small" : "default"}
-          >
-            Create Your Event
-          </CustomButton>
-        </Link>
+        <div className="flex gap-2">
+          <Link to={"/dashboard/event/scan-ticket"}>
+            <CustomButton
+              variant="secondary"
+              className="w-fit"
+              icon={<Camera className="mr-1 size-5" />}
+              size={isMobile ? "small" : "default"}
+            >
+              Scan Ticket
+            </CustomButton>
+          </Link>
+          <Link to={"/dashboard/event/post"}>
+            <CustomButton
+              variant="secondary"
+              className="w-fit"
+              icon={<PlusIcon className="mr-1 size-5" />}
+              size={isMobile ? "small" : "default"}
+            >
+              Create Your Event
+            </CustomButton>
+          </Link>
+        </div>
       </div>
 
       {/* Event List Section */}

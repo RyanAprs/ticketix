@@ -17,6 +17,7 @@
     "src/ticketix_frontend"
   ],
   "dependencies": {
-    "@headlessui/react": "^2.2.0"
+    "@headlessui/react": "^2.2.0",
+    "react-qr-scanner": "^1.0.0-alpha.11"
   }
 }
