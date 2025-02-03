@@ -46,6 +46,10 @@ const EventDetail = () => {
           const res = await fetchDetailEvent(actor, id);
 
           if (res) {
+            console.log(res);
+            const isCrator = res.creator === principal;
+
+            console.log(isCrator);
             const user = await getUserById(actor, res.creator);
             const salesDeadline = Number(res.salesDeadline);
             const formattedDate = formatNSToDate(

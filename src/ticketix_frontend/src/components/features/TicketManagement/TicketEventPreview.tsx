@@ -12,9 +12,10 @@ import { useNavigate } from "react-router-dom";
 
 interface TicketEventPreviewProps {
   tickets: EnhancedTicketType[];
+  isOwner: boolean;
 }
 
-const TicketEventPreview = ({ tickets }: TicketEventPreviewProps) => {
+const TicketEventPreview = ({ tickets, isOwner }: TicketEventPreviewProps) => {
   const [openModal, setOpenModal] = useState(false);
   const [selectedTicket, setSelectedTicket] =
     useState<EnhancedTicketType | null>(null);
@@ -109,7 +110,6 @@ const TicketEventPreview = ({ tickets }: TicketEventPreviewProps) => {
       }
 
       const selectedTickets = Array(ticketCount).fill(selectedTicket.id);
-      console.log(selectedTicket);
 
       if (actor && principal) {
         const result = await actor.buyTicketsDemo(
@@ -164,12 +164,14 @@ const TicketEventPreview = ({ tickets }: TicketEventPreviewProps) => {
                 </span>
               </div>
 
-              <CustomButton
-                onClick={() => handleOpenModal(ticket)}
-                className="w-full py-2.5 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors duration-200 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
-                Purchase Ticket
-              </CustomButton>
+              {!isOwner && (
+                <CustomButton
+                  onClick={() => handleOpenModal(ticket)}
+                  className="w-full py-2.5 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors duration-200 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Purchase Ticket
+                </CustomButton>
+              )}
             </div>
           </div>
         ))}

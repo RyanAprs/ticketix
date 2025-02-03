@@ -9,7 +9,7 @@ import { TicketType } from "@/types";
 import { Principal } from "@dfinity/principal";
 import { ArrowLeft } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Ticket as TicketOwnedType } from "../../../../declarations/ticketix_backend/ticketix_backend.did";
 import TicketResellDialog from "@/components/ui/Dialog/TicketResellDialog";
 
@@ -28,6 +28,7 @@ const TicketPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [ticketOwned, setTicketOwned] = useState([] as TicketOwnedType[]);
+  const navigate = useNavigate();
 
   const handleResellClick = () => {
     setIsDialogOpen(true);
@@ -147,7 +148,6 @@ const TicketPage = () => {
         try {
           setIsLoading(true);
           const result = await getTicketByOwnerOwnedStatus(actor, principal);
-          console.log(result);
 
           if (result) {
             setTicketOwned(result);
@@ -180,6 +180,10 @@ const TicketPage = () => {
     );
   }
 
+  const isOwner = tickets.some(
+    (ticket) => ticket.principal.toString() === principal?.toString()
+  );
+
   return (
     <Layout>
       <div className="flex flex-col gap-4 mt-20">
@@ -190,14 +194,23 @@ const TicketPage = () => {
               Back
             </CustomButton>
           </Link>
-          <CustomButton className="text-white" onClick={handleResellClick}>
-            Resale Ticket
-          </CustomButton>
+          {isOwner ? (
+            <CustomButton
+              className="text-white"
+              onClick={() => navigate("/dashboard/event")}
+            >
+              Manage Event
+            </CustomButton>
+          ) : (
+            <CustomButton className="text-white" onClick={handleResellClick}>
+              Resale Ticket
+            </CustomButton>
+          )}
         </div>
         {isLoading ? (
           <IsLoadingPage />
         ) : (
-          <TicketEventPreview tickets={tickets} />
+          <TicketEventPreview tickets={tickets} isOwner={isOwner} />
         )}
       </div>
 

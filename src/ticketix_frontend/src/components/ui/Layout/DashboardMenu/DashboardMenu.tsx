@@ -30,7 +30,7 @@ const DashboardMenu = () => {
   });
 
   return (
-    <aside className="h-[calc(100vh-81px)] w-full max-w-[250px] border-r border-border">
+    <aside className="h-[calc(100vh-81px)] w-full max-w-[250px] border-r border-border font-jetbrainsMono">
       <div className="flex flex-col divide-y divide-border">
         {dashboardMenu.map((section, sectionIndex) => (
           <div key={sectionIndex} className="space-y-1 p-2 text-mainAccent">

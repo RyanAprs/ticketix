@@ -143,24 +143,27 @@ const WalletPage = () => {
                   <ArrowUpDown className="h-4 w-4" />
                   Recent Transactions
                 </h3>
-                <div className="rounded-lg border">
+                <div className="rounded-lg border p-4">
                   {transactions.length > 0 ? (
                     transactions.map((transaction, index) => (
-                      <div key={index} className="p-4 border-b last:border-b-0">
+                      <div
+                        key={index}
+                        className="p-5 border-b last:border-b-0 bg-blue-200 gap-3 rounded-xl"
+                      >
                         <div className="flex justify-between">
                           <div>
-                            <p className="text-sm font-medium text-gray-700">
+                            <p className="text-lg font-medium text-gray-700">
                               From: {transaction.buyerUsername}
                             </p>
-                            <p className="text-sm font-medium text-gray-700">
+                            <p className="text-lg font-medium text-gray-700">
                               To: {transaction.sellerUsername}
                             </p>
                           </div>
-                          <div className="text-sm text-gray-500">
+                          <div className="text-lg text-gray-500">
                             {transaction.date}
                           </div>
                         </div>
-                        <p className="mt-2 text-lg font-bold text-gray-900">
+                        <p className="mt-2 text-lg font-bold text-gray-900 text-end">
                           Amount: {transaction.amount} ICP
                         </p>
                       </div>
@@ -174,16 +177,16 @@ const WalletPage = () => {
               </div>
 
               {/* Actions Section */}
-              <div className="mt-6 flex flex-wrap gap-4">
+              {/* <div className="mt-6 flex flex-wrap gap-4">
                 <button className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
                   Send
                   <ArrowUpDown className="h-4 w-4" />
                 </button>
                 <button className="inline-flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium hover:bg-gray-50">
-                  View on Explorer
+                  Open Plug Wallet
                   <ExternalLink className="h-4 w-4" />
                 </button>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

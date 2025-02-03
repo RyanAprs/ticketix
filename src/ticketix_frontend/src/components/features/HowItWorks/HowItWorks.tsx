@@ -35,7 +35,7 @@ const HowItWorks = () => {
             </div>
             <h3 className="mb-2 text-xl font-semibold">Access Your Event</h3>
             <p className="font-light">
-              Simply show your NFT ticket at the event, and enjoy the seamless,
+              Simply show your ticket at the event, and enjoy the seamless,
               fraud-free experience powered by blockchain technology.
             </p>
           </div>

@@ -22,11 +22,11 @@ const HeroBanner = () => {
         </div>
 
         {/* Buttons */}
-        <div className="mt-8 md:mt-9 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 md:gap-10 px-4">
+        <div className="w-full mt-8 md:mt-9 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 md:gap-10 px-4">
           {!isAuthenticated && (
             <Button
               size="lg"
-              className="w-full sm:w-auto bg-blue-400 rounded-lg shadow-lg border-x border-t border-blue-100"
+              className="w-1/2 sm:w-auto bg-blue-400 rounded-lg shadow-lg border-x border-t border-blue-100"
               onClick={login}
             >
               Join Now
@@ -34,20 +34,26 @@ const HeroBanner = () => {
           )}
 
           {isAuthenticated && (
-            <Link to="/dashboard/ticket" className="w-full sm:w-auto">
+            <Link
+              to="/dashboard/ticket"
+              className="w-full flex items-center justify-center sm:w-auto"
+            >
               <Button
                 size="lg"
-                className="w-full sm:w-auto bg-blue-400 rounded-lg shadow-lg border-x border-t border-blue-100"
+                className="w-1/2 sm:w-auto bg-blue-400 rounded-lg shadow-lg border-x border-t border-blue-100"
               >
                 My Ticket
               </Button>
             </Link>
           )}
 
-          <Link to="/event" className="w-full sm:w-auto">
+          <Link
+            to="/event"
+            className="w-full flex items-center justify-center sm:w-auto"
+          >
             <Button
               size="lg"
-              className="w-full sm:w-auto bg-blue-600 rounded-lg shadow-lg border-x border-t border-blue-100"
+              className="w-1/2 sm:w-auto bg-blue-600 rounded-lg shadow-lg border-x border-t border-blue-100"
             >
               Explore Event
             </Button>

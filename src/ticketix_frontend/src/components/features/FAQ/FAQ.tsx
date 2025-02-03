@@ -76,13 +76,16 @@ const FAQ = () => {
         <div className="flex flex-col lg:flex-row gap-4 lg:gap-12">
           <div className="flex flex-col justify-between w-full lg:w-2/5">
             <div className="flex flex-col gap-4 md:gap-6 mb-8 lg:mb-0">
-              <p className="font-normal text-base md:text-lg text-center lg:text-left">
-                Frequently asked question (faq)
+              <p className="hidden lg:block font-normal text-base md:text-lg text-center lg:text-left">
+                Frequently Asked Question (FAQ)
               </p>
               <div className="font-semibold text-2xl md:text-4xl text-center lg:text-left">
                 <h1>Have questions in mind?</h1>
                 <h1>Let's us answer it</h1>
               </div>
+              <p className="lg:hidden font-normal text-base md:text-lg text-center lg:text-left">
+                Frequently Asked Question (FAQ)
+              </p>
             </div>
 
             <div className="hidden lg:block font-normal text-base md:text-lg text-center lg:text-left">

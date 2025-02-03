@@ -83,7 +83,7 @@ const TicketManagement = () => {
               )}
             >
               {filteredTickets.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-12 bg-gray-50 rounded-lg w-full">
+                <div className="flex flex-col items-center justify-center py-12  rounded-lg w-full">
                   <Ticket className="w-12 h-12 text-gray-400 mb-4" />
                   <p className="text-lg font-medium text-gray-900">
                     No Tickets Available
@@ -104,7 +104,7 @@ const TicketManagement = () => {
                           <div className="p-2 bg-indigo-50 rounded-lg">
                             <Ticket className="w-10 h-10 text-indigo-600" />
                           </div>
-                          <div className="text-xl">
+                          <div className="text-xl flex flex-col gap-2 justify-center items-start">
                             <p className="font-medium text-gray-900">
                               Ticket #{ticket.id}
                             </p>

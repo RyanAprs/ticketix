@@ -31,7 +31,7 @@ const Footer = () => {
   return (
     <footer className="w-full border-t bg-blue-100 py-8 font-medium text-subtext font-jetbrainsMono">
       <section className="flex flex-col gap-6 px-4 md:gap-14 xl:flex-row xl:justify-center xl:gap-20">
-        <div className="w-[350px]">
+        <div className="w-[350px] flex flex-col gap-4">
           <Link to={"/"} className="flex gap-2 items-center">
             <img
               alt="ticketix logo"
@@ -67,7 +67,7 @@ const Footer = () => {
       </section>
 
       <section className="mt-8 border-t pt-8 text-center">
-        <p>&copy; 2025 TickeTix. All rights reserved.</p>
+        <p>&copy;2025 TickeTix. All rights reserved.</p>
       </section>
     </footer>
   );

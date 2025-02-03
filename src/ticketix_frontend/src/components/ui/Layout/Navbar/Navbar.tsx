@@ -10,7 +10,7 @@ const Navbar = () => {
     <nav className="flex w-full justify-center bg-transparent z-50 font-jetbrainsMono">
       <div
         className={cn(
-          "flex h-[80px] w-full items-center justify-between md:px-16 pt-6 px-14"
+          "flex h-[80px] w-full items-center justify-between md:px-12 pt-6 px-14"
         )}
       >
         <div className="flex items-center gap-x-[60px]">
@@ -26,7 +26,7 @@ const Navbar = () => {
         </div>
 
         <div className="flex gap-7">
-          <ul className="flex items-center gap-x-10 font-semibold text-blue-800">
+          <ul className="flex items-center gap-x-10 text-lg font-semibold text-blue-800">
             {isAuthenticated && (
               <li className="hover:text-blue-600">
                 <Link to="/dashboard">Dashboard</Link>

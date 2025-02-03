@@ -46,7 +46,7 @@ const UserDropdown = () => {
     <Menu as="div" className="mt2 relative inline-block text-left">
       {/* Dropdown Button */}
       <MenuButton className={"flex items-center gap-3"}>
-        <div className="flex items-center gap-1 text-blue-800">
+        <div className="flex items-center gap-1 text-lg text-blue-800">
           <div className="font-semibold">@{user?.username}</div>
           <ChevronDown />
         </div>

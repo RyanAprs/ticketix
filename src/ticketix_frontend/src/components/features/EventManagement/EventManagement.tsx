@@ -75,7 +75,7 @@ const EventManagement = () => {
         ) : (
           <>
             {events.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-12 bg-gray-50 rounded-lg w-full">
+              <div className="flex flex-col items-center justify-center py-12 rounded-lg w-full">
                 <CalendarCheck className="w-12 h-12 text-gray-400 mb-4" />
                 <p className="text-lg font-medium text-gray-900">
                   No Events Available

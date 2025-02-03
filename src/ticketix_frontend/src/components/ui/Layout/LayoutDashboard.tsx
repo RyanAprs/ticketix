@@ -20,7 +20,9 @@ const LayoutDashboard = ({ children, className, title }: LayoutProps) => {
 
       <div className="flex flex-1 w-full">
         {!isTablet && <DashboardMenu />}
-        <main className={cn("flex-1 w-full p-4", className)}>{children}</main>
+        <main className={cn("flex-1 w-full p-4 font-jetbrainsMono", className)}>
+          {children}
+        </main>
       </div>
     </div>
   );
