@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Html5QrcodeScanner } from "html5-qrcode";
 import { Camera, QrCode, AlertCircle, CheckCircle } from "lucide-react";
+import { useAuthManager } from "@/store/AuthProvider";
 
 const TicketScanner: React.FC = () => {
+  const { principal } = useAuthManager();
   const [scanResult, setScanResult] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [ticketData, setTicketData] = useState<any>(null);
@@ -49,7 +51,7 @@ const TicketScanner: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center p-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden">
         {/* Header */}
         <div className="bg-blue-600 text-white p-4 flex items-center space-x-4">
@@ -80,6 +82,24 @@ const TicketScanner: React.FC = () => {
                 <div className="flex items-center text-green-600 space-x-2">
                   <CheckCircle className="w-5 h-5" />
                   <h3 className="font-semibold">Ticket Scanned Successfully</h3>
+                </div>
+                <div className="space-y-1">
+                  <p>
+                    <span className="font-medium">Ticket ID:</span>{" "}
+                    {ticketData.ticketId}
+                  </p>
+                  <p>
+                    <span className="font-medium">Event ID:</span>{" "}
+                    {ticketData.eventId}
+                  </p>
+                  <p>
+                    <span className="font-medium">Owner Event:</span>{" "}
+                    {principal?.toString()}
+                  </p>
+                  <p>
+                    <span className="font-medium">Owner Ticket:</span>{" "}
+                    {ticketData.owner}
+                  </p>
                 </div>
               </div>
             )}

@@ -1,5 +1,42 @@
 # `ticketix`
 
+**Ticketix** is an innovative platform powered by **Internet Computer Protocol (ICP)** that provides a secure, transparent, and decentralized ticketing system. By leveraging blockchain technology, Ticketix eliminates ticket fraud, ensures seamless ticket resale, and reduces costs by removing third-party intermediaries.
+
+<p align="center">
+  <img src="https://blush-working-booby-982.mypinata.cloud/ipfs/bafkreievpcichm4wnitvolvmf7ookcjlrgo22d7fcvqaqdvdk2i64sgbaq" width="100%">
+</p>
+
+---
+
+## 🚀 Key Features of TickeTix 
+
+**Event Management**: Organizers can efficiently manage events, sell tickets, and track attendees.
+**Security & Transparency**: Every transaction is permanently recorded on the blockchain, preventing ticket fraud and ensuring trust.
+**Flexible Ticket Transactions**: Users can safely purchase tickets and resell unused ones through the resale feature.
+**Unique QR Code Validation**: Each ticket comes with an encrypted QR code, valid for a one-time event check-in.
+**Decentralization & Lower Costs**: By eliminating intermediaries, transactions become faster and more cost-effective.
+
+---
+
+## 💻 Technology Stack  
+
+### Core ICP Technologies  
+- **Internet Computer Protocol (ICP)** 
+- **Motoko**
+- **Internet Identity**
+
+### Frontend Technologies 
+- **React.js**
+- **Vite** 
+- **Typescript**
+- **Redux**
+- **Tailwind**
+- **Lucide Dev**
+
+### IPFS Provider
+- **Pinata Web3**
+
+
 Welcome to your new `ticketix` project and to the Internet Computer development community. By default, creating a new project adds this README and some template files to your project directory. You can edit these template files to customize your project and to include your own code to speed up the development cycle.
 
 To get started, you might want to explore the project directory structure and the default configuration file. Working with this project in your development environment will not affect any production deployment or identity tokens.

@@ -68,14 +68,6 @@ const TicketEventPreview = ({ tickets, isOwner }: TicketEventPreviewProps) => {
         ticketIds: selectedTickets,
       });
 
-      console.log({
-        eventId: selectedTicket.eventId,
-        ticketIds: selectedTickets,
-        buyer: principal,
-        seller: Principal.fromText(selectedTicket.owner.toString()),
-        amount: totalCost,
-      });
-
       if (actor) {
         const result = await actor.purchaseTickets(
           selectedTicket.eventId,
@@ -186,7 +178,7 @@ const TicketEventPreview = ({ tickets, isOwner }: TicketEventPreviewProps) => {
                     }
                     className="w-full py-2.5 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors duration-200 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                   >
-                    Purchase Ticket
+                    Purchase Demo
                   </CustomButton>
                 )}
               </div>
@@ -229,10 +221,10 @@ const TicketEventPreview = ({ tickets, isOwner }: TicketEventPreviewProps) => {
         <div className="flex w-full justify-end gap-3 px-5 pb-5">
           <Button
             variant="outline"
-            onClick={() => setOpenModal(false)}
+            onClick={handlePurchase}
             className="mb-3 mt-5"
           >
-            Cancel
+            {loading ? "Processing..." : "Plug Wallet"}
           </Button>
           <Button
             variant="secondary"
@@ -240,7 +232,7 @@ const TicketEventPreview = ({ tickets, isOwner }: TicketEventPreviewProps) => {
             onClick={handlePurchaseDemo}
             disabled={loading || !selectedTicket || ticketCount < 1}
           >
-            {loading ? "Processing..." : "Confirm Purchase"}
+            {loading ? "Processing..." : "Confirm Purchase Demo"}
           </Button>
         </div>
       </ModalCustom>
