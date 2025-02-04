@@ -131,6 +131,10 @@ const TicketEventPreview = ({ tickets, isOwner }: TicketEventPreviewProps) => {
     }
   };
 
+  console.log(isOwner);
+
+  console.log(tickets);
+
   return (
     <div className="container mx-auto px-4 py-8">
       {tickets.length === 0 ? (
@@ -169,18 +173,19 @@ const TicketEventPreview = ({ tickets, isOwner }: TicketEventPreviewProps) => {
                   </span>
                 </div>
 
-                {!isOwner && (
-                  <CustomButton
-                    onClick={() =>
-                      isAuthenticated
-                        ? handleOpenModal(ticket)
-                        : handleDialogOpen()
-                    }
-                    className="w-full py-2.5 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors duration-200 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  >
-                    Purchase Demo
-                  </CustomButton>
-                )}
+                {principal &&
+                  ticket.principal.toString() !== principal.toString() && (
+                    <CustomButton
+                      onClick={() =>
+                        isAuthenticated
+                          ? handleOpenModal(ticket)
+                          : handleDialogOpen()
+                      }
+                      className="w-full py-2.5 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors duration-200 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    >
+                      Purchase Demo
+                    </CustomButton>
+                  )}
               </div>
             </div>
           ))}

@@ -184,8 +184,6 @@ const TicketPage = () => {
     (ticket) => ticket.principal.toString() === principal?.toString()
   );
 
-  
-
   return (
     <Layout>
       <div className="flex flex-col gap-4 mt-20">
