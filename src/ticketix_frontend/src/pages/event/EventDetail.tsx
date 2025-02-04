@@ -47,8 +47,8 @@ const EventDetail = () => {
           const res = await fetchDetailEvent(actor, id);
 
           if (res) {
-            console.log(res);
-            const isCrator = res.creator === principal;
+            const creator = res.creator.toString();
+            localStorage.setItem("creatorEvent", creator);
 
             const user = await getUserById(actor, res.creator);
             const eventDate = Number(res.eventDate);

@@ -13,10 +13,9 @@ import { useNavigate } from "react-router-dom";
 
 interface TicketEventPreviewProps {
   tickets: EnhancedTicketType[];
-  isOwner: boolean;
 }
 
-const TicketEventPreview = ({ tickets, isOwner }: TicketEventPreviewProps) => {
+const TicketEventPreview = ({ tickets }: TicketEventPreviewProps) => {
   const [openModal, setOpenModal] = useState(false);
   const [selectedTicket, setSelectedTicket] =
     useState<EnhancedTicketType | null>(null);
@@ -130,10 +129,6 @@ const TicketEventPreview = ({ tickets, isOwner }: TicketEventPreviewProps) => {
       setLoading(false);
     }
   };
-
-  console.log(isOwner);
-
-  console.log(tickets);
 
   return (
     <div className="container mx-auto px-4 py-8">

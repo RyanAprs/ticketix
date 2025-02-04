@@ -29,6 +29,7 @@ const TicketPage = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [ticketOwned, setTicketOwned] = useState([] as TicketOwnedType[]);
   const navigate = useNavigate();
+  const creator = localStorage.getItem("creatorEvent");
 
   const handleResellClick = () => {
     setIsDialogOpen(true);
@@ -180,10 +181,6 @@ const TicketPage = () => {
     );
   }
 
-  const isOwner = tickets.some(
-    (ticket) => ticket.principal.toString() === principal?.toString()
-  );
-
   return (
     <Layout>
       <div className="flex flex-col gap-4 mt-20">
@@ -194,7 +191,7 @@ const TicketPage = () => {
               Back
             </CustomButton>
           </Link>
-          {isOwner ? (
+          {creator === principal?.toString() ? (
             <CustomButton
               className="text-white"
               onClick={() => navigate("/dashboard/event")}
@@ -210,7 +207,7 @@ const TicketPage = () => {
         {isLoading ? (
           <IsLoadingPage />
         ) : (
-          <TicketEventPreview tickets={tickets} isOwner={isOwner} />
+          <TicketEventPreview tickets={tickets} />
         )}
       </div>
 
