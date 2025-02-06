@@ -362,6 +362,15 @@ actor TickeTix {
         );
     };
 
+    public func scanTicket(
+      ticketId: Text,
+      eventId: Text,
+      ownerEventId: Principal,
+      ownerTicketId: Principal,
+    ) : async Result.Result<Types.Event, Text> {
+      return TicketService.scanTicket(events, ticketId, eventId, ownerEventId, ownerTicketId);
+    };
+
   // BALANCE ==========================================================================
   // GET ACCOUNT ICP BALANCE
   // public shared (msg) func getAccountBalance() : async Nat {

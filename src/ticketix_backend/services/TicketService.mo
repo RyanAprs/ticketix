@@ -88,4 +88,96 @@ module {
             };
         };
     };
+
+    public func scanTicket(
+        events: Types.Events,
+        ticketId: Text,
+        eventId: Text,
+        ownerEventId: Principal,
+        ownerTicketId: Principal,
+    ) : Result.Result<Types.Event, Text>{
+        if(Principal.isAnonymous(ownerTicketId)) {
+            return #err("Anonymous principals are not allowed.")
+        };
+
+        if(Principal.isAnonymous(ownerEventId)) {
+            return #err("Anonymous principals are not allowed.")
+        };
+
+        switch (events.get(eventId)) {
+            case (null) {
+                return #err("Event not found");
+            };
+
+            case (?event) {
+                var ticketFound = false;
+                var ticketError : ?Text = null;
+                var ownerEvent = event.creator;
+                
+                let scanTickets: [Types.Ticket] = Array.map<Types.Ticket, Types.Ticket>(
+                    event.ticket,
+                    func(ticket) {  
+                        if(ticket.id == ticketId) {
+                            ticketFound := true;
+
+                            if(not Principal.equal(ownerEvent, ownerEventId) and not Principal.equal(ticket.owner, ownerTicketId)){
+                                ticketError := ?("Owner event or owner ticket are invalid");
+                                return ticket;
+                            };
+
+                            if(ticket.status == #used) {
+                                ticketError := ?("This ticket is already used");
+                                return ticket;
+                            };
+
+                            return {
+                                id = ticket.id;
+                                eventId = ticket.eventId;
+                                owner = ticket.owner;
+                                status = #used;
+                                price = ticket.price;
+                            }
+                        };
+                        return ticket;
+                    }
+                );
+
+                switch (ticketError) {
+                    case (?error) {return #err(error); };
+                    case (null) {};
+                };
+
+                if(not ticketFound) {
+                    return #err("Ticket not found");
+                };
+
+                let updatedTicketToCheck = Array.find<Types.Ticket> (
+                    scanTickets,
+                    func(ticket) = ticket.id == ticketId
+                );
+
+                switch (updatedTicketToCheck) {
+                    case (null) { return #err("Ticket update failed"); };
+                    case (?ticket) {
+                        let updatedEvent : Types.Event = {
+                            id = event.id;
+                            creator = event.creator;
+                            title = event.title;
+                            description = event.description;
+                            imageUrl = event.imageUrl;
+                            eventDate = event.eventDate;
+                            total = event.total;
+                            createdAt = event.createdAt;
+                            ticket = scanTickets;
+                            location = event.location;
+                        };
+
+                        events.put(eventId, updatedEvent);
+
+                        return #ok(updatedEvent);
+                    };
+                };
+            };
+        };
+    };
 }
