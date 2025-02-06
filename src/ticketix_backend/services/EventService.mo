@@ -269,6 +269,20 @@ module {
     };
 
     // GET DETAIL EVENT
+    // public func getDetailEvent(
+    //     events: Types.Events,
+    //     eventId: Text,
+    // ) : Result.Result<Types.Event, Text> {
+    //     switch (events.get(eventId)) {
+    //         case (null) {
+    //             return #err("Event not found!");
+    //         };
+    //         case(?event) {
+    //             return #ok(event);
+    //         };
+    //     };
+    // };
+
     public func getDetailEvent(
         events: Types.Events,
         eventId: Text,
@@ -277,8 +291,33 @@ module {
             case (null) {
                 return #err("Event not found!");
             };
-            case(?event) {
-                return #ok(event);
+            case (?event) {
+                let forSaleCount = Array.foldLeft<Types.Ticket, Nat>(
+                    event.ticket,
+                    0,
+                    func (acc: Nat, ticket: Types.Ticket) : Nat {
+                        if (ticket.status == #forSale) {
+                            acc + 1
+                        } else {
+                            acc
+                        }
+                    }
+                );
+                
+                let updatedEvent : Types.Event = {
+                    id = event.id;
+                    creator = event.creator;
+                    title = event.title;
+                    description = event.description;
+                    imageUrl = event.imageUrl;
+                    eventDate = event.eventDate;
+                    total = forSaleCount;  
+                    location = event.location;
+                    createdAt = event.createdAt;
+                    ticket = event.ticket;
+                };
+                
+                return #ok(updatedEvent);
             };
         };
     };

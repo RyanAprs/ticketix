@@ -159,6 +159,40 @@ actor TickeTix {
     return Iter.toArray(events.vals());
   };
 
+  public func getAllEventPreviewsWithForSaleTotal() : async [Types.Event] {
+    let eventList = Iter.map<Types.Event, Types.Event>(
+        events.vals(),
+        func (event: Types.Event) : Types.Event {
+            let forSaleCount = Array.foldLeft<Types.Ticket, Nat>(
+                event.ticket,
+                0,
+                func (acc: Nat, ticket: Types.Ticket) : Nat {
+                    if (ticket.status == #forSale) {
+                        acc + 1
+                    } else {
+                        acc
+                    }
+                }
+            );
+            
+            {
+                id = event.id;
+                creator = event.creator;
+                title = event.title;
+                description = event.description;
+                imageUrl = event.imageUrl;
+                eventDate = event.eventDate;
+                total = forSaleCount;  
+                location = event.location;
+                createdAt = event.createdAt;
+                ticket = event.ticket;
+            }
+        }
+    );
+    
+    return Iter.toArray(eventList);
+};
+
   // GET DETAIL EVENT
   public func getEventDetail(
     eventId: Text,
@@ -195,20 +229,48 @@ actor TickeTix {
   // GET ALL EVENT BY CREATOR
   public func getEventByCreator(
     userId: Principal
-  ): async Result.Result<[Types.Event], Text> {
-    let ownedEvents = Iter.filter<Types.Event>(
-      events.vals(),
-      func (event: Types.Event) : Bool {
-        return event.creator == userId;
-      }
-    );
-    
-    let eventArray = Iter.toArray(ownedEvents);
-    if (eventArray.size() == 0) {
-      return #err("You do not own any event.");
-    } else {
-      return #ok(eventArray);
-    };
+  ) : async Result.Result<[Types.Event], Text> {
+      let ownedEvents = Iter.map<Types.Event, Types.Event>(
+          Iter.filter<Types.Event>(
+              events.vals(),
+              func (event: Types.Event) : Bool {
+                  return event.creator == userId;
+              }
+          ),
+          func (event: Types.Event) : Types.Event {
+              let forSaleCount = Array.foldLeft<Types.Ticket, Nat>(
+                  event.ticket,
+                  0,
+                  func (acc: Nat, ticket: Types.Ticket) : Nat {
+                      if (ticket.status == #forSale) {
+                          acc + 1
+                      } else {
+                          acc
+                      }
+                  }
+              );
+              
+              {
+                  id = event.id;
+                  creator = event.creator;
+                  title = event.title;
+                  description = event.description;
+                  imageUrl = event.imageUrl;
+                  eventDate = event.eventDate;
+                  total = forSaleCount; 
+                  location = event.location;
+                  createdAt = event.createdAt;
+                  ticket = event.ticket;
+              }
+          }
+      );
+      
+      let eventArray = Iter.toArray(ownedEvents);
+      if (eventArray.size() == 0) {
+          return #err("You do not own any event.");
+      } else {
+          return #ok(eventArray);
+      };
   };
 
     // DELETE EVENT
