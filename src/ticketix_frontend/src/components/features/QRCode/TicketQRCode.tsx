@@ -5,14 +5,16 @@ interface TicketQRCodeProps {
   ticketId: string;
   eventId: string;
   owner: string;
+  eventCreator: string;
 }
 
 const TicketQRCode: React.FC<TicketQRCodeProps> = ({
   ticketId,
   eventId,
   owner,
+  eventCreator,
 }) => {
-  const qrValue = JSON.stringify({ ticketId, eventId, owner });
+  const qrValue = JSON.stringify({ ticketId, eventId, owner, eventCreator });
 
   return (
     <div className="flex flex-col items-center gap-4 p-4 max-w-md mx-auto">

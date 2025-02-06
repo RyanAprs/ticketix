@@ -10,11 +10,12 @@ interface TicketDetail {
   id: string;
   eventId: string;
   owner: string;
+  eventCreator: string;
 }
 
 const TicketDetailPreview = () => {
   const { id } = useParams();
-  const { actor } = useAuthManager();
+  const { actor, principal } = useAuthManager();
   const [ticket, setTicket] = useState<TicketDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -25,11 +26,12 @@ const TicketDetailPreview = () => {
         if (actor && id) {
           const res = await getTicketById(actor, id);
 
-          if (res) {
+          if (res && principal) {
             const data: TicketDetail = {
               id: res.id,
               eventId: res.eventId,
               owner: res.owner.toString(),
+              eventCreator: principal.toString(),
             };
             setTicket(data);
           }
@@ -71,6 +73,7 @@ const TicketDetailPreview = () => {
             ticketId={ticket.id}
             eventId={ticket.eventId}
             owner={ticket.owner}
+            eventCreator={ticket.eventCreator}
           />
         </div>
       </div>

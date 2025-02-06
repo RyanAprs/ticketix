@@ -17,7 +17,7 @@ const TicketScanner: React.FC = () => {
       scannerRef.current.id,
       {
         fps: 10,
-        qrbox: 250,
+        qrbox: 300,
         rememberLastUsedCamera: true,
       },
       false
@@ -29,9 +29,6 @@ const TicketScanner: React.FC = () => {
         setScanResult(decodedText);
         setTicketData(parsedData);
         setError(null);
-        console.log("Parsed Ticket Data:", parsedData);
-
-        scanner.clear();
       } catch (err) {
         setError("Invalid QR Code format");
         setScanResult(null);
@@ -51,7 +48,7 @@ const TicketScanner: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center p-4">
+    <div className="min-h-screen  flex items-center justify-center p-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden">
         {/* Header */}
         <div className="bg-blue-600 text-white p-4 flex items-center space-x-4">
