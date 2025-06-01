@@ -6,10 +6,11 @@ const FAQ = () => {
       title: "What is TickeTix?",
       content: (
         <p>
-          NekoTip is a blockchain-based donation platform built on the Internet
-          Computer Protocol (ICP). It platform for buying and selling event
-          tickets securely. It uses NFT technology to ensure authenticity and
-          prevent fraud.
+          Ticketix is an innovative platform powered by Internet Computer
+          Protocol (ICP) that provides a secure, transparent, and decentralized
+          ticketing system. By leveraging blockchain technology, Ticketix
+          eliminates ticket fraud, ensures seamless ticket resale, and reduces
+          costs by removing third-party intermediaries.
         </p>
       ),
     },
